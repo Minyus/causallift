@@ -10,7 +10,7 @@ Table data including the following columns:
 
 - features (a.k.a independent variable, explanatory variable)
 - outcome (a.k.a dependent variable, target variable, label)
-- treatment (a variable that can be controlled, e.g. giving a drug, executing an advertising campaign, etc.)
+- treatment (a variable that can be controlled for each target, e.g. giving a drug to patients, executing an advertising campaign to customers, etc.)
 - propensity (optional; CausalLift can calculate from observational data if not provided. Not needed for A/B Testing data.)
 
 ### How to install CausalLift?
