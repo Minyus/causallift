@@ -33,7 +33,7 @@ Option 3: clone the [GitHub repository](https://github.com/Minyus/causallift.git
 	python setup.py install
 ```
 
-### How to use OptKeras?
+### How to use CausalLift?
 
 Please see the [CausalLift example]( 
 https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_with_simulated_observational_data.ipynb
