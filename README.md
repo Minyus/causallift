@@ -181,6 +181,8 @@ For business, a metric that can be used to estimate how much more profit can be 
 - Support for other classification models other than XGBoost to predict outcome
 - Support for other classification models other than Logistic Regression to estimate propensity score
 
+Any feedback, suggestions, pull requests to enhance documentation, usability, and features are welcomed!
+
 
 ### References:
 - Gutierrez, P. and G´erardy, J. Causal inference and uplift modelling: A review of the literature. In International Conference on Predictive Applications and APIs, pages 1–13, 2017.
