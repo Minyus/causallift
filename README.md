@@ -46,7 +46,7 @@ Option 3: clone the [GitHub repository](https://github.com/Minyus/causallift.git
 
 Please see the [CausalLift example]( 
 https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_with_simulated_observational_data.ipynb
-) available in Google Colab (free cloud GPU) environment.
+) available in Google Colab (free cloud CPU/GPU) environment.
 
 To run the code, navigate to "Runtime" >> "Run all".
 
@@ -177,7 +177,8 @@ For business, a metric that can be used to estimate how much more profit can be 
 
 ### To-dos:
 - Improve documentation
-- Add examples using publicly available datasets 
+- Add examples of applying uplift modeling to publicly available datasets 
+- Add visualization of the uplift model
 - Support for other classification models other than XGBoost to predict outcome
 - Support for other classification models other than Logistic Regression to estimate propensity score
 
