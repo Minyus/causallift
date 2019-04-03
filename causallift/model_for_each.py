@@ -14,6 +14,7 @@ from .utils import (get_cols_features,
                     score_df,
                     conf_mat_df)
 
+import numpy as np
 import pandas as pd
 from xgboost import XGBClassifier
 from sklearn.model_selection import GridSearchCV
