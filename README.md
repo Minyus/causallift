@@ -87,7 +87,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 For business, a metric that can be used to estimate how much more profit can be earned is more practical. CausalLift will estimate how much conversion rate (the proportion of people who took desired action such as buying a product) will increase.
 
 
-### What parameaters are available for OptKeras?
+### What parameaters are available for CausalLift?
 
         train_df: pd.DataFrame
             Pandas Data Frame containing samples used for training
