@@ -1,5 +1,6 @@
 """ causal_lift.py """
 
+import pandas as pd
 
 class CausalLift():
     r"""
