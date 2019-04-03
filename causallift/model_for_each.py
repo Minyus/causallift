@@ -1,6 +1,19 @@
 """ model_for_each.py """
 """ 2 supervised models """
 
+from .utils import (get_cols_features,
+                    concat_train_test,
+                    concat_train_test_df,
+                    len_t,
+                    len_o,
+                    len_to,
+                    treatment_fraction_,
+                    outcome_fraction_,
+                    overall_uplift_gain_,
+                    gain_tuple,
+                    score_df,
+                    conf_mat_df)
+
 from xgboost import XGBClassifier
 from sklearn.model_selection import GridSearchCV
 
