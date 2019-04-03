@@ -13,6 +13,7 @@ from .utils import (get_cols_features,
                     score_df,
                     conf_mat_df)
 
+import pandas as pd
 from sklearn.model_selection import GridSearchCV
 from sklearn import linear_model
 
