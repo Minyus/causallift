@@ -4,8 +4,27 @@
 [![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD-yellow.svg)](https://opensource.org/licenses/BSD-2-Clause)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_with_simulated_observational_data.ipynb)
 
+### What is Uplift Modeling?
 
-### What kind of data can be used?
+Uplift Modeling is a technique to find which individuals should be targeted and which individuals should not. 
+
+Applications of Uplift Modeling include:
+- Increase revenue by finding customers who should be targeted for advertising/marketing campaigns.
+- Retain revenue by finding customers who should be contacted to prevent churn. 
+
+Resources to understand the concepts of Uplift Modeling include:
+
+- [[Medium article] Uplift Models for better marketing campaigns (Part 1)](
+https://medium.com/@abhayspawar/uplift-models-for-better-marketing-campaigns-part-1-b491292e4c80
+)
+- [[Medium article] Simple Machine Learning Techniques To Improve Your Marketing Strategy: Demystifying Uplift Models](
+https://medium.com/datadriveninvestor/simple-machine-learning-techniques-to-improve-your-marketing-strategy-demystifying-uplift-models-dc4fb3f927a2
+)
+- [[Wikipedia] Uplift_modelling](
+https://en.wikipedia.org/wiki/Uplift_modelling
+)
+
+### What kind of data can be fed to CausalLift?
 Table data including the following columns:
 
 - features (a.k.a independent variable, explanatory variable)
