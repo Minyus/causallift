@@ -9,8 +9,8 @@
 Uplift Modeling is a technique to find which individuals should be targeted and which individuals should not. 
 
 Applications of Uplift Modeling include:
-- Increase revenue by finding customers who should be targeted for advertising/marketing campaigns and who should not.
-- Retain revenue by finding customers who should be contacted to prevent churn and who should not. 
+- Increase revenue by finding which customers should be targeted and which customers should not for advertising/marketing campaigns 
+- Retain revenue by finding which customers should be contacted and which customers should not to prevent churn. 
 
 Resources to understand the concepts of Uplift Modeling include:
 
