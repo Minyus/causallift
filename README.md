@@ -9,8 +9,8 @@
 Table data including the following columns:
 
 - features (a.k.a independent variable, explanatory variable)
-- outcome (a.k.a dependent variable, target variable, label)
-- treatment (a variable that can be controlled for each target, e.g. giving a drug to patients, executing an advertising campaign to customers, etc.)
+- outcome (a.k.a dependent variable, target variable, label): binary (0 or 1)
+- treatment (a variable that can be controlled for each sample, e.g. whether to giving a drug to each patient, whether to execute an advertising campaign to each customer, etc.) : binary (0 or 1)
 - propensity (optional; CausalLift can calculate from observational data if not provided. Not needed for A/B Testing data.)
 
 ### How to install CausalLift?
@@ -172,18 +172,47 @@ For business, a metric that can be used to estimate how much more profit can be 
 
 ### What was the tested environment for CausalLift?
 
-- Google Colaboratory 
+- Google Colab
 
 
 ### To-dos:
 - Improve documentation
 - Add examples of applying uplift modeling to publicly available datasets 
-- Add visualization of the uplift model
+- Add visualization of the uplift model (using matplotlib, plotly, bokeh, holoviews, pylift, etc.)
 - Support for other classification models other than XGBoost to predict outcome
 - Support for other classification models other than Logistic Regression to estimate propensity score
 
 Any feedback, suggestions, pull requests to enhance documentation, usability, and features are welcomed!
 
+### Related Python and R packages:
+
+[Python]
+
+- ["pylift"]( 
+https://github.com/wayfair/pylift
+)
+
+- ["pymatch"](
+https://github.com/benmiroglio/pymatch
+)
+
+- ["dowhy"](
+https://github.com/Microsoft/dowhy
+)
+
+[R]
+
+- ["uplift"](
+https://cran.r-project.org/web/packages/uplift/index.html
+)
+
+- ["tools4uplift"](
+https://cran.r-project.org/web/packages/tools4uplift/index.html
+)
+
+- ["matching"](
+https://cran.r-project.org/web/packages/Matching/index.html
+)
 
 ### References:
 - Gutierrez, P. and G´erardy, J. Causal inference and uplift modelling: A review of the literature. In International Conference on Predictive Applications and APIs, pages 1–13, 2017.
