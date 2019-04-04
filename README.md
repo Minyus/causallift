@@ -10,8 +10,8 @@ Table data including the following columns:
 
 - features (a.k.a independent variable, explanatory variable)
 - outcome (a.k.a dependent variable, target variable, label): binary (0 or 1)
-- treatment (a variable that can be controlled for each sample, e.g. whether to giving a drug to each patient, whether to execute an advertising campaign to each customer, etc.) : binary (0 or 1)
-- propensity (optional; CausalLift can calculate from observational data if not provided. Not needed for A/B Testing data.)
+- treatment (a variable you can control and want to optimize for each sample, e.g. whether to giving a drug to each patient, whether to execute an advertising campaign to each customer, etc.) : binary (0 or 1)
+- propensity (optional; CausalLift can calculate from observational data if not provided. Not needed for A/B Testing data.) : continuous between 0 and 1
 
 ### How to install CausalLift?
 
@@ -59,7 +59,7 @@ Here are the basic steps to use.
 
 from causallift import CausalLift
 
-""" Step 1. Instantiate CausalLift class
+""" Step 1. Set up data and optionally compute estimated propensity score.
 Feed pandas dataframes for train and test. 
 If your data is observational data (not A/B Testing or Randomized Controlled Trial) and you can assume the propensity to be treated can be estimated by the features, set enable_ipw = True to use Inverse Probability Weighting.
 If the fed dataframes include propensity column, CausalLift will use it.
@@ -69,7 +69,7 @@ Otherwise, CausalLift will estimate propensity using logistic regression.
 cl = CausalLift(train_df, test_df, enable_ipw=True)
 
 
-""" Step 2. Train 2 supervised classification models (currently only XGBoost is supported) for treated and untreated samples independently and estimate CATE (Conditional Average Treatment Effect). It is recommended to treat only the CATE is high enough """
+""" Step 2. Train 2 classification models (currently only XGBoost is supported) for treated and untreated samples independently and compute estimated CATE (Conditional Average Treatment Effect) or uplift score. It is recommended to treat only the CATE is high enough. """
 
 train_df, test_df = cl.estimate_cate_by_2_models()
 
@@ -81,10 +81,10 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 
 ### Why CausalLift was developed?
 
-- Existing packages for Uplift Modeling assumes the dataset is A/B Testing (Randomized Control Trial) dataset. In real business, however, observational dataset (dataset in which treatment was not chosen randomly) is more common. CausalLift utilizes basic methodology in Causal Inference ("Inverse Probability Weighting") and Uplift Modeling (training 2 models independently for treated and untreated samples.).
+- Existing packages for Uplift Modeling assumes the dataset is from A/B Testing (a.k.a. Randomized Control Trial). In real business, however, observational dataset (dataset in which treatment was not chosen randomly) is more common especially in early stage of data-driven decision making. CausalLift utilizes basic methodology in Causal Inference ("Inverse Probability Weighting" based on propensity scores) and Uplift Modeling (training 2 models independently for treated and untreated samples to compute the uplift scores.).
 	
-- Metrics used to evaluate Uplift Modeling such as Qini are useful in research, but difficult to use in business.
-For business, a metric that can be used to estimate how much more profit can be earned is more practical. CausalLift will estimate how much conversion rate (the proportion of people who took desired action such as buying a product) will increase.
+- Metrics used to evaluate Uplift Modeling such as Qini and AUUC (Area Under the Uplift Curve) are useful in research, but difficult to use in business.
+For business, a metric that can be used to estimate how much more profit can be earned is more practical. CausalLift can estimate how much conversion rate (the proportion of people who took desired action such as buying a product) will increase using the uplift model.
 
 
 ### What parameaters are available for CausalLift?
@@ -179,8 +179,8 @@ For business, a metric that can be used to estimate how much more profit can be 
 - Improve documentation
 - Add examples of applying uplift modeling to publicly available datasets 
 - Add visualization of the uplift model (using matplotlib, plotly, bokeh, holoviews, pylift, etc.)
-- Support for other classification models other than XGBoost to predict outcome
-- Support for other classification models other than Logistic Regression to estimate propensity score
+- Support for classification models other than XGBoost to predict outcome
+- Support for classification models other than Logistic Regression to estimate propensity score
 
 Any feedback, suggestions, pull requests to enhance documentation, usability, and features are welcomed!
 
