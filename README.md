@@ -195,6 +195,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 
 
 ### To-dos:
+
 - Improve documentation
 - Add examples of applying uplift modeling to publicly available datasets 
 - Add visualization of the uplift model (using matplotlib, plotly, bokeh, holoviews, pylift, etc.)
