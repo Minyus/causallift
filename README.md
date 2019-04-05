@@ -116,7 +116,7 @@ train_df, test_df = cl.estimate_cate_by_2_models()
 estimated_effect_df = cl.estimate_recommendation_impact()
 ```
 
-### What parameaters are available for CausalLift?
+### What parameters are available for CausalLift?
 
         cols_features: list of str, optional
             List of column names used as features.
@@ -251,5 +251,5 @@ Yusuke Minami
 
 ### License
 
-BSD 2-clause License (see https://github.com/Minyus/causallift/blob/master/LICENSE).
+[BSD 2-clause License](https://github.com/Minyus/causallift/blob/master/LICENSE).
 
