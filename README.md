@@ -4,8 +4,9 @@
 [![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD-yellow.svg)](https://opensource.org/licenses/BSD-2-Clause)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_with_simulated_observational_data.ipynb)
 
-Were you asked to predict which customer will buy a product or which customer will churn?
-It is often not enough. Uplift Modeling might be the one you need.
+Were you asked to predict which customers will buy a product or churn?
+It is likely not enough. 
+Uplift Modeling might be the one you need.
 
 ### What is Uplift Modeling?
 
