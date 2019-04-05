@@ -8,7 +8,7 @@
 
 Uplift Modeling is a technique to find which individuals should be "treated" (or targeted) and which individuals should not. 
 
-Applications of Uplift Modeling include:
+Applications of Uplift Modeling for business include:
 - Increase revenue by finding which customers should be targeted and which customers should not for advertising/marketing campaigns 
 - Retain revenue by finding which customers should be contacted and which customers should not to prevent churn. 
 
@@ -23,6 +23,18 @@ https://medium.com/datadriveninvestor/simple-machine-learning-techniques-to-impr
 - [[Wikipedia] Uplift_modelling](
 https://en.wikipedia.org/wiki/Uplift_modelling
 )
+
+### Why CausalLift was developed?
+
+In a word, to use for real-world business.
+
+- Existing packages for Uplift Modeling assumes the dataset is from A/B Testing (a.k.a. Randomized Control Trial). In real-world business, however, observational dataset (dataset in which treatment (or campaign) targets was not chosen randomly) is more common especially in the early stage of data-driven decision making. CausalLift supports observational dataset using a basic methodology in Causal Inference ("Inverse Probability Weighting" based on propensity scores) based on assumption that propensity to be treated can be inferred from the given features.
+
+- There are 2 challenges of Uplift Modeling; explainability for the model and evaluation. CausalLift utilizes a basic methodology of Uplift Modeling called Two Models approach (training 2 models independently for treated and untreated samples to compute the CATE (Conditional Average Treatment Effects) or uplift scores) to address these challenges.
+
+	- [explainability for the model] Since it is relatively simple, it is less challenging to explain how it works to stakeholders in business.
+
+	- [explainability for evaluation] To evaluate Uplift Modeling, metrics such as Qini and AUUC (Area Under the Uplift Curve) are used in research, but difficult to use in real-world business. For business, a metric that can estimate how much more profit can be earned is more practical. The 2 models can be reused to simulate the outcome of following the recommendation by the Uplift Model and can estimate how much conversion rate (the proportion of people who took desired action such as buying a product) will increase using the uplift model.
 
 ### What kind of data can be fed to CausalLift?
 Table data including the following columns:
@@ -98,27 +110,8 @@ train_df, test_df = cl.estimate_cate_by_2_models()
 estimated_effect_df = cl.estimate_recommendation_impact()
 ```
 
-### Why CausalLift was developed?
-
-In a word, to use for real-world business.
-
-- Existing packages for Uplift Modeling assumes the dataset is from A/B Testing (a.k.a. Randomized Control Trial). In real-world business, however, observational dataset (dataset in which treatment (or campaign) targets was not chosen randomly) is more common especially in the early stage of data-driven decision making. CausalLift supports observational dataset using a basic methodology in Causal Inference ("Inverse Probability Weighting" based on propensity scores) based on assumption that propensity to be treated can be inferred from the given features.
-
-- There are 2 challenges of Uplift Modeling; explainability for the model and evaluation. CausalLift utilizes a basic methodology of Uplift Modeling called Two Models approach (training 2 models independently for treated and untreated samples to compute the CATE (Conditional Average Treatment Effects) or uplift scores) to address these challenges.
-
-1. [explainability for the model]
-- Since it is relatively simple, it is less challenging to explain to stakeholders in business.
-
-2. [explainability for evaluation]
-- To evaluate Uplift Modeling, metrics such as Qini and AUUC (Area Under the Uplift Curve) are used in research, but difficult to use in real-world business. For business, a metric that can estimate how much more profit can be earned is more practical. CausalLift can estimate how much conversion rate (the proportion of people who took desired action such as buying a product) will increase using the uplift model.
-
-
 ### What parameaters are available for CausalLift?
 
-        train_df: pd.DataFrame
-            Pandas Data Frame containing samples used for training
-        test_df: pd.DataFrame
-            Pandas Data Frame containing samples used for testing
         cols_features: list of str, optional
             List of column names used as features.
             If None (default), all the columns except for outcome,
@@ -198,7 +191,7 @@ In a word, to use for real-world business.
 
 ### What was the tested environment for CausalLift?
 
-- Google Colab
+- Google Colab (Python 3.6.7)
 
 
 ### To-dos:
