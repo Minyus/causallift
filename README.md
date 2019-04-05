@@ -214,32 +214,26 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 
 Any feedback, suggestions, pull requests to enhance documentation, usability, and features are welcomed!
 
-### Related Python and R packages:
-
-[Python]
+### Related Python packages:
 
 - ["pylift"]( 
 https://github.com/wayfair/pylift
 )
-
 - ["pymatch"](
 https://github.com/benmiroglio/pymatch
 )
-
 - ["dowhy"](
 https://github.com/Microsoft/dowhy
 )
 
-[R]
+### Related R packages:
 
 - ["uplift"](
 https://cran.r-project.org/web/packages/uplift/index.html
 )
-
 - ["tools4uplift"](
 https://cran.r-project.org/web/packages/tools4uplift/index.html
 )
-
 - ["matching"](
 https://cran.r-project.org/web/packages/Matching/index.html
 )
