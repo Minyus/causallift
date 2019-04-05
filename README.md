@@ -195,7 +195,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
 
 
-### What was the tested environment for CausalLift?
+### What was the tested environment of CausalLift?
 
 - Google Colab (Python 3.6.7)
 
