@@ -10,7 +10,7 @@ It is often not enough. Uplift Modeling might be the one you need.
 ### What is Uplift Modeling?
 
 
-Uplift Modeling is a technique to find which individuals should be "treated" (or targeted) and which individuals should not. 
+Uplift Modeling is a Machine Learning technique to find which individuals should be "treated" (or targeted) and which individuals should not. 
 
 Applications of Uplift Modeling for business include:
 - Increase revenue by finding which customers should be targeted for advertising/marketing campaigns and which customers should not. 
