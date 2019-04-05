@@ -1,4 +1,4 @@
-# CausalLift: Python package for Uplift Modeling in real-world business applicable for both A/B testing and observational data
+# CausalLift: Python package for Uplift Modeling in real-world business; applicable for both A/B testing and observational data
 
 [![PyPI version](https://badge.fury.io/py/causallift.svg)](https://badge.fury.io/py/causallift)
 [![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD-yellow.svg)](https://opensource.org/licenses/BSD-2-Clause)
