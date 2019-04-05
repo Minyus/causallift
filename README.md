@@ -6,6 +6,7 @@
 
 ### What is Uplift Modeling?
 
+
 Uplift Modeling is a technique to find which individuals should be "treated" (or targeted) and which individuals should not. 
 
 Applications of Uplift Modeling for business include:
@@ -39,10 +40,19 @@ In a word, to use for real-world business.
 ### What kind of data can be fed to CausalLift?
 Table data including the following columns:
 
-- features (a.k.a independent variable, explanatory variable)
-- outcome (a.k.a dependent variable, target variable, label): binary (0 or 1)
-- treatment (a variable you can control and want to optimize for each sample, e.g. whether to giving a drug to each patient, whether to execute an advertising campaign to each customer, etc.) : binary (0 or 1)
-- propensity (optional; CausalLift can calculate from observational data if not provided. Not needed for A/B Testing data.) : continuous between 0 and 1
+- Features 
+	- a.k.a independent variables, explanatory variables
+	- e.g. customer age, gender, etc.
+- Outcome: binary (0 or 1)
+	- a.k.a dependent variable, target variable, label
+	- e.g. whether the customer bought a product, clicked a link, etc.
+- Treatment: binary (0 or 1)
+	- a variable you can control and want to optimize for each sample (customer) 
+	- e.g. whether an advertising campaign was executed, whether a discount was offered, etc.
+	- Note: if you cannot find a treatment column, you may need to ask stakeholders to get the data, which might take hours to years.
+- [Optional] Propensity: continuous between 0 and 1
+	- propensity (or probability) to be treated 
+	- If not provided, CausalLift can estimate from the features using logistic regression. Not needed for A/B Testing data. 
 
 ### How to install CausalLift?
 
