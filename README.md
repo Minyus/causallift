@@ -103,23 +103,16 @@ Here are the basic steps to use.
 
 from causallift import CausalLift
 
-""" Step 1. Set up data and optionally compute estimated propensity score.
-Feed pandas dataframes for train and test. 
-If your data is observational data (not A/B Testing or Randomized Controlled Trial) and you can assume the propensity to be treated can be estimated by the features, set enable_ipw = True to use Inverse Probability Weighting.
-If the fed dataframes include propensity column, CausalLift will use it.
-Otherwise, CausalLift will estimate propensity using logistic regression.
-"""
+""" Step 1. Feed datasets and optionally compute estimated propensity scores using logistic regression if set enable_ipw = True."""
 
 cl = CausalLift(train_df, test_df, enable_ipw=True)
 
-
-""" Step 2. Train 2 classification models (currently only XGBoost is supported) for treated and untreated samples independently and compute estimated CATE (Conditional Average Treatment Effect) or uplift score. It is recommended to treat only the CATE is high enough. """
+""" Step 2. Train 2 classification models (XGBoost) for treated and untreated samples independently and compute estimated CATE (Conditional Average Treatment Effect) or uplift score. """
 
 train_df, test_df = cl.estimate_cate_by_2_models()
 
+""" Step 3. Estimate how much conversion rate will increase by selecting treatment (campaign) targets as recommended by the uplift modeling. """
 
-""" Step 3. Estimate the impact of choosing treatment targets as recommended by the uplift modeling.
-"""
 estimated_effect_df = cl.estimate_recommendation_impact()
 ```
 
