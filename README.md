@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/causallift.svg)](https://badge.fury.io/py/causallift)
 [![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD-yellow.svg)](https://opensource.org/licenses/BSD-2-Clause)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_with_simulated_observational_data.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_example.ipynb)
 
 Were you asked to predict which customers will buy a product or churn?
 It is likely not enough. 
@@ -92,7 +92,7 @@ Option 3: clone the [GitHub repository](https://github.com/Minyus/causallift.git
 ### How to use CausalLift?
 
 Please see the [CausalLift example]( 
-https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_with_simulated_observational_data.ipynb
+https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_example.ipynb
 ) available in Google Colab (free cloud CPU/GPU) environment.
 
 To run the code, navigate to "Runtime" >> "Run all".
