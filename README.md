@@ -60,6 +60,14 @@ Table data including the following columns:
 	- propensity (or probability) to be treated 
 	- If not provided, CausalLift can estimate from the features using logistic regression. Not needed for A/B Testing data. 
 
+
+<img src="readme_images/Example_table_data.png">
+<p align="center">
+	Example table data
+</p>
+
+
+
 ### How to install CausalLift?
 
 Option 1: install from the PyPI
@@ -102,22 +110,35 @@ To download the notebook file, navigate to "File" >> "Download .ipynb".
 Here are the basic steps to use.
 
 ```python
-""" Step 0. Import CausalLift """
+""" Step 0. Import CausalLift 
+"""
 
 from causallift import CausalLift
 
-""" Step 1. Feed datasets and optionally compute estimated propensity scores using logistic regression if set enable_ipw = True."""
+""" Step 1. Feed datasets and optionally compute estimated propensity scores 
+using logistic regression if set enable_ipw = True.
+"""
 
 cl = CausalLift(train_df, test_df, enable_ipw=True)
 
-""" Step 2. Train 2 classification models (XGBoost) for treated and untreated samples independently and compute estimated CATE (Conditional Average Treatment Effect) or uplift score. """
+""" Step 2. Train 2 classification models (XGBoost) for treated and untreated 
+samples independently and compute estimated CATE (Conditional Average Treatment 
+Effect) or uplift score. 
+"""
 
 train_df, test_df = cl.estimate_cate_by_2_models()
 
-""" Step 3. Estimate how much conversion rate will increase by selecting treatment (campaign) targets as recommended by the uplift modeling. """
+""" Step 3. Estimate how much conversion rate will increase by selecting treatment 
+(campaign) targets as recommended by the uplift modeling. 
+"""
 
 estimated_effect_df = cl.estimate_recommendation_impact()
 ```
+
+<img src="readme_images/CausalLift_flow_diagram.png">
+<p align="center">
+	CausalLift flow diagram
+</p>
 
 ### What parameters are available for CausalLift?
 
