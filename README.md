@@ -33,7 +33,7 @@ https://en.wikipedia.org/wiki/Uplift_modelling
 
 In a word, to use for real-world business.
 
-- Existing packages for Uplift Modeling assumes the dataset is from A/B Testing (a.k.a. Randomized Control Trial). In real-world business, however, observational dataset (dataset in which treatment (or campaign) targets was not chosen randomly) is more common especially in the early stage of data-driven decision making. CausalLift supports observational dataset using a basic methodology in Causal Inference ("Inverse Probability Weighting" based on propensity scores) based on assumption that propensity to be treated can be inferred from the given features.
+- Existing packages for Uplift Modeling assumes the dataset is from A/B Testing (a.k.a. Randomized Controlled Trial). In real-world business, however, observational dataset (dataset in which treatment (or campaign) targets was not chosen randomly) is more common especially in the early stage of data-driven decision making. CausalLift supports observational dataset using a basic methodology in Causal Inference ("Inverse Probability Weighting" based on propensity scores) based on assumption that propensity to be treated can be inferred from the given features.
 
 - There are 2 challenges of Uplift Modeling; explainability of the model and evaluation. CausalLift utilizes a basic methodology of Uplift Modeling called Two Models approach (training 2 models independently for treated and untreated samples to compute the CATE (Conditional Average Treatment Effects) or uplift scores) to address these challenges.
 
