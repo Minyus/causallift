@@ -236,9 +236,11 @@ https://cran.r-project.org/web/packages/Matching/index.html
 )
 
 ### References:
-- Gutierrez, P. and G´erardy, J. Causal inference and uplift modelling: A review of the literature. In International Conference on Predictive Applications and APIs, pages 1–13, 2017.
+- Gutierrez, Pierre. and G´erardy, Jean-Yves. Causal inference and uplift modelling: A review of the literature. In International Conference on Predictive Applications and APIs, pages 1–13, 2017.
 
-- Yi, R. and Frost, W. (n.d.). Pylift: A Fast Python Package for Uplift Modeling. Retrieved April 3, 2019, from https://tech.wayfair.com/2018/10/pylift-a-fast-python-package-for-uplift-modeling/
+- Athey, Susan and Imbens, Guido W. Machine learning methods for estimating heterogeneous causal effects. Stat, 2015.
+
+- Yi, Robert. and Frost, Will. (n.d.). Pylift: A Fast Python Package for Uplift Modeling. Retrieved April 3, 2019, from https://tech.wayfair.com/2018/10/pylift-a-fast-python-package-for-uplift-modeling/
 
 
 ### About author 
