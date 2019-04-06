@@ -45,13 +45,15 @@ In a word, to use for real-world business.
 Table data including the following columns:
 
 - Features 
-	- a.k.a independent variables, explanatory variables
-	- e.g. customer age, gender, etc.
+	- a.k.a independent variables, explanatory variables, covariates
+	- e.g. customer gender, age range, etc.
+	- Note: Categorical variables need to be one-hot coded so propensity can be estimated using logistic regression. [pandas.get_dummies](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.get_dummies.html) can be used.
 - Outcome: binary (0 or 1)
 	- a.k.a dependent variable, target variable, label
 	- e.g. whether the customer bought a product, clicked a link, etc.
 - Treatment: binary (0 or 1)
-	- a variable you can control and want to optimize for each sample (customer) 
+	- a.k.a intervention
+	- a variable you can control and want to optimize for each individual (customer) 
 	- e.g. whether an advertising campaign was executed, whether a discount was offered, etc.
 	- Note: if you cannot find a treatment column, you may need to ask stakeholders to get the data, which might take hours to years.
 - [Optional] Propensity: continuous between 0 and 1
