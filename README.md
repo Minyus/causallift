@@ -235,8 +235,11 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 ### Related Python packages
 
 - ["pylift"](https://github.com/wayfair/pylift)
-- ["EconML" (ALICE: Automated Learning and Intelligence for Causation and Economics)](https://github.com/Microsoft/EconML)
-- ["dowhy"](https://github.com/Microsoft/dowhy)
+[[documentation]](https://pylift.readthedocs.io/en/latest/)
+- ["EconML" (ALICE: Automated Learning and Intelligence for Causation and Economics)](https://github.com/Microsoft/EconML) 
+[[documentation]](https://econml.azurewebsites.net/index.html)
+- ["DoWhy"](https://github.com/Microsoft/dowhy)
+[[documentation]](https://causalinference.gitlab.io/dowhy/)
 - ["pymatch"](https://github.com/benmiroglio/pymatch)
 
 
@@ -269,9 +272,10 @@ https://cran.r-project.org/web/packages/Matching/index.html
 
 - Improve documentation (using Sphinx)
 - Add examples of applying uplift modeling to more publicly available datasets (such as [Lending Club Loan Data](https://www.kaggle.com/wendykan/lending-club-loan-data) as [pymatch](https://github.com/benmiroglio/pymatch) did.
-- Add visualization of the uplift model (using matplotlib, plotly, bokeh, holoviews, [pylift](https://github.com/wayfair/pylift), etc.)
+- Clarify the model summary output including visualization
 - Support for classification models other than XGBoost (Random Forest, LightGBM, etc.) to predict outcome
 - Support for classification models other than Logistic Regression to estimate propensity scores which would need calibration
+- Support for multiple treatments
 
 Any feedback, suggestions, pull requests to enhance/correct documentation, usability, and features are welcomed!
 
