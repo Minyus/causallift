@@ -29,11 +29,19 @@ https://medium.com/datadriveninvestor/simple-machine-learning-techniques-to-impr
 https://en.wikipedia.org/wiki/Uplift_modelling
 )
 
+### What's special about CausalLift from perspective of Causal Inference?
+
+CausalLift is a basic application of Causal Inference with focus on decision making based on CATE (Conditional Average Treatment Effect) or ITE (Individual Treatment Effect).
+
+### What's special about CausalLift from perspective of Uplift Modeling?
+
+CausalLift is a basic application of Uplifting Modeling that works with observational datasets not from A/B Testing and outputs intuitive metrics for evaluation.
+
 ### Why CausalLift was developed?
 
 In a word, to use for real-world business.
 
-- Existing packages for Uplift Modeling assumes the dataset is from A/B Testing (a.k.a. Randomized Controlled Trial). In real-world business, however, observational datasets in which treatment (campaign) targets were not chosen randomly are more common especially in the early stage of data-driven decision making. CausalLift supports observational datasets using a basic methodology in Causal Inference called "Inverse Probability Weighting" based on assumption that propensity to be treated can be inferred from the available features.
+- Existing packages for Uplift Modeling assumes the dataset is from A/B Testing (a.k.a. Randomized Controlled Trial). In real-world business, however, observational datasets in which treatment (campaign) targets were not chosen randomly are more common especially in the early stage of evidence-based decision making. CausalLift supports observational datasets using a basic methodology in Causal Inference called "Inverse Probability Weighting" based on assumption that propensity to be treated can be inferred from the available features.
 
 - There are 2 challenges of Uplift Modeling; explainability of the model and evaluation. CausalLift utilizes a basic methodology of Uplift Modeling called Two Models approach (training 2 models independently for treated and untreated samples to compute the CATE (Conditional Average Treatment Effects) or uplift scores) to address these challenges.
 
