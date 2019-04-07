@@ -232,16 +232,6 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 - Google Colab (Python 3.6.7)
 
 
-### To-dos:
-
-- Improve documentation (using Sphinx)
-- Add examples of applying uplift modeling to more publicly available datasets (such as [Lending Club Loan Data](https://www.kaggle.com/wendykan/lending-club-loan-data) as [pymatch](https://github.com/benmiroglio/pymatch) did.
-- Add visualization of the uplift model (using matplotlib, plotly, bokeh, holoviews, [pylift](https://github.com/wayfair/pylift), etc.)
-- Support for classification models other than XGBoost (Random Forest, LightGBM, etc.) to predict outcome
-- Support for classification models other than Logistic Regression to estimate propensity scores which would need calibration
-
-Any feedback, suggestions, pull requests to enhance/correct documentation, usability, and features are welcomed!
-
 ### Related Python packages:
 
 - ["pylift"]( 
@@ -254,7 +244,7 @@ https://github.com/benmiroglio/pymatch
 https://github.com/Microsoft/dowhy
 )
 
-### Related R packages:
+### Related R packages
 
 - ["uplift"](
 https://cran.r-project.org/web/packages/uplift/index.html
@@ -266,12 +256,30 @@ https://cran.r-project.org/web/packages/tools4uplift/index.html
 https://cran.r-project.org/web/packages/Matching/index.html
 )
 
-### References:
+### References
+
 - Gutierrez, Pierre. and G´erardy, Jean-Yves. Causal inference and uplift modelling: A review of the literature. In International Conference on Predictive Applications and APIs, pages 1–13, 2017.
 
 - Athey, Susan and Imbens, Guido W. Machine learning methods for estimating heterogeneous causal effects. Stat, 2015.
 
 - Yi, Robert. and Frost, Will. (n.d.). Pylift: A Fast Python Package for Uplift Modeling. Retrieved April 3, 2019, from https://tech.wayfair.com/2018/10/pylift-a-fast-python-package-for-uplift-modeling/
+
+### License
+
+[BSD 2-clause License](https://github.com/Minyus/causallift/blob/master/LICENSE).
+
+
+### To-dos
+
+- Improve documentation (using Sphinx)
+- Add examples of applying uplift modeling to more publicly available datasets (such as [Lending Club Loan Data](https://www.kaggle.com/wendykan/lending-club-loan-data) as [pymatch](https://github.com/benmiroglio/pymatch) did.
+- Add visualization of the uplift model (using matplotlib, plotly, bokeh, holoviews, [pylift](https://github.com/wayfair/pylift), etc.)
+- Support for classification models other than XGBoost (Random Forest, LightGBM, etc.) to predict outcome
+- Support for classification models other than Logistic Regression to estimate propensity scores which would need calibration
+
+Any feedback, suggestions, pull requests to enhance/correct documentation, usability, and features are welcomed!
+
+If you could write a review about CausalLift in any natural languages (English, Chinese, Japanese, etc.) or implement similar features in any programming languages (R, SAS, etc.), please let me know. I will add the link here.
 
 
 ### About author 
@@ -281,9 +289,3 @@ Yusuke Minami
 - https://github.com/Minyus
 - https://www.linkedin.com/in/yusukeminami/
 - https://twitter.com/Minyus86
-
-
-### License
-
-[BSD 2-clause License](https://github.com/Minyus/causallift/blob/master/LICENSE).
-
