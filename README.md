@@ -60,8 +60,8 @@ Table data including the following columns:
 	- a.k.a dependent variable, target variable, label
 	- e.g. whether the customer bought a product, clicked a link, etc.
 - Treatment: binary (0 or 1)
-	- a.k.a intervention
 	- a variable you can control and want to optimize for each individual (customer) 
+	- a.k.a intervention
 	- e.g. whether an advertising campaign was executed, whether a discount was offered, etc.
 	- Note: if you cannot find a treatment column, you may need to ask stakeholders to get the data, which might take hours to years.
 - [Optional] Propensity: continuous between 0 and 1
