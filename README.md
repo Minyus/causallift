@@ -235,7 +235,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 ### Related Python packages
 
 - ["pylift"](https://github.com/wayfair/pylift)
-- ["ALICE" (Automated Learning and Intelligence for Causation and Economics)](https://github.com/Microsoft/EconML)
+- ["EconML" (ALICE: Automated Learning and Intelligence for Causation and Economics)](https://github.com/Microsoft/EconML)
 - ["dowhy"](https://github.com/Microsoft/dowhy)
 - ["pymatch"](https://github.com/benmiroglio/pymatch)
 
