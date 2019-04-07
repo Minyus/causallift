@@ -123,7 +123,7 @@ cl = CausalLift(train_df, test_df, enable_ipw=True)
 
 """ Step 2. Train 2 classification models (XGBoost) for treated and untreated 
 samples independently and compute estimated CATE (Conditional Average Treatment 
-Effect) or uplift score. 
+Effect), ITE (Individual Treatment Effect), or uplift score. 
 """
 
 train_df, test_df = cl.estimate_cate_by_2_models()
