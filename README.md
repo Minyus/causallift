@@ -227,12 +227,8 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 ### To-dos:
 
 - Improve documentation (using Sphinx)
-- Add examples of applying uplift modeling to more publicly available datasets (such as [Lending Club Loan Data](https://www.kaggle.com/wendykan/lending-club-loan-data) as [pymatch](
-https://github.com/benmiroglio/pymatch
-) (https://medium.com/@bmiroglio/introducing-the-pymatch-package-6a8c020e2009)) did.
-- Add visualization of the uplift model (using matplotlib, plotly, bokeh, holoviews, [pylift]( 
-https://github.com/wayfair/pylift
-), etc.)
+- Add examples of applying uplift modeling to more publicly available datasets (such as [Lending Club Loan Data](https://www.kaggle.com/wendykan/lending-club-loan-data) as [pymatch](https://github.com/benmiroglio/pymatch) did.
+- Add visualization of the uplift model (using matplotlib, plotly, bokeh, holoviews, [pylift](https://github.com/wayfair/pylift), etc.)
 - Support for classification models other than XGBoost (Random Forest, LightGBM, etc.) to predict outcome
 - Support for classification models other than Logistic Regression to estimate propensity scores which would need calibration
 
