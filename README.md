@@ -47,7 +47,7 @@ In a word, to use for real-world business.
 
 	- [Explainability of the model] Since it is relatively simple, it is less challenging to explain how it works to stakeholders in business.
 
-	- [Explainability of evaluation] To evaluate Uplift Modeling, metrics such as Qini and AUUC (Area Under the Uplift Curve) are used in research, but difficult to use in real-world business. For business, a metric that can estimate how much more profit can be earned is more practical. The 2 models can be reused to simulate the outcome of following the recommendation by the Uplift Model and can estimate how much conversion rate (the proportion of people who took desired action such as buying a product) will increase using the uplift model.
+	- [Explainability of evaluation] To evaluate Uplift Modeling, metrics such as Qini and AUUC (Area Under the Uplift Curve) are used in research, but these metrics are difficult to explain to the stakeholders. For business, a metric that can estimate how much more profit can be earned is more practical. Since CausalLift adopted the Two-Model approach, the 2 models can be reused to simulate the outcome of following the recommendation by the Uplift Model and can estimate how much conversion rate (the proportion of people who took desired action such as buying a product) will increase using the uplift model.
 
 ### What kind of data can be fed to CausalLift?
 Table data including the following columns:
