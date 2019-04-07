@@ -232,7 +232,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 - Google Colab (Python 3.6.7)
 
 
-### Related Python packages:
+### Related Python packages
 
 - ["pylift"]( 
 https://github.com/wayfair/pylift
