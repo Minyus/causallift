@@ -281,6 +281,13 @@ Any feedback, suggestions, pull requests to enhance/correct documentation, usabi
 
 If you could write a review about CausalLift in any natural languages (English, Chinese, Japanese, etc.) or implement similar features in any programming languages (R, SAS, etc.), please let me know. I will add the link here.
 
+### Keywords to search
+
+[English] Causal Inference, Propensity Score, Econometrics
+
+[中文] 因果推论, 倾向评分, 计量经济学
+
+[日本語] 因果推論, 傾向スコア, 計量経済学
 
 ### About author 
 
