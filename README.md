@@ -260,7 +260,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 
 	Uplift Modeling.
 	
-- ["tools4uplift"](https://cran.r-project.org/web/packages/tools4uplift/index.html)
+- ["tools4uplift"](https://cran.r-project.org/web/packages/tools4uplift/index.html) [[paper]](https://arxiv.org/abs/1901.10867)
 
 	Uplift Modeling and utility tools for quantization of continuous variables, visualization of metrics such as Qini, and automatic feature selection.
 	
