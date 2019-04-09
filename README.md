@@ -4,9 +4,12 @@
 [![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD-yellow.svg)](https://opensource.org/licenses/BSD-2-Clause)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_example.ipynb)
 
-Were you asked to predict which customers will buy a product or churn?
-It is likely not enough. 
-Uplift Modeling might be the one you need.
+If you are simply building a Machine Learning model and executing promotion campaigns to the customers who are predicted to, for example, buy a product, it is not efficient.
+
+There are customers who will buy a product anyway even without promotion campaigns (called "Sure things").
+It is even possible that there are customers who will buy a product only if not targeted (called "Do Not Disturbs" or "Sleeping Dogs").
+
+The solution is called Uplift Modeling.
 
 ### What is Uplift Modeling?
 
