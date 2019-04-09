@@ -236,24 +236,37 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 
 - ["pylift"](https://github.com/wayfair/pylift)
 [[documentation]](https://pylift.readthedocs.io/en/latest/)
+
+	Uplift Modeling based on Transformed Outcome method for A/B Testing data and visualization of metrics such as Qini.
+	
 - ["EconML" (ALICE: Automated Learning and Intelligence for Causation and Economics)](https://github.com/Microsoft/EconML) 
 [[documentation]](https://econml.azurewebsites.net/index.html)
+
+	Several advanced methods to estimate CATE from observational data.
+	
 - ["DoWhy"](https://github.com/Microsoft/dowhy)
 [[documentation]](https://causalinference.gitlab.io/dowhy/)
+
+	Visualization of steps in Causal Inference for observational data.
+	
 - ["pymatch"](https://github.com/benmiroglio/pymatch)
+
+	Propensity Score Matching for observational data.
 
 
 ### Related R packages
 
-- ["uplift"](
-https://cran.r-project.org/web/packages/uplift/index.html
-)
-- ["tools4uplift"](
-https://cran.r-project.org/web/packages/tools4uplift/index.html
-)
-- ["matching"](
-https://cran.r-project.org/web/packages/Matching/index.html
-)
+- ["uplift"](https://cran.r-project.org/web/packages/uplift/index.html)
+
+	Uplift Modeling.
+	
+- ["tools4uplift"](https://cran.r-project.org/web/packages/tools4uplift/index.html)
+
+	Uplift Modeling and utility tools for quantization of continuous variables, visualization of metrics such as Qini, and automatic feature selection.
+	
+- ["matching"](https://cran.r-project.org/web/packages/Matching/index.html)
+
+	Propensity Score Matching for observational data.
 
 ### References
 
