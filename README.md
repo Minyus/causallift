@@ -305,6 +305,9 @@ If you could write a review about CausalLift in any natural languages (English, 
 
 [日本語] 因果推論, 傾向スコア, 計量経済学
 
+### Article about CausalList in Japanese
+- https://qiita.com/Minyus86/items/07ce57a8bddc49c2bbf5
+
 ### About author 
 
 Yusuke Minami
