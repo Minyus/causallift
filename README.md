@@ -266,10 +266,15 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 - ["tools4uplift"](https://cran.r-project.org/web/packages/tools4uplift/index.html) [[paper]](https://arxiv.org/abs/1901.10867)
 
 	Uplift Modeling and utility tools for quantization of continuous variables, visualization of metrics such as Qini, and automatic feature selection.
-	
+
 - ["matching"](https://cran.r-project.org/web/packages/Matching/index.html)
 
 	Propensity Score Matching for observational data.
+
+- ["CausalImpact"](https://cran.r-project.org/web/packages/CausalImpact/index.html) [[documentation]](https://google.github.io/CausalImpact/CausalImpact.html)
+
+	Causal inference using Bayesian structural time-series models 
+
 
 ### References
 
@@ -299,11 +304,11 @@ If you could write a review about CausalLift in any natural languages (English, 
 
 ### Keywords to search
 
-[English] Causal Inference, Propensity Score, Econometrics
+[English] Causal Inference, Counterfactual, Propensity Score, Econometrics
 
-[中文] 因果推论, 倾向评分, 计量经济学
+[中文] 因果推论, 反事实, 倾向评分, 计量经济学
 
-[日本語] 因果推論, 傾向スコア, 計量経済学
+[日本語] 因果推論, 反事実, 傾向スコア, 計量経済学
 
 ### Article about CausalList in Japanese
 - https://qiita.com/Minyus86/items/07ce57a8bddc49c2bbf5
