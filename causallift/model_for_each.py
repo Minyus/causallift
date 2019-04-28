@@ -1,6 +1,8 @@
 """ model_for_each.py """
 """ 2 supervised models """
 
+from IPython.display import display
+
 from .utils import (get_cols_features,
                     concat_train_test,
                     concat_train_test_df,
@@ -73,7 +75,7 @@ class ModelForTreatedOrUntreated():
                 (1 / propensity) if treatment_val == 1.0 else (1 / (1 - propensity))
         else:
             # do not use sample weight
-            sample_weight = 1.0
+            sample_weight = np.ones_like(y_train, dtype=float)
 
         if params is None:
             params = {
