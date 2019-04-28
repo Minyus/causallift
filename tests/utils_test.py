@@ -162,5 +162,36 @@ class UtilsTest(unittest.TestCase):
 
         self.assertEqual(value, result)
 
+    def test_overall_uplift_gain_should_compute_uplift_for_sure_things(self):
+        df = pd.DataFrame(data=np.random.rand(12, 2), columns=['var1', 'var2'])
+        df['Outcome'] = [random.sample(range(2), 1)[0] for i in range(12)]
+        df['Treatment'] = [random.sample(range(2), 1)[0] for i in range(12)]
+
+        no_treated_positive_outcome = df[(df['Treatment'] == 1) & (df['Outcome'] == 1)].shape[0]
+        no_not_treated_positive_outcome = df[(df['Treatment'] == 0) & (df['Outcome'] == 1)].shape[0]
+        no_treated = df[df['Treatment'] == 1].shape[0]
+        no_not_treated = df[df['Treatment'] == 0].shape[0]
+
+        gain = (no_treated_positive_outcome/no_treated) - (no_not_treated_positive_outcome/no_not_treated)
+        result = utils.overall_uplift_gain_(df)
+
+        self.assertEqual(gain, result)
+
+    def test_overall_uplift_gain_should_compute_uplift_for_sure_things_with_custom_colum_names(self):
+        df = pd.DataFrame(data=np.random.rand(12, 2), columns=['var1', 'var2'])
+        df['Result'] = [random.sample(range(2), 1)[0] for i in range(12)]
+        df['Contacted'] = [random.sample(range(2), 1)[0] for i in range(12)]
+
+        no_treated_positive_outcome = df[(df['Contacted'] == 1) & (df['Result'] == 1)].shape[0]
+        no_not_treated_positive_outcome = df[(df['Contacted'] == 0) & (df['Result'] == 1)].shape[0]
+        no_treated = df[df['Contacted'] == 1].shape[0]
+        no_not_treated = df[df['Contacted'] == 0].shape[0]
+
+        gain = (no_treated_positive_outcome/no_treated) - (no_not_treated_positive_outcome/no_not_treated)
+        result = utils.overall_uplift_gain_(df, col_treatment='Contacted', col_outcome='Result')
+
+        self.assertEqual(gain, result)
+
+
 if __name__ == '__main__':
     unittest.main()

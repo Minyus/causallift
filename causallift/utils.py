@@ -45,8 +45,8 @@ def outcome_fraction_(df, col_outcome='Outcome'):
 def overall_uplift_gain_(df, treatment=1.0, outcome=1.0,
                          col_treatment='Treatment', col_outcome='Outcome'):
     overall_uplift_gain = \
-        (len_to(df, col_treatment='Treatment', col_outcome='Outcome') / len_t(df, col_treatment=col_treatment)) \
-        - (len_to(df, 0, 1, col_treatment='Treatment', col_outcome='Outcome') / len_t(df, 0,
+        (len_to(df, col_treatment=col_treatment, col_outcome=col_outcome) / len_t(df, col_treatment=col_treatment)) \
+        - (len_to(df, 0, 1, col_treatment=col_treatment, col_outcome=col_outcome) / len_t(df, 0,
                                                                                       col_treatment=col_treatment))
     return overall_uplift_gain
 
