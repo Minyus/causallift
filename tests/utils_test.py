@@ -95,5 +95,37 @@ class UtilsTest(unittest.TestCase):
         result = utils.len_o(df, outcome=0, col_outcome='Result')
 
         self.assertEqual(length, result)
+
+    def test_len_to_should_return_the_number_of_records_where_outcome_and_treatment_is_1(self):
+        df = pd.DataFrame(data=np.random.rand(12, 2), columns=['var1', 'var2'])
+        df['Outcome'] = [random.sample(range(2), 1)[0] for i in range(12)]
+        df['Treatment'] = [random.sample(range(2), 1)[0] for i in range(12)]
+
+        length = df[(df['Treatment'] == 1) & (df['Outcome'] == 1)].shape[0]
+        result = utils.len_to(df)
+
+        self.assertEqual(length, result)
+
+    def test_len_to_should_return_the_number_of_records_where_outcome_and_treatment_are_different(self):
+        df = pd.DataFrame(data=np.random.rand(12, 2), columns=['var1', 'var2'])
+        df['Outcome'] = [random.sample(range(2), 1)[0] for i in range(12)]
+        df['Treatment'] = [random.sample(range(2), 1)[0] for i in range(12)]
+
+        length = df[(df['Treatment'] == 1) & (df['Outcome'] == 0)].shape[0]
+        result = utils.len_to(df, outcome=0)
+
+        self.assertEqual(length, result)
+
+    def test_len_to_should_return_the_number_of_records_where_outcome_and_treatment_are_different_with_custom_column_names(self):
+        df = pd.DataFrame(data=np.random.rand(12, 2), columns=['var1', 'var2'])
+        df['result'] = [random.sample(range(2), 1)[0] for i in range(12)]
+        df['marketed_to'] = [random.sample(range(2), 1)[0] for i in range(12)]
+
+        length = df[(df['marketed_to'] == 1) & (df['result'] == 0)].shape[0]
+        result = utils.len_to(df, outcome=0, col_outcome='result', col_treatment='marketed_to')
+
+        self.assertEqual(length, result)
+
+
 if __name__ == '__main__':
     unittest.main()
