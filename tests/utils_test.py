@@ -2,6 +2,7 @@ import unittest
 from causallift import utils
 import pandas as pd
 import numpy as np
+import random
 
 
 class UtilsTest(unittest.TestCase):
@@ -41,5 +42,58 @@ class UtilsTest(unittest.TestCase):
         pd.testing.assert_frame_equal(train_df, result.xs('train'))
         pd.testing.assert_frame_equal(test_df, result.xs('test'))
 
+    def test_len_t_should_return_the_number_of_records_where_treatment_equals_1(self):
+        df = pd.DataFrame(data=np.random.rand(6, 2), columns=['var1', 'var2'])
+        df['Treatment'] = [random.sample(range(2), 1)[0] for i in range(6)]
+
+        length = df[df['Treatment'] == 1].shape[0]
+        result = utils.len_t(df)
+
+        self.assertEqual(length, result)
+
+    def test_len_t_should_return_the_number_of_records_where_treatment_equals_0(self):
+        df = pd.DataFrame(data=np.random.rand(6, 2), columns=['var1', 'var2'])
+        df['Treatment'] = [random.sample(range(2), 1)[0] for i in range(6)]
+
+        length = df[df['Treatment'] == 0].shape[0]
+        result = utils.len_t(df, treatment=0)
+
+        self.assertEqual(length, result)
+
+    def test_len_t_should_return_the_number_of_records_where_treatment_equals_0_and_treatment_col_is_not_default(self):
+        df = pd.DataFrame(data=np.random.rand(6, 2), columns=['var1', 'var2'])
+        df['MarketedTo'] = [random.sample(range(2), 1)[0] for i in range(6)]
+
+        length = df[df['MarketedTo'] == 0].shape[0]
+        result = utils.len_t(df, treatment=0, col_treatment='MarketedTo')
+
+        self.assertEqual(length, result)
+
+    def test_len_o_should_return_the_number_of_records_where_outcome_is_1(self):
+        df = pd.DataFrame(data=np.random.rand(6, 2), columns=['var1', 'var2'])
+        df['Outcome'] = [random.sample(range(2), 1)[0] for i in range(6)]
+
+        length = df[df['Outcome'] == 1].shape[0]
+        result = utils.len_o(df)
+
+        self.assertEqual(length, result)
+
+    def test_len_o_should_return_the_number_of_records_where_outcome_is_0(self):
+        df = pd.DataFrame(data=np.random.rand(6, 2), columns=['var1', 'var2'])
+        df['Outcome'] = [random.sample(range(2), 1)[0] for i in range(6)]
+
+        length = df[df['Outcome'] == 0].shape[0]
+        result = utils.len_o(df, outcome=0)
+
+        self.assertEqual(length, result)
+
+    def test_len_o_should_return_the_number_of_records_where_outcome_equals_0_and_outcome_col_is_not_default(self):
+        df = pd.DataFrame(data=np.random.rand(6, 2), columns=['var1', 'var2'])
+        df['Result'] = [random.sample(range(2), 1)[0] for i in range(6)]
+
+        length = df[df['Result'] == 0].shape[0]
+        result = utils.len_o(df, outcome=0, col_outcome='Result')
+
+        self.assertEqual(length, result)
 if __name__ == '__main__':
     unittest.main()
