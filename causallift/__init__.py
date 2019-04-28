@@ -17,4 +17,4 @@ from .model_for_each import (ModelForTreatedOrUntreated,
 from .estimate_propensity import estimate_propensity
 from .causal_lift import CausalLift
 
-__version__='0.0.1'
+__version__='0.0.2'
