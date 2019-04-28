@@ -23,5 +23,23 @@ class UtilsTest(unittest.TestCase):
 
         self.assertEqual(['var1', 'var2', 'var3'], result)
 
+    def test_concat_train_test_should_concatnate_both_sets_into_series_with_keys(self):
+        train_df = pd.DataFrame(data=np.random.rand(3, 3), columns=['var1', 'var2', 'var3'])
+        test_df = pd.DataFrame(data=np.random.rand(3, 3), columns=['var1', 'var2', 'var3'])
+
+        result = utils.concat_train_test(train=train_df, test=test_df)
+
+        pd.testing.assert_series_equal(pd.Series(train_df), result.xs('train'))
+        pd.testing.assert_series_equal(pd.Series(test_df), result.xs('test'))
+
+    def test_concat_train_test_df_should_concatnate_both_sets_into_frames_with_keys(self):
+        train_df = pd.DataFrame(data=np.random.rand(3, 3), columns=['var1', 'var2', 'var3'])
+        test_df = pd.DataFrame(data=np.random.rand(3, 3), columns=['var1', 'var2', 'var3'])
+
+        result = utils.concat_train_test_df(train=train_df, test=test_df)
+
+        pd.testing.assert_frame_equal(train_df, result.xs('train'))
+        pd.testing.assert_frame_equal(test_df, result.xs('test'))
+
 if __name__ == '__main__':
     unittest.main()
