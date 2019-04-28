@@ -126,6 +126,41 @@ class UtilsTest(unittest.TestCase):
 
         self.assertEqual(length, result)
 
+    def test_treatment_fraction_should_compute_percentage_of_treated(self):
+        df = pd.DataFrame(data=np.random.rand(12, 2), columns=['var1', 'var2'])
+        df['Treatment'] = [random.sample(range(2), 1)[0] for i in range(12)]
+
+        value = len(df[df['Treatment'] == 1])/len(df)
+        result = utils.treatment_fraction_(df)
+
+        self.assertEqual(value, result)
+
+    def test_treatment_fraction_should_compute_percentage_of_treated_with_custom_name(self):
+        df = pd.DataFrame(data=np.random.rand(12, 2), columns=['var1', 'var2'])
+        df['marketed'] = [random.sample(range(2), 1)[0] for i in range(12)]
+
+        value = len(df[df['marketed'] == 1])/len(df)
+        result = utils.treatment_fraction_(df, col_treatment='marketed')
+
+        self.assertEqual(value, result)
+
+    def test_outcome_fraction_should_compute_percentage_of_positive_outcome(self):
+        df = pd.DataFrame(data=np.random.rand(12, 2), columns=['var1', 'var2'])
+        df['Outcome'] = [random.sample(range(2), 1)[0] for i in range(12)]
+
+        value = len(df[df['Outcome'] == 1])/len(df)
+        result = utils.outcome_fraction_(df)
+
+        self.assertEqual(value, result)
+
+    def test_outcome_fraction_should_compute_percentage_of_positive_outcome_with_custom_name(self):
+        df = pd.DataFrame(data=np.random.rand(12, 2), columns=['var1', 'var2'])
+        df['result'] = [random.sample(range(2), 1)[0] for i in range(12)]
+
+        value = len(df[df['result'] == 1])/len(df)
+        result = utils.outcome_fraction_(df, col_outcome='result')
+
+        self.assertEqual(value, result)
 
 if __name__ == '__main__':
     unittest.main()
