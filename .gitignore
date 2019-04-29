@@ -24,6 +24,7 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+requirements.txt
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -113,3 +114,6 @@ Pipfile.lock
 # Output CSV files
 examples/CATE_for_Train.csv
 examples/CATE_for_Test.csv
+
+# vscode
+.vscode/
