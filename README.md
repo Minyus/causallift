@@ -299,6 +299,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 - Support for multiple treatments
 
 Any feedback, suggestions, pull requests to enhance/correct documentation, usability, and features are welcomed!
+Separate pull requests for each improvement are appreciated rather than a single big pull request.
 
 If you could write a review about CausalLift in any natural languages (English, Chinese, Japanese, etc.) or implement similar features in any programming languages (R, SAS, etc.), please let me know. I will add the link here.
 
