@@ -256,6 +256,10 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 
 	Propensity Score Matching for observational data.
 
+- ["Ax"](https://github.com/facebook/Ax) 
+[[documentation]](https://ax.dev/)
+
+	Platform for adaptive experiments, powered by BoTorch, a library built on PyTorch
 
 ### Related R packages
 
