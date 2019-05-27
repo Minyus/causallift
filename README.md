@@ -4,41 +4,41 @@
 [![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD-yellow.svg)](https://opensource.org/licenses/BSD-2-Clause)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_example.ipynb)
 
-If you are simply building a Machine Learning model and executing promotion campaigns to the customers who are predicted to, for example, buy a product, it is not efficient.
+If you are simply building a Machine Learning model and executing promotion campaigns to the customers who are predicted to buy a product, for example, it is not efficient.
 
-There are customers who will buy a product anyway even without promotion campaigns (called "Sure things").
-It is even possible that there are customers who will buy a product only if not targeted (called "Do Not Disturbs" or "Sleeping Dogs").
+There are some customers who will buy a product anyway even without promotion campaigns (called "Sure things").
 
-The solution is called Uplift Modeling.
+It is even possible that the campaign triggers some customers to churn (called "Do Not Disturbs" or "Sleeping Dogs").
+
+The solution is Uplift Modeling.
 
 ### What is Uplift Modeling?
 
 
-Uplift Modeling is a Machine Learning technique to find which individuals should be "treated" (or targeted) and which individuals should not. 
+Uplift Modeling is a Machine Learning technique to find which customers (individuals) should be targeted ("treated") and which customers should not be targeted. 
 
 Applications of Uplift Modeling for business include:
 - Increase revenue by finding which customers should be targeted for advertising/marketing campaigns and which customers should not. 
 - Retain revenue by finding which customers should be contacted to prevent churn and which customers should not. 
 
-Resources to understand the concepts of Uplift Modeling include:
+More specifically, Uplift Modeling estimates uplift scores (a.k.a. CATE: Conditional Average Treatment Effect or ITE: Individual Treatment Effect). 
 
-- [[Medium article] Uplift Models for better marketing campaigns (Part 1)](
-https://medium.com/@abhayspawar/uplift-models-for-better-marketing-campaigns-part-1-b491292e4c80
-)
-- [[Medium article] Simple Machine Learning Techniques To Improve Your Marketing Strategy: Demystifying Uplift Models](
-https://medium.com/datadriveninvestor/simple-machine-learning-techniques-to-improve-your-marketing-strategy-demystifying-uplift-models-dc4fb3f927a2
-)
-- [[Wikipedia] Uplift_modelling](
-https://en.wikipedia.org/wiki/Uplift_modelling
-)
 
-### What's special about CausalLift from perspective of Causal Inference?
+### What is uplift score?
 
-CausalLift is a basic application of Causal Inference with focus on decision making based on CATE (Conditional Average Treatment Effect) or ITE (Individual Treatment Effect).
+Suppose you are in charge of a marketing camppaign to sell a product, and the estimated conversion rate (probability to buy a product) of a customer if targetted is 50 % and the estimated conversion rate if not targetted is 40 %, then the uplift score of the customer is (50 - 40) = +10 % points. 
 
-### What's special about CausalLift from perspective of Uplift Modeling?
+Likewise, suppose the estimated conversion rate if targeted is 20 % and the estimated conversion rate if not targetted is 80%, the uplift score is (20 - 80) = -60 % points (negative value).
 
-CausalLift is a basic application of Uplifting Modeling that works with observational datasets not from A/B Testing and outputs intuitive metrics for evaluation.
+The range of uplift scores is between -100 and +100 % points (-1 and +1).
+
+It is recommended to target customers with high uplift scores and avoid customers with negative uplift scores to optimize the marketing campaign.
+
+
+### What is special about "CausalLift" package?
+
+- CausalLift works with both A/B testing results and observational datasets. 
+- CausalLift can output intuitive metrics for evaluation.
 
 ### Why CausalLift was developed?
 
@@ -68,8 +68,8 @@ Table data including the following columns:
 	- e.g. whether an advertising campaign was executed, whether a discount was offered, etc.
 	- Note: if you cannot find a treatment column, you may need to ask stakeholders to get the data, which might take hours to years.
 - [Optional] Propensity: continuous between 0 and 1
-	- propensity (or probability) to be treated 
-	- If not provided, CausalLift can estimate from the features using logistic regression. Not needed for A/B Testing data. 
+	- propensity (or probability) to be treated for observational datasets (not needed for A/B Testing results)
+	- If not provided, CausalLift can estimate from the features using logistic regression. 
 
 
 <img src="readme_images/Example_table_data.png">
@@ -287,6 +287,19 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 - Athey, Susan and Imbens, Guido W. Machine learning methods for estimating heterogeneous causal effects. Stat, 2015.
 
 - Yi, Robert. and Frost, Will. (n.d.). Pylift: A Fast Python Package for Uplift Modeling. Retrieved April 3, 2019, from https://tech.wayfair.com/2018/10/pylift-a-fast-python-package-for-uplift-modeling/
+
+
+### Introductive resources about Uplift Modeling
+
+- [[Medium article] Uplift Models for better marketing campaigns (Part 1)](
+https://medium.com/@abhayspawar/uplift-models-for-better-marketing-campaigns-part-1-b491292e4c80
+)
+- [[Medium article] Simple Machine Learning Techniques To Improve Your Marketing Strategy: Demystifying Uplift Models](
+https://medium.com/datadriveninvestor/simple-machine-learning-techniques-to-improve-your-marketing-strategy-demystifying-uplift-models-dc4fb3f927a2
+)
+- [[Wikipedia] Uplift_modelling](
+https://en.wikipedia.org/wiki/Uplift_modelling
+)
 
 ### License
 
