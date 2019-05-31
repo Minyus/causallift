@@ -27,13 +27,9 @@ More specifically, Uplift Modeling estimates uplift scores (a.k.a. CATE: Conditi
 ### What is uplift score?
 
 Uplift score is how much the estimated conversion rate will increase by the campaign.
-
-Suppose you are in charge of a marketing camppaign to sell a product, and the estimated conversion rate (probability to buy a product) of a customer if targetted is 50 % and the estimated conversion rate if not targetted is 40 %, then the uplift score of the customer is (50 - 40) = +10 % points. 
-
-Likewise, suppose the estimated conversion rate if targeted is 20 % and the estimated conversion rate if not targetted is 80%, the uplift score is (20 - 80) = -60 % points (negative value).
-
+Suppose you are in charge of a marketing campaign to sell a product, and the estimated conversion rate (probability to buy a product) of a customer if targeted is 50 % and the estimated conversion rate if not targeted is 40 %, then the uplift score of the customer is (50–40) = +10 % points.
+Likewise, suppose the estimated conversion rate if targeted is 20 % and the estimated conversion rate if not targeted is 80%, the uplift score is (20–80) = -60 % points (negative value).
 The range of uplift scores is between -100 and +100 % points (-1 and +1).
-
 It is recommended to target customers with high uplift scores and avoid customers with negative uplift scores to optimize the marketing campaign.
 
 
