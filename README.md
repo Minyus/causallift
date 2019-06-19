@@ -12,33 +12,45 @@ It is even possible that the campaign triggers some customers to churn (called "
 
 The solution is Uplift Modeling.
 
-### What is Uplift Modeling?
+## What is Uplift Modeling?
 
 
 Uplift Modeling is a Machine Learning technique to find which customers (individuals) should be targeted ("treated") and which customers should not be targeted. 
+
+Uplift Modeling is also known as persuasion modeling, incremental modeling, treatment effects modeling, true lift modeling, net modeling.
 
 Applications of Uplift Modeling for business include:
 - Increase revenue by finding which customers should be targeted for advertising/marketing campaigns and which customers should not. 
 - Retain revenue by finding which customers should be contacted to prevent churn and which customers should not. 
 
-More specifically, Uplift Modeling estimates uplift scores (a.k.a. CATE: Conditional Average Treatment Effect or ITE: Individual Treatment Effect). 
+
+## A famous use case?
+
+The most fammous use case of Uplift Modeling would be the 44th US president Barack Obama's 2nd presidential campaign in 2012. Obama's team used Uplift Modeling to find which voters could be persuaded to vote for him. Here are some articles.
+
+- [What is ‘Persuasion Modeling’, and how did it help Obama to win the elections?](http://numrush.com/2013/06/28/what-is-persuasion-modeling-and-how-did-it-help-obama-to-win-the-elections/)
+- [How Obama’s Team Used Big Data to Rally Voters](https://www.technologyreview.com/s/509026/how-obamas-team-used-big-data-to-rally-voters/)
+- [How uplift modeling helped Obama's campaign -- and can aid marketers](https://searchbusinessanalytics.techtarget.com/video/How-uplift-modeling-helped-Obamas-campaign-and-can-aid-marketers) 
 
 
-### What is uplift score?
 
-Uplift score is how much the estimated conversion rate will increase by the campaign.
+## How does Uplift Modeling work?
+
+Uplift Modeling estimates uplift scores (a.k.a. CATE: Conditional Average Treatment Effect or ITE: Individual Treatment Effect). Uplift score is how much the estimated conversion rate will increase by the campaign.
+
 Suppose you are in charge of a marketing campaign to sell a product, and the estimated conversion rate (probability to buy a product) of a customer if targeted is 50 % and the estimated conversion rate if not targeted is 40 %, then the uplift score of the customer is (50–40) = +10 % points.
 Likewise, suppose the estimated conversion rate if targeted is 20 % and the estimated conversion rate if not targeted is 80%, the uplift score is (20–80) = -60 % points (negative value).
+
 The range of uplift scores is between -100 and +100 % points (-1 and +1).
 It is recommended to target customers with high uplift scores and avoid customers with negative uplift scores to optimize the marketing campaign.
 
 
-### What is special about "CausalLift" package?
+## What are advantages of "CausalLift" package?
 
 - CausalLift works with both A/B testing results and observational datasets. 
 - CausalLift can output intuitive metrics for evaluation.
 
-### Why CausalLift was developed?
+## Why CausalLift was developed?
 
 In a word, to use for real-world business.
 
@@ -50,7 +62,7 @@ In a word, to use for real-world business.
 
 	- [Explainability of evaluation] To evaluate Uplift Modeling, metrics such as Qini and AUUC (Area Under the Uplift Curve) are used in research, but these metrics are difficult to explain to the stakeholders. For business, a metric that can estimate how much more profit can be earned is more practical. Since CausalLift adopted the Two-Model approach, the 2 models can be reused to simulate the outcome of following the recommendation by the Uplift Model and can estimate how much conversion rate (the proportion of people who took desired action such as buying a product) will increase using the uplift model.
 
-### What kind of data can be fed to CausalLift?
+## What kind of data can be fed to CausalLift?
 Table data including the following columns:
 
 - Features 
@@ -77,7 +89,7 @@ Table data including the following columns:
 
 
 
-### How to install CausalLift?
+## How to install CausalLift?
 
 Option 1: install from the PyPI
 
@@ -97,7 +109,7 @@ Option 3: clone the [GitHub repository](https://github.com/Minyus/causallift.git
 	python setup.py install
 ```
 
-### Dependencies:
+## Dependencies:
 
 - numpy
 - pandas
@@ -106,7 +118,7 @@ Option 3: clone the [GitHub repository](https://github.com/Minyus/causallift.git
 - xgboost
 
 
-### How to use CausalLift?
+## How to use CausalLift?
 
 Please see the [CausalLift example]( 
 https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_example.ipynb
@@ -149,7 +161,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 	CausalLift flow diagram
 </p>
 
-### What parameters are available for CausalLift?
+## What parameters are available for CausalLift?
 
         cols_features: list of str, optional
             List of column names used as features.
@@ -228,12 +240,12 @@ estimated_effect_df = cl.estimate_recommendation_impact()
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
 
 
-### What was the tested environment of CausalLift?
+## What was the tested environment of CausalLift?
 
 - Google Colab (Python 3.6.7)
 
 
-### Related Python packages
+## Related Python packages
 
 - ["pylift"](https://github.com/wayfair/pylift)
 [[documentation]](https://pylift.readthedocs.io/en/latest/)
@@ -259,7 +271,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 
 	Platform for adaptive experiments, powered by BoTorch, a library built on PyTorch
 
-### Related R packages
+## Related R packages
 
 - ["uplift"](https://cran.r-project.org/web/packages/uplift/index.html)
 
@@ -278,7 +290,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 	Causal inference using Bayesian structural time-series models 
 
 
-### References
+## References
 
 - Gutierrez, Pierre. and G´erardy, Jean-Yves. Causal inference and uplift modelling: A review of the literature. In International Conference on Predictive Applications and APIs, pages 1–13, 2017.
 
@@ -287,7 +299,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 - Yi, Robert. and Frost, Will. (n.d.). Pylift: A Fast Python Package for Uplift Modeling. Retrieved April 3, 2019, from https://tech.wayfair.com/2018/10/pylift-a-fast-python-package-for-uplift-modeling/
 
 
-### Introductive resources about Uplift Modeling
+## Introductive resources about Uplift Modeling
 
 - [[Medium article] Uplift Models for better marketing campaigns (Part 1)](
 https://medium.com/@abhayspawar/uplift-models-for-better-marketing-campaigns-part-1-b491292e4c80
@@ -299,12 +311,12 @@ https://medium.com/datadriveninvestor/simple-machine-learning-techniques-to-impr
 https://en.wikipedia.org/wiki/Uplift_modelling
 )
 
-### License
+## License
 
 [BSD 2-clause License](https://github.com/Minyus/causallift/blob/master/LICENSE).
 
 
-### To-dos
+## To-dos
 
 - Improve documentation (using Sphinx)
 - Add examples of applying uplift modeling to more publicly available datasets (such as [Lending Club Loan Data](https://www.kaggle.com/wendykan/lending-club-loan-data) as [pymatch](https://github.com/benmiroglio/pymatch) did.
@@ -318,7 +330,7 @@ Separate pull requests for each improvement are appreciated rather than a single
 
 If you could write a review about CausalLift in any natural languages (English, Chinese, Japanese, etc.) or implement similar features in any programming languages (R, SAS, etc.), please let me know. I will add the link here.
 
-### Keywords to search
+## Keywords to search
 
 [English] Causal Inference, Counterfactual, Propensity Score, Econometrics
 
@@ -326,10 +338,10 @@ If you could write a review about CausalLift in any natural languages (English, 
 
 [日本語] 因果推論, 反事実, 傾向スコア, 計量経済学
 
-### Article about CausalList in Japanese
+## Article about CausalList in Japanese
 - https://qiita.com/Minyus86/items/07ce57a8bddc49c2bbf5
 
-### About author 
+## About author 
 
 Yusuke Minami
 
