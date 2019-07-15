@@ -1,10 +1,70 @@
+##########################
+# KEDRO PROJECT
+
+# ignore all local configuration
+conf/local/**
+!conf/local/.gitkeep
+
+# ignore potentially sensitive credentials files
+conf/**/*credentials*
+
+# ignore everything in the following folders
+data/**
+logs/**
+references/**
+results/**
+
+# except their sub-folders
+!data/**/
+!logs/**/
+!references/**/
+!results/**/
+
+# also keep all .gitkeep files
+!.gitkeep
+
+# keep also the example dataset
+!data/01_raw/iris.csv
+
+
+##########################
+# Common files
+
+# IntelliJ
+.idea/
+*.iml
+out/
+.idea_modules/
+
+### macOS
+*.DS_Store
+.AppleDouble
+.LSOverride
+.Trashes
+
+# Vim
+*~
+.*.swo
+.*.swp
+
+# emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# C extensions
+*.so
+
+### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
-*.so
 
 # Distribution / packaging
 .Python
@@ -24,7 +84,6 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
-requirements.txt
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -46,7 +105,6 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
-.pytest_cache/
 
 # Translations
 *.mo
@@ -54,8 +112,9 @@ coverage.xml
 
 # Django stuff:
 *.log
+.static_storage/
+.media/
 local_settings.py
-db.sqlite3
 
 # Flask stuff:
 instance/
@@ -72,6 +131,10 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+
+# IPython
+.ipython/profile_default/history.sqlite
+.ipython/profile_default/startup/README
 
 # pyenv
 .python-version
@@ -91,29 +154,8 @@ ENV/
 env.bak/
 venv.bak/
 
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
 # mkdocs documentation
 /site
 
 # mypy
 .mypy_cache/
-
-# PyCharm
-.idea/
-
-# pipenv files
-Pipfile
-Pipfile.lock
-
-# Output CSV files
-examples/CATE_for_Train.csv
-examples/CATE_for_Test.csv
-
-# vscode
-.vscode/
