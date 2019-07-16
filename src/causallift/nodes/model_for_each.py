@@ -124,25 +124,21 @@ class ModelForTreatedOrUntreated():
 
     def recommendation_by_cate(self, cate_series,
                                treatment_fraction_train=None, treatment_fraction_test=None):
-        if treatment_fraction_train is None:
-            treatment_fraction_train = self.treatment_fraction_train
-        if treatment_fraction_test is None:
-            treatment_fraction_test = self.treatment_fraction_test
+
+        treatment_fraction_train = treatment_fraction_train or self.treatment_fraction_train
+        treatment_fraction_test = treatment_fraction_test or self.treatment_fraction_test
 
         def recommendation(cate_series, treatment_fraction):
             rank_series = cate_series.rank(method='first', ascending=False, pct=True)
-            recommendation = np.where(rank_series <= treatment_fraction, 1.0, 0.0)
-            return recommendation
+            r = np.where(rank_series <= treatment_fraction, 1.0, 0.0)
+            return r
 
         recommendation_train = recommendation(cate_series.xs('train'), treatment_fraction_train)
         recommendation_test = recommendation(cate_series.xs('test'), treatment_fraction_test)
 
-        def add_recommendation_column(recommendation_train, recommendation_test, col_recommendation):
-            self.df_.loc[:, col_recommendation] = \
-                concat_train_test(recommendation_train, recommendation_test)
-            self.col_recommendation = col_recommendation
+        self.df_.loc[:, self.args.col_recommendation] = \
+            concat_train_test(recommendation_train, recommendation_test)
 
-        add_recommendation_column(recommendation_train, recommendation_test, self.args.col_recommendation)
 
     def simulate_recommendation(self):
         verbose = self.args.verbose
