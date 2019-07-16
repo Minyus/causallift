@@ -3,4 +3,5 @@ pandas
 matplotlib
 scikit-learn
 xgboost
+easydict
 kedro==0.14.3
