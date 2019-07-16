@@ -26,50 +26,37 @@ class ModelForTreatedOrUntreated():
     def __init__(self,
                  train_df_,
                  test_df_,
+                 args,
                  treatment_val=1.0,
-                 random_state=0,
-                 verbose=2,
-                 cols_features=None,
-                 col_treatment='Treatment',
-                 col_outcome='Outcome',
-                 col_propensity='Propensity',
-                 col_recommendation='Recommendation',
-                 min_propensity=0.01,
-                 max_propensity=0.99,
-                 enable_ipw=True,
-                 uplift_model_params=None,
-                 cv=3):
+                 ):
 
+        assert isinstance(train_df_, pd.DataFrame)
+        assert isinstance(test_df_, pd.DataFrame)
         assert treatment_val in [0.0, 1.0]
-        seed = random_state
-        params = uplift_model_params
+        seed = args.random_state
+        params = args.uplift_model_params
 
-        if cols_features is None:
-            cols_features = \
-                [column for column in df.columns if column not in [ \
-                    col_treatment, col_outcome, col_propensity, col_recommendation]]
-
-        if verbose >= 2:
+        if args.verbose >= 2:
             print('\n\n## Model for Treatment = {}'.format(treatment_val))
 
         df_ = concat_train_test_df(train_df_.reset_index(drop=True).copy(),
                                    test_df_.reset_index(drop=True).copy())
-        df = df_.query('{}=={}'.format(col_treatment, treatment_val)).copy()
+        df = df_.query('{}=={}'.format(args.col_treatment, treatment_val)).copy()
 
-        X_train = df.xs('train')[cols_features]
-        y_train = df.xs('train')[col_outcome]
-        X_test = df.xs('test')[cols_features]
-        y_test = df.xs('test')[col_outcome]
+        X_train = df.xs('train')[args.cols_features]
+        y_train = df.xs('train')[args.col_outcome]
+        X_test = df.xs('test')[args.cols_features]
+        y_test = df.xs('test')[args.col_outcome]
 
-        if enable_ipw and (col_propensity in df.xs('train').columns):
-            propensity = df.xs('train')[col_propensity]
+        if args.enable_ipw and (args.col_propensity in df.xs('train').columns):
+            propensity = df.xs('train')[args.col_propensity]
 
             # avoid propensity near 0 or 1 which will result in too large weight
-            if propensity.min() < min_propensity and verbose >= 2:
-                print('[Warning] Propensity scores below {} were clipped.'.format(min_propensity))
-            if propensity.max() > max_propensity and verbose >= 2:
-                print('[Warning] Propensity scores above {} were clipped.'.format(max_propensity))
-            propensity.clip(lower=min_propensity, upper=max_propensity, inplace=True)
+            if propensity.min() < args.min_propensity and args.verbose >= 2:
+                print('[Warning] Propensity scores below {} were clipped.'.format(args.min_propensity))
+            if propensity.max() > args.max_propensity and args.verbose >= 2:
+                print('[Warning] Propensity scores above {} were clipped.'.format(args.max_propensity))
+            propensity.clip(lower=args.min_propensity, upper=args.max_propensity, inplace=True)
 
             sample_weight = \
                 (1 / propensity) if treatment_val == 1.0 else (1 / (1 - propensity))
@@ -77,39 +64,17 @@ class ModelForTreatedOrUntreated():
             # do not use sample weight
             sample_weight = np.ones_like(y_train, dtype=float)
 
-        if params is None:
-            params = {
-                'max_depth': [3],
-                'learning_rate': [0.1],
-                'n_estimators': [100],
-                'silent': [True],
-                'objective': ['binary:logistic'],
-                'booster': ['gbtree'],
-                'n_jobs': [-1],
-                'nthread': [None],
-                'gamma': [0],
-                'min_child_weight': [1],
-                'max_delta_step': [0],
-                'subsample': [1],
-                'colsample_bytree': [1],
-                'colsample_bylevel': [1],
-                'reg_alpha': [0],
-                'reg_lambda': [1],
-                'scale_pos_weight': [1],
-                'base_score': [0.5],
-                'missing': [None],
-            }
         model = GridSearchCV(XGBClassifier(random_state=seed),
-                             params, cv=cv, return_train_score=False, n_jobs=-1)
+                             params, cv=args.cv, return_train_score=False, n_jobs=-1)
 
         model.fit(X_train, y_train, sample_weight=sample_weight)
-        if verbose >= 3:
+        if args.verbose >= 3:
             print('### Best parameters of the model trained using samples with observational Treatment: {} \n {}'.
                   format(treatment_val, model.best_params_))
 
-        if verbose >= 2:
+        if args.verbose >= 2:
             if hasattr(model.best_estimator_, 'feature_importances_'):
-                fi_df = pd.DataFrame( \
+                fi_df = pd.DataFrame(
                     model.best_estimator_.feature_importances_.reshape(1, -1),
                     index=['feature importance'])
                 print('\n### Feature importances of the model trained using samples with observational Treatment:',
@@ -122,25 +87,25 @@ class ModelForTreatedOrUntreated():
         y_pred_test = model.predict(X_test)
 
         score_original_treatment_df = score_df(y_train, y_test, y_pred_train, y_pred_test, average='binary')
-        if verbose >= 3:
+        if args.verbose >= 3:
             print('\n### Outcome estimated by the model trained using samples with observational Treatment:',
                   treatment_val)
             display(score_original_treatment_df)
 
         self.model = model
         self.treatment_val = treatment_val
-        self.col_treatment = col_treatment
-        self.col_outcome = col_outcome
-        self.cols_features = cols_features
+        self.col_treatment = args.col_treatment
+        self.col_outcome = args.col_outcome
+        self.cols_features = args.cols_features
         self.score_original_treatment_df = score_original_treatment_df
 
         self.treatment_fraction_train = \
-            len(df_.xs('train').query('{}=={}'.format(col_treatment, 1.0))) / len(df_.xs('train'))
+            len(df_.xs('train').query('{}=={}'.format(args.col_treatment, 1.0))) / len(df_.xs('train'))
         self.treatment_fraction_test = \
-            len(df_.xs('test').query('{}=={}'.format(col_treatment, 1.0))) / len(df_.xs('test'))
+            len(df_.xs('test').query('{}=={}'.format(args.col_treatment, 1.0))) / len(df_.xs('test'))
         self.df_ = df_
 
-        self.verbose = verbose
+        self.verbose = args.verbose
 
     def predict_proba(self):
         model = self.model
@@ -223,12 +188,12 @@ class ModelForTreatedOrUntreated():
 
 
 class ModelForTreated(ModelForTreatedOrUntreated):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *lsargs, **kwargs):
         kwargs.update(treatment_val=1.0)
-        super().__init__(*args, **kwargs)
+        super().__init__(*lsargs, **kwargs)
 
 
 class ModelForUntreated(ModelForTreatedOrUntreated):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *lsargs, **kwargs):
         kwargs.update(treatment_val=0.0)
-        super().__init__(*args, **kwargs)
+        super().__init__(*lsargs, **kwargs)

@@ -20,6 +20,8 @@ from .nodes.model_for_each import (ModelForTreatedOrUntreated,
 from .nodes.estimate_propensity import estimate_propensity
 
 import pandas as pd
+from easydict import EasyDict
+
 
 class CausalLift():
     r"""
@@ -112,62 +114,86 @@ class CausalLift():
     def __init__(self,
                  train_df,
                  test_df,
-                 cols_features=None,
-                 col_treatment='Treatment',
-                 col_outcome='Outcome',
-                 col_propensity='Propensity',
-                 col_cate='CATE',
-                 col_recommendation='Recommendation',
-                 min_propensity=0.01,
-                 max_propensity=0.99,
-                 random_state=0,
-                 verbose=2,
-                 uplift_model_params=None,
-                 enable_ipw=True,
-                 propensity_model_params=None,
-                 cv=3):
+                 **kwargs):
+
+        args = EasyDict()
+        args.cols_features = None
+        args.col_treatment = 'Treatment'
+        args.col_outcome = 'Outcome'
+        args.col_propensity = 'Propensity'
+        args.col_cate = 'CATE'
+        args.col_recommendation = 'Recommendation'
+        args.min_propensity = 0.01
+        args.max_propensity = 0.99
+        args.random_state = 0
+        args.verbose = 2
+        args.uplift_model_params = {
+            'max_depth': [3],
+            'learning_rate': [0.1],
+            'n_estimators': [100],
+            'silent': [True],
+            'objective': ['binary:logistic'],
+            'booster': ['gbtree'],
+            'n_jobs': [-1],
+            'nthread': [None],
+            'gamma': [0],
+            'min_child_weight': [1],
+            'max_delta_step': [0],
+            'subsample': [1],
+            'colsample_bytree': [1],
+            'colsample_bylevel': [1],
+            'reg_alpha': [0],
+            'reg_lambda': [1],
+            'scale_pos_weight': [1],
+            'base_score': [0.5],
+            'missing': [None],
+        }
+        args.enable_ipw = True
+        args.propensity_model_params = \
+            {
+                'C': [0.1, 1, 10],
+                'class_weight': [None],
+                'dual': [False],
+                'fit_intercept': [True],
+                'intercept_scaling': [1],
+                'max_iter': [100],
+                'multi_class': ['ovr'],
+                'n_jobs': [1],
+                'penalty': ['l1', 'l2'],
+                'solver': ['liblinear'],
+                'tol': [0.0001],
+                'warm_start': [False]
+            }
+        args.cv = 3
+        args.update(kwargs)
 
         assert isinstance(train_df, pd.DataFrame)
         assert isinstance(test_df, pd.DataFrame)
         assert set(train_df.columns) == set(test_df.columns)
 
-        non_feature_cols = [col_treatment, col_outcome, col_propensity,
-                            col_cate, col_recommendation]
-        if cols_features is None: cols_features = \
-            get_cols_features(train_df, non_feature_cols=non_feature_cols)
+        non_feature_cols = [
+            args.col_treatment,
+            args.col_outcome,
+            args.col_propensity,
+            args.col_cate,
+            args.col_recommendation,
+        ]
+
+        args.cols_features = \
+            args.cols_features or get_cols_features(train_df, non_feature_cols=non_feature_cols)
 
         train_df = train_df.copy()
         test_df = test_df.copy()
 
-        if enable_ipw and (col_propensity not in train_df.columns):
+        if args.enable_ipw and (args.col_propensity not in train_df.columns):
             train_df, test_df = \
                 estimate_propensity(train_df,
                                     test_df,
-                                    cols_features=cols_features,
-                                    col_treatment=col_treatment,
-                                    col_outcome=col_outcome,
-                                    col_propensity=col_propensity,
-                                    random_state=random_state,
-                                    verbose=verbose,
-                                    propensity_model_params=propensity_model_params,
-                                    cv=cv)
+                                    args)
 
-        self.enable_ipw = enable_ipw
         self.train_df = train_df
         self.test_df = test_df
-
-        self.random_state = random_state
-        self.verbose = verbose
-        self.cols_features = cols_features
-        self.col_treatment = col_treatment
-        self.col_outcome = col_outcome
-        self.col_propensity = col_propensity
-        self.col_cate = col_cate
-        self.col_recommendation = col_recommendation
-        self.min_propensity = min_propensity
-        self.max_propensity = max_propensity
-        self.uplift_model_params = uplift_model_params
-        self.cv = cv
+        self.args = args
 
     def estimate_cate_by_2_models(self,
                                   verbose=None):
@@ -181,34 +207,11 @@ class CausalLift():
 
         train_df_ = self.train_df.copy()
         test_df_ = self.test_df.copy()
-        if verbose is None: verbose = self.verbose
+        # if verbose is None: verbose = args.verbose
+        verbose = verbose or self.args.verbose
 
-        model_for_treated = ModelForTreated(train_df_, test_df_,
-                                            random_state=self.random_state,
-                                            verbose=self.verbose,
-                                            cols_features=self.cols_features,
-                                            col_treatment=self.col_treatment,
-                                            col_outcome=self.col_outcome,
-                                            col_propensity=self.col_propensity,
-                                            col_recommendation=self.col_recommendation,
-                                            min_propensity=self.min_propensity,
-                                            max_propensity=self.max_propensity,
-                                            enable_ipw=self.enable_ipw,
-                                            uplift_model_params=self.uplift_model_params,
-                                            cv=self.cv)
-        model_for_untreated = ModelForUntreated(train_df_, test_df_,
-                                                random_state=self.random_state,
-                                                verbose=self.verbose,
-                                                cols_features=self.cols_features,
-                                                col_treatment=self.col_treatment,
-                                                col_outcome=self.col_outcome,
-                                                col_propensity=self.col_propensity,
-                                                col_recommendation=self.col_recommendation,
-                                                min_propensity=self.min_propensity,
-                                                max_propensity=self.max_propensity,
-                                                enable_ipw=self.enable_ipw,
-                                                uplift_model_params=self.uplift_model_params,
-                                                cv=self.cv)
+        model_for_treated = ModelForTreated(train_df_, test_df_, self.args)
+        model_for_untreated = ModelForUntreated(train_df_, test_df_, self.args)
         self.model_for_treated = model_for_treated
         self.model_for_untreated = model_for_untreated
 
@@ -221,8 +224,8 @@ class CausalLift():
         cate_estimated = model_for_treated.predict_proba() - model_for_untreated.predict_proba()
         self.cate_estimated = cate_estimated
 
-        self.train_df.loc[:, self.col_cate] = cate_estimated.xs('train').values
-        self.test_df.loc[:, self.col_cate] = cate_estimated.xs('test').values
+        self.train_df.loc[:, self.args.col_cate] = cate_estimated.xs('train').values
+        self.test_df.loc[:, self.args.col_cate] = cate_estimated.xs('test').values
 
         return self.train_df, self.test_df
 
@@ -249,7 +252,7 @@ class CausalLift():
         """
 
         if cate_estimated is None: cate_estimated = self.cate_estimated
-        if verbose is None: verbose = self.verbose
+        verbose = verbose or self.args.verbose
 
         model_for_treated = self.model_for_treated
         model_for_untreated = self.model_for_untreated
@@ -266,7 +269,7 @@ class CausalLift():
         self.treated_df = treated_df
         self.untreated_df = untreated_df
 
-        if self.verbose >= 3:
+        if verbose >= 3:
             print('\n### Treated samples without and with uplift model:')
             display(self.treated_df)
             print('\n### Untreated samples without and with uplift model:')
@@ -282,7 +285,7 @@ class CausalLift():
 
         estimated_effect_df['observed conversion rate without uplift model'] = \
             (treated_df['# samples chosen without uplift model'] * treated_df[
-                'observed conversion rate without uplift model'] \
+                'observed conversion rate without uplift model']
              + untreated_df['# samples chosen without uplift model'] * untreated_df[
                  'observed conversion rate without uplift model']) \
             / (treated_df['# samples chosen without uplift model'] + untreated_df[
@@ -292,7 +295,7 @@ class CausalLift():
 
         estimated_effect_df['predicted conversion rate using uplift model'] = \
             (treated_df['# samples recommended by uplift model'] * treated_df[
-                'predicted conversion rate using uplift model'] \
+                'predicted conversion rate using uplift model']
              + untreated_df['# samples recommended by uplift model'] * untreated_df[
                  'predicted conversion rate using uplift model']) \
             / (treated_df['# samples recommended by uplift model'] + untreated_df[
