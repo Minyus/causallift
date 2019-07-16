@@ -131,6 +131,9 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+notebooks/**
+!notebooks/.gitkeep
+!notebooks/**.ipynb
 
 # IPython
 .ipython/profile_default/history.sqlite
