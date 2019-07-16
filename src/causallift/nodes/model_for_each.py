@@ -150,10 +150,6 @@ class ModelForTreatedOrUntreated():
         model = self.model
         df_ = self.df_
         treatment_val = self.treatment_val
-        # col_recommendation = self.col_recommendation
-        # col_outcome = self.col_outcome
-        # cols_features = self.cols_features
-        # col_outcome = self.col_outcome
         args = self.args
         score_original_treatment_df = self.score_original_treatment_df
 
