@@ -94,9 +94,9 @@ class ModelForTreatedOrUntreated():
 
         self.model = model
         self.treatment_val = treatment_val
-        self.col_treatment = args.col_treatment
-        self.col_outcome = args.col_outcome
-        self.cols_features = args.cols_features
+        # self.col_treatment = args.col_treatment
+        # self.col_outcome = args.col_outcome
+        # self.cols_features = args.cols_features
         self.score_original_treatment_df = score_original_treatment_df
 
         self.treatment_fraction_train = \
@@ -105,11 +105,12 @@ class ModelForTreatedOrUntreated():
             len(df_.xs('test').query('{}=={}'.format(args.col_treatment, 1.0))) / len(df_.xs('test'))
         self.df_ = df_
 
-        self.verbose = args.verbose
+        # self.verbose = args.verbose
+        self.args = args
 
     def predict_proba(self):
         model = self.model
-        cols_features = self.cols_features
+        cols_features = self.args.cols_features
 
         df_ = self.df_
 
@@ -120,12 +121,6 @@ class ModelForTreatedOrUntreated():
         y_pred_test = model.predict_proba(X_test)[:, 1]
 
         return concat_train_test(y_pred_train, y_pred_test)
-
-    def add_recommendation_column(self, recommendation_train, recommendation_test,
-                                  col_recommendation='Recommendation'):
-        self.df_.loc[:, col_recommendation] = \
-            concat_train_test(recommendation_train, recommendation_test)
-        self.col_recommendation = col_recommendation
 
     def recommendation_by_cate(self, cate_series,
                                treatment_fraction_train=None, treatment_fraction_test=None):
@@ -141,26 +136,33 @@ class ModelForTreatedOrUntreated():
 
         recommendation_train = recommendation(cate_series.xs('train'), treatment_fraction_train)
         recommendation_test = recommendation(cate_series.xs('test'), treatment_fraction_test)
-        self.add_recommendation_column(recommendation_train, recommendation_test)
+
+        def add_recommendation_column(recommendation_train, recommendation_test, col_recommendation):
+            self.df_.loc[:, col_recommendation] = \
+                concat_train_test(recommendation_train, recommendation_test)
+            self.col_recommendation = col_recommendation
+
+        add_recommendation_column(recommendation_train, recommendation_test, self.args.col_recommendation)
 
     def simulate_recommendation(self):
-        verbose = self.verbose
+        verbose = self.args.verbose
 
         model = self.model
         df_ = self.df_
         treatment_val = self.treatment_val
-        col_recommendation = self.col_recommendation
-        col_outcome = self.col_outcome
-        cols_features = self.cols_features
-        col_outcome = self.col_outcome
+        # col_recommendation = self.col_recommendation
+        # col_outcome = self.col_outcome
+        # cols_features = self.cols_features
+        # col_outcome = self.col_outcome
+        args = self.args
         score_original_treatment_df = self.score_original_treatment_df
 
-        df = df_.query('{}=={}'.format(col_recommendation, treatment_val)).copy()
+        df = df_.query('{}=={}'.format(args.col_recommendation, treatment_val)).copy()
 
-        X_train = df.xs('train')[cols_features]
-        y_train = df.xs('train')[col_outcome]
-        X_test = df.xs('test')[cols_features]
-        y_test = df.xs('test')[col_outcome]
+        X_train = df.xs('train')[args.cols_features]
+        y_train = df.xs('train')[args.col_outcome]
+        X_test = df.xs('test')[args.cols_features]
+        y_test = df.xs('test')[args.col_outcome]
 
         y_pred_train = model.predict(X_train)
         y_pred_test = model.predict(X_test)

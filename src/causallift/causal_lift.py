@@ -207,7 +207,7 @@ class CausalLift():
 
         train_df_ = self.train_df.copy()
         test_df_ = self.test_df.copy()
-        # if verbose is None: verbose = args.verbose
+
         verbose = verbose or self.args.verbose
 
         model_for_treated = ModelForTreated(train_df_, test_df_, self.args)
