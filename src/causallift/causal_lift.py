@@ -2,7 +2,7 @@
 
 from IPython.display import display
 
-from .utils import (get_cols_features,
+from .nodes.utils import (get_cols_features,
                     concat_train_test,
                     concat_train_test_df,
                     len_t,
@@ -14,10 +14,10 @@ from .utils import (get_cols_features,
                     gain_tuple,
                     score_df,
                     conf_mat_df)
-from .model_for_each import (ModelForTreatedOrUntreated,
+from .nodes.model_for_each import (ModelForTreatedOrUntreated,
                              ModelForTreated,
                              ModelForUntreated)
-from .estimate_propensity import estimate_propensity
+from .nodes.estimate_propensity import estimate_propensity
 
 import pandas as pd
 
