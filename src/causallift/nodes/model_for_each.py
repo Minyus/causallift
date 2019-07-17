@@ -23,14 +23,13 @@ from sklearn.model_selection import GridSearchCV
 
 
 class ModelForTreatedOrUntreated():
-    def __init__(self,
-                 df_,
-                 args,
-                 treatment_val=1.0,
-                 ):
+    def __init__(self, treatment_val=1.0):
+        assert treatment_val in {0.0, 1.0}
+        self.treatment_val = treatment_val
+    def fit(self, df_, args):
 
         assert isinstance(df_, pd.DataFrame)
-        assert treatment_val in {0.0, 1.0}
+        treatment_val = self.treatment_val
         seed = args.random_state
         params = args.uplift_model_params
 

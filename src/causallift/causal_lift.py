@@ -194,8 +194,11 @@ class CausalLift():
         self._separate_train_test() # for backward compatibility
         self.args = args
 
-        self.model_for_treated = ModelForTreated(self.df, self.args)
-        self.model_for_untreated = ModelForUntreated(self.df, self.args)
+        self.model_for_treated = ModelForTreated()
+        self.model_for_untreated = ModelForUntreated()
+
+        self.model_for_treated.fit(self.df, self.args)
+        self.model_for_untreated.fit(self.df, self.args)
 
         # fractions
         self.treatment_fractions = EasyDict(treatment_fractions_(self.df, self.args.col_treatment))
