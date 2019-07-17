@@ -9,6 +9,7 @@ from .nodes.utils import (get_cols_features,
                     len_o,
                     len_to,
                     treatment_fraction_,
+                    treatment_fractions_,
                     outcome_fraction_,
                     overall_uplift_gain_,
                     gain_tuple,
@@ -215,18 +216,15 @@ class CausalLift():
         self.model_for_treated = model_for_treated
         self.model_for_untreated = model_for_untreated
 
-        df = self.df
-        args = self.args
-        self.treatment_fraction_train = \
-            len(df.xs('train').query('{}=={}'.format(args.col_treatment, 1.0))) / len(df.xs('train'))
-        self.treatment_fraction_test = \
-            len(df.xs('test').query('{}=={}'.format(args.col_treatment, 1.0))) / len(df.xs('test'))
+        self.treatment_fractions = treatment_fractions_(self.df, self.args.col_treatment)
+        self.treatment_fraction_train = self.treatment_fractions['train'] # for backward compatibility
+        self.treatment_fraction_test = self.treatment_fractions['test'] # for backward compatibility
 
         if verbose >= 3:
             print('### Treatment fraction in train dataset: ',
-                  self.treatment_fraction_train)
+                  self.treatment_fractions['train'])
             print('### Treatment fraction in test dataset: ',
-                  self.treatment_fraction_test)
+                  self.treatment_fractions['test'])
 
         cate_estimated = model_for_treated.predict_proba(self.df) - model_for_untreated.predict_proba(self.df)
         self.cate_estimated = cate_estimated # for backward compatibility
