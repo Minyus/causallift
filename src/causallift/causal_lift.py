@@ -189,7 +189,13 @@ class CausalLift():
             train_df, test_df = estimate_propensity(train_df, test_df, args)
 
         self.df = concat_train_test_df(train_df, test_df)
+        self.separate_train_test() # for backward compatibility
         self.args = args
+
+    def separate_train_test(self):
+        self.train_df = self.df.xs('train')
+        self.test_df = self.df.xs('test')
+        return self.train_df, self.test_df
 
     def estimate_cate_by_2_models(self,
                                   verbose=None):
@@ -219,7 +225,7 @@ class CausalLift():
 
         self.df.loc[:, self.args.col_cate] = cate_estimated.values
 
-        return self.df.xs('train'), self.df.xs('test')
+        return self.separate_train_test()
 
     def estimate_recommendation_impact(self,
                                        cate_estimated=None,
