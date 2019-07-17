@@ -30,7 +30,7 @@ class ModelForTreatedOrUntreated():
                  ):
 
         assert isinstance(df_, pd.DataFrame)
-        assert treatment_val in [0.0, 1.0]
+        assert treatment_val in {0.0, 1.0}
         seed = args.random_state
         params = args.uplift_model_params
 
@@ -93,19 +93,16 @@ class ModelForTreatedOrUntreated():
 
         self.score_original_treatment_df = score_original_treatment_df
 
-        self.treatment_fraction_train = \
-            len(df_.xs('train').query('{}=={}'.format(args.col_treatment, 1.0))) / len(df_.xs('train'))
-        self.treatment_fraction_test = \
-            len(df_.xs('test').query('{}=={}'.format(args.col_treatment, 1.0))) / len(df_.xs('test'))
-        self.df_ = df_
+
+        # self.df_ = df_
 
         self.args = args
 
-    def predict_proba(self):
+    def predict_proba(self, df_):
         model = self.model
         cols_features = self.args.cols_features
 
-        df_ = self.df_
+        # df_ = self.df_
 
         X_train = df_.xs('train')[cols_features]
         X_test = df_.xs('test')[cols_features]
@@ -114,30 +111,15 @@ class ModelForTreatedOrUntreated():
         y_pred_test = model.predict_proba(X_test)[:, 1]
 
         return concat_train_test(y_pred_train, y_pred_test)
-
-    def recommendation_by_cate(self, cate_series,
-                               treatment_fraction_train=None, treatment_fraction_test=None):
-
-        treatment_fraction_train = treatment_fraction_train or self.treatment_fraction_train
-        treatment_fraction_test = treatment_fraction_test or self.treatment_fraction_test
-
-        def recommendation(cate_series, treatment_fraction):
-            rank_series = cate_series.rank(method='first', ascending=False, pct=True)
-            r = np.where(rank_series <= treatment_fraction, 1.0, 0.0)
-            return r
-
-        recommendation_train = recommendation(cate_series.xs('train'), treatment_fraction_train)
-        recommendation_test = recommendation(cate_series.xs('test'), treatment_fraction_test)
-
-        self.df_.loc[:, self.args.col_recommendation] = \
-            concat_train_test(recommendation_train, recommendation_test)
+        # TODO: Refactor
 
 
-    def simulate_recommendation(self):
+
+    def simulate_recommendation(self, df_):
         verbose = self.args.verbose
 
         model = self.model
-        df_ = self.df_
+
         treatment_val = self.treatment_val
         args = self.args
         score_original_treatment_df = self.score_original_treatment_df
