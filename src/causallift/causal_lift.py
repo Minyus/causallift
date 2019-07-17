@@ -197,8 +197,12 @@ class CausalLift():
         self.model_for_treated = ModelForTreated()
         self.model_for_untreated = ModelForUntreated()
 
-        self.model_for_treated.fit(self.df, self.args)
-        self.model_for_untreated.fit(self.df, self.args)
+        [model_treated, score_original_treatment_treated_df] = self.model_for_treated.fit(self.args, self.df)
+        [model_untreated, score_original_treatment_untreated_df] = self.model_for_untreated.fit(self.args, self.df)
+        self.model_treated = model_treated
+        self.model_untreated = model_untreated
+        self.score_original_treatment_treated_df = score_original_treatment_treated_df
+        self.score_original_treatment_untreated_df = score_original_treatment_untreated_df
 
         # fractions
         self.treatment_fractions = EasyDict(treatment_fractions_(self.df, self.args.col_treatment))
@@ -228,7 +232,9 @@ class CausalLift():
 
         # verbose = verbose or self.args.verbose
 
-        cate_estimated = self.model_for_treated.predict_proba(self.df) - self.model_for_untreated.predict_proba(self.df)
+        cate_estimated = \
+            self.model_for_treated.predict_proba(self.args, self.df, self.model_treated) \
+            - self.model_for_untreated.predict_proba(self.args, self.df, self.model_untreated)
         self.cate_estimated = cate_estimated # for backward compatibility
         self.df.loc[:, self.args.col_cate] = cate_estimated.values
 
@@ -287,8 +293,10 @@ class CausalLift():
         df = recommendation_by_cate(self.df, self.args, self.treatment_fractions)
         self.df = df
 
-        treated_df = model_for_treated.simulate_recommendation(df)
-        untreated_df = model_for_untreated.simulate_recommendation(df)
+        treated_df = model_for_treated.simulate_recommendation(self.args, self.df, self.model_treated,
+                                                               self.score_original_treatment_treated_df)
+        untreated_df = model_for_untreated.simulate_recommendation(self.args, self.df, self.model_untreated,
+                                                                   self.score_original_treatment_untreated_df)
 
         self.treated_df = treated_df
         self.untreated_df = untreated_df

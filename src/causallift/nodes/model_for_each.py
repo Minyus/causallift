@@ -26,7 +26,7 @@ class ModelForTreatedOrUntreated():
     def __init__(self, treatment_val=1.0):
         assert treatment_val in {0.0, 1.0}
         self.treatment_val = treatment_val
-    def fit(self, df_, args):
+    def fit(self, args, df_):
 
         assert isinstance(df_, pd.DataFrame)
         treatment_val = self.treatment_val
@@ -87,16 +87,12 @@ class ModelForTreatedOrUntreated():
                   treatment_val)
             display(score_original_treatment_df)
 
-        self.model = model
-        self.treatment_val = treatment_val
+        return [model, score_original_treatment_df]
 
-        self.score_original_treatment_df = score_original_treatment_df
-
-        self.args = args
-
-    def predict_proba(self, df_):
-        model = self.model
-        cols_features = self.args.cols_features
+    def predict_proba(self, args, df_, model):
+        # model = self.model
+        # cols_features = self.args.cols_features
+        cols_features = args.cols_features
 
         X_train = df_.xs('train')[cols_features]
         X_test = df_.xs('test')[cols_features]
@@ -111,14 +107,10 @@ class ModelForTreatedOrUntreated():
         # return y_pred
 
 
-    def simulate_recommendation(self, df_):
-        verbose = self.args.verbose
-
-        model = self.model
+    def simulate_recommendation(self, args, df_, model, score_original_treatment_df):
 
         treatment_val = self.treatment_val
-        args = self.args
-        score_original_treatment_df = self.score_original_treatment_df
+        verbose = args.verbose
 
         df = df_.query('{}=={}'.format(args.col_recommendation, treatment_val)).copy()
 
