@@ -216,15 +216,15 @@ class CausalLift():
         self.model_for_treated = model_for_treated
         self.model_for_untreated = model_for_untreated
 
-        self.treatment_fractions = treatment_fractions_(self.df, self.args.col_treatment)
-        self.treatment_fraction_train = self.treatment_fractions['train'] # for backward compatibility
-        self.treatment_fraction_test = self.treatment_fractions['test'] # for backward compatibility
+        self.treatment_fractions = EasyDict(treatment_fractions_(self.df, self.args.col_treatment))
+        self.treatment_fraction_train = self.treatment_fractions.train # for backward compatibility
+        self.treatment_fraction_test = self.treatment_fractions.test # for backward compatibility
 
         if verbose >= 3:
             print('### Treatment fraction in train dataset: ',
-                  self.treatment_fractions['train'])
+                  self.treatment_fractions.train)
             print('### Treatment fraction in test dataset: ',
-                  self.treatment_fractions['test'])
+                  self.treatment_fractions.test)
 
         cate_estimated = model_for_treated.predict_proba(self.df) - model_for_untreated.predict_proba(self.df)
         self.cate_estimated = cate_estimated # for backward compatibility
@@ -257,41 +257,33 @@ class CausalLift():
         if cate_estimated is not None:
             self.cate_estimated = cate_estimated # for backward compatibility
             self.df.loc[:, self.args.col_cate] = cate_estimated.values
-        treatment_fraction_train = treatment_fraction_train or self.treatment_fraction_train
-        treatment_fraction_test = treatment_fraction_test or self.treatment_fraction_test
+        self.treatment_fractions.train = treatment_fraction_train or self.treatment_fractions.train
+        self.treatment_fractions.test = treatment_fraction_test or self.treatment_fractions.test
 
         verbose = verbose or self.args.verbose
 
         model_for_treated = self.model_for_treated
         model_for_untreated = self.model_for_untreated
 
-        # model_for_treated.recommendation_by_cate(self.df,
-        #                                          treatment_fraction_train=treatment_fraction_train,
-        #                                          treatment_fraction_test=treatment_fraction_test)
-        # model_for_untreated.recommendation_by_cate(self.df,
-        #                                            treatment_fraction_train=treatment_fraction_train,
-        #                                            treatment_fraction_test=treatment_fraction_test)
-        def recommendation_by_cate(self, df_,
-                                   treatment_fraction_train=None, treatment_fraction_test=None):
+        def recommendation_by_cate(df, args, treatment_fractions):
+
+            cate_series = df[args.col_cate]
 
             def recommendation(cate_series, treatment_fraction):
                 rank_series = cate_series.rank(method='first', ascending=False, pct=True)
                 r = np.where(rank_series <= treatment_fraction, 1.0, 0.0)
                 return r
 
-            cate_series = df_[self.args.col_cate]
-            recommendation_train = recommendation(cate_series.xs('train'), treatment_fraction_train)
-            recommendation_test = recommendation(cate_series.xs('test'), treatment_fraction_test)
+            recommendation_train = recommendation(cate_series.xs('train'), treatment_fractions.train)
+            recommendation_test = recommendation(cate_series.xs('test'), treatment_fractions.test)
 
-            df_.loc[:, self.args.col_recommendation] = \
+            df.loc[:, args.col_recommendation] = \
                 concat_train_test(recommendation_train, recommendation_test)
-            # TODO Refactor
 
-            return df_
+            return df
 
-        df = recommendation_by_cate(self, self.df,
-                                    treatment_fraction_train=treatment_fraction_train,
-                                    treatment_fraction_test=treatment_fraction_test)
+        df = recommendation_by_cate(self.df, self.args, self.treatment_fractions)
+        self.df = df
 
         treated_df = model_for_treated.simulate_recommendation(df)
         untreated_df = model_for_untreated.simulate_recommendation(df)
