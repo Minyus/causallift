@@ -191,10 +191,24 @@ class CausalLift():
             train_df, test_df = estimate_propensity(train_df, test_df, args)
 
         self.df = concat_train_test_df(train_df, test_df)
-        self.separate_train_test() # for backward compatibility
+        self._separate_train_test() # for backward compatibility
         self.args = args
 
-    def separate_train_test(self):
+        self.model_for_treated = ModelForTreated(self.df, self.args)
+        self.model_for_untreated = ModelForUntreated(self.df, self.args)
+
+        # fractions
+        self.treatment_fractions = EasyDict(treatment_fractions_(self.df, self.args.col_treatment))
+        self.treatment_fraction_train = self.treatment_fractions.train # for backward compatibility
+        self.treatment_fraction_test = self.treatment_fractions.test # for backward compatibility
+
+        if self.args.verbose >= 3:
+            print('### Treatment fraction in train dataset: ',
+                  self.treatment_fractions.train)
+            print('### Treatment fraction in test dataset: ',
+                  self.treatment_fractions.test)
+
+    def _separate_train_test(self):
         self.train_df = self.df.xs('train')
         self.test_df = self.df.xs('test')
         return self.train_df, self.test_df
@@ -209,28 +223,13 @@ class CausalLift():
                 If None (default), use the value set in the constructor.
         """
 
-        verbose = verbose or self.args.verbose
+        # verbose = verbose or self.args.verbose
 
-        model_for_treated = ModelForTreated(self.df, self.args)
-        model_for_untreated = ModelForUntreated(self.df, self.args)
-        self.model_for_treated = model_for_treated
-        self.model_for_untreated = model_for_untreated
-
-        self.treatment_fractions = EasyDict(treatment_fractions_(self.df, self.args.col_treatment))
-        self.treatment_fraction_train = self.treatment_fractions.train # for backward compatibility
-        self.treatment_fraction_test = self.treatment_fractions.test # for backward compatibility
-
-        if verbose >= 3:
-            print('### Treatment fraction in train dataset: ',
-                  self.treatment_fractions.train)
-            print('### Treatment fraction in test dataset: ',
-                  self.treatment_fractions.test)
-
-        cate_estimated = model_for_treated.predict_proba(self.df) - model_for_untreated.predict_proba(self.df)
+        cate_estimated = self.model_for_treated.predict_proba(self.df) - self.model_for_untreated.predict_proba(self.df)
         self.cate_estimated = cate_estimated # for backward compatibility
         self.df.loc[:, self.args.col_cate] = cate_estimated.values
 
-        return self.separate_train_test()
+        return self._separate_train_test()
 
     def estimate_recommendation_impact(self,
                                        cate_estimated=None,

@@ -93,16 +93,11 @@ class ModelForTreatedOrUntreated():
 
         self.score_original_treatment_df = score_original_treatment_df
 
-
-        # self.df_ = df_
-
         self.args = args
 
     def predict_proba(self, df_):
         model = self.model
         cols_features = self.args.cols_features
-
-        # df_ = self.df_
 
         X_train = df_.xs('train')[cols_features]
         X_test = df_.xs('test')[cols_features]
@@ -111,8 +106,10 @@ class ModelForTreatedOrUntreated():
         y_pred_test = model.predict_proba(X_test)[:, 1]
 
         return concat_train_test(y_pred_train, y_pred_test)
-        # TODO: Refactor
 
+        # X = df_[cols_features]
+        # y_pred = model.predict_proba(X)[:, 1]
+        # return y_pred
 
 
     def simulate_recommendation(self, df_):
