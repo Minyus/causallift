@@ -3,18 +3,7 @@
 
 from IPython.display import display
 
-from .utils import (get_cols_features,
-                    concat_train_test,
-                    concat_train_test_df,
-                    len_t,
-                    len_o,
-                    len_to,
-                    treatment_fraction_,
-                    outcome_fraction_,
-                    overall_uplift_gain_,
-                    gain_tuple,
-                    score_df,
-                    conf_mat_df)
+from .utils import *
 
 import numpy as np
 import pandas as pd
@@ -154,3 +143,23 @@ class ModelForUntreated(ModelForTreatedOrUntreated):
     def __init__(self, *lsargs, **kwargs):
         kwargs.update(treatment_val=0.0)
         super().__init__(*lsargs, **kwargs)
+
+
+def model_for_treated_fit(args, df):
+    return ModelForTreated().fit(args, df)
+
+def model_for_treated_predict_proba(args, df, model):
+    return ModelForTreated().predict_proba(args, df, model)
+
+def model_for_treated_simulate_recommendation(args, df, model, score_original_treatment_df):
+    return ModelForTreated().simulate_recommendation(args, df, model, score_original_treatment_df)
+
+
+def model_for_untreated_fit(args, df):
+    return ModelForUntreated().fit(args, df)
+
+def model_for_untreated_predict_proba(args, df, model):
+    return ModelForUntreated().predict_proba(args, df, model)
+
+def model_for_untreated_simulate_recommendation(args, df, model, score_original_treatment_df):
+    return ModelForUntreated().simulate_recommendation(args, df, model, score_original_treatment_df)

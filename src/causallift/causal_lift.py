@@ -180,11 +180,8 @@ class CausalLift():
         self._separate_train_test() # for backward compatibility
         self.args = args
 
-        self.model_for_treated = ModelForTreated()
-        self.model_for_untreated = ModelForUntreated()
-
-        [model_treated, score_original_treatment_treated_df] = self.model_for_treated.fit(self.args, self.df)
-        [model_untreated, score_original_treatment_untreated_df] = self.model_for_untreated.fit(self.args, self.df)
+        [model_treated, score_original_treatment_treated_df] = model_for_treated_fit(self.args, self.df)
+        [model_untreated, score_original_treatment_untreated_df] = model_for_untreated_fit(self.args, self.df)
         self.model_treated = model_treated
         self.model_untreated = model_untreated
         self.score_original_treatment_treated_df = score_original_treatment_treated_df
@@ -219,8 +216,8 @@ class CausalLift():
         # verbose = verbose or self.args.verbose
 
         cate_estimated = \
-            self.model_for_treated.predict_proba(self.args, self.df, self.model_treated) \
-            - self.model_for_untreated.predict_proba(self.args, self.df, self.model_untreated)
+            model_for_treated_predict_proba(self.args, self.df, self.model_treated) \
+            - model_for_untreated_predict_proba(self.args, self.df, self.model_untreated)
         self.cate_estimated = cate_estimated # for backward compatibility
         self.df.loc[:, self.args.col_cate] = cate_estimated.values
 
@@ -256,8 +253,8 @@ class CausalLift():
 
         verbose = verbose or self.args.verbose
 
-        model_for_treated = self.model_for_treated
-        model_for_untreated = self.model_for_untreated
+        # model_for_treated = self.model_for_treated
+        # model_for_untreated = self.model_for_untreated
 
         def recommendation_by_cate(df, args, treatment_fractions):
 
@@ -279,9 +276,9 @@ class CausalLift():
         df = recommendation_by_cate(self.df, self.args, self.treatment_fractions)
         self.df = df
 
-        treated_df = model_for_treated.simulate_recommendation(self.args, self.df, self.model_treated,
+        treated_df = model_for_treated_simulate_recommendation(self.args, self.df, self.model_treated,
                                                                self.score_original_treatment_treated_df)
-        untreated_df = model_for_untreated.simulate_recommendation(self.args, self.df, self.model_untreated,
+        untreated_df = model_for_untreated_simulate_recommendation(self.args, self.df, self.model_untreated,
                                                                    self.score_original_treatment_untreated_df)
 
         self.treated_df = treated_df
