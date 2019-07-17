@@ -182,17 +182,13 @@ class CausalLift():
         args.cols_features = \
             args.cols_features or get_cols_features(train_df, non_feature_cols=non_feature_cols)
 
-        train_df = train_df.copy()
-        test_df = test_df.copy()
+        train_df = train_df.reset_index(drop=True).copy()
+        test_df = test_df.reset_index(drop=True).copy()
 
         if args.enable_ipw and (args.col_propensity not in train_df.columns):
-            train_df, test_df = \
-                estimate_propensity(train_df,
-                                    test_df,
-                                    args)
+            train_df, test_df = estimate_propensity(train_df, test_df, args)
 
-        self.train_df = train_df
-        self.test_df = test_df
+        self.df = concat_train_test_df(train_df, test_df)
         self.args = args
 
     def estimate_cate_by_2_models(self,
@@ -205,13 +201,10 @@ class CausalLift():
                 If None (default), use the value set in the constructor.
         """
 
-        train_df_ = self.train_df.copy()
-        test_df_ = self.test_df.copy()
-
         verbose = verbose or self.args.verbose
 
-        model_for_treated = ModelForTreated(train_df_, test_df_, self.args)
-        model_for_untreated = ModelForUntreated(train_df_, test_df_, self.args)
+        model_for_treated = ModelForTreated(self.df, self.args)
+        model_for_untreated = ModelForUntreated(self.df, self.args)
         self.model_for_treated = model_for_treated
         self.model_for_untreated = model_for_untreated
 
@@ -224,10 +217,9 @@ class CausalLift():
         cate_estimated = model_for_treated.predict_proba() - model_for_untreated.predict_proba()
         self.cate_estimated = cate_estimated
 
-        self.train_df.loc[:, self.args.col_cate] = cate_estimated.xs('train').values
-        self.test_df.loc[:, self.args.col_cate] = cate_estimated.xs('test').values
+        self.df.loc[:, self.args.col_cate] = cate_estimated.values
 
-        return self.train_df, self.test_df
+        return self.df.xs('train'), self.df.xs('test')
 
     def estimate_recommendation_impact(self,
                                        cate_estimated=None,
@@ -251,7 +243,7 @@ class CausalLift():
                 If None (default), use the value set in the constructor.
         """
 
-        if cate_estimated is None: cate_estimated = self.cate_estimated
+        cate_estimated = cate_estimated or self.cate_estimated
         verbose = verbose or self.args.verbose
 
         model_for_treated = self.model_for_treated

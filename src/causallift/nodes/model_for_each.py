@@ -24,14 +24,12 @@ from sklearn.model_selection import GridSearchCV
 
 class ModelForTreatedOrUntreated():
     def __init__(self,
-                 train_df_,
-                 test_df_,
+                 df_,
                  args,
                  treatment_val=1.0,
                  ):
 
-        assert isinstance(train_df_, pd.DataFrame)
-        assert isinstance(test_df_, pd.DataFrame)
+        assert isinstance(df_, pd.DataFrame)
         assert treatment_val in [0.0, 1.0]
         seed = args.random_state
         params = args.uplift_model_params
@@ -39,8 +37,6 @@ class ModelForTreatedOrUntreated():
         if args.verbose >= 2:
             print('\n\n## Model for Treatment = {}'.format(treatment_val))
 
-        df_ = concat_train_test_df(train_df_.reset_index(drop=True).copy(),
-                                   test_df_.reset_index(drop=True).copy())
         df = df_.query('{}=={}'.format(args.col_treatment, treatment_val)).copy()
 
         X_train = df.xs('train')[args.cols_features]
@@ -94,9 +90,7 @@ class ModelForTreatedOrUntreated():
 
         self.model = model
         self.treatment_val = treatment_val
-        # self.col_treatment = args.col_treatment
-        # self.col_outcome = args.col_outcome
-        # self.cols_features = args.cols_features
+
         self.score_original_treatment_df = score_original_treatment_df
 
         self.treatment_fraction_train = \
@@ -105,7 +99,6 @@ class ModelForTreatedOrUntreated():
             len(df_.xs('test').query('{}=={}'.format(args.col_treatment, 1.0))) / len(df_.xs('test'))
         self.df_ = df_
 
-        # self.verbose = args.verbose
         self.args = args
 
     def predict_proba(self):
