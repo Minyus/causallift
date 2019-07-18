@@ -24,15 +24,9 @@ except:
     print('[Warning] Could not import matplotlib.pyplot. ')
 
 
-def estimate_propensity(train_df,
-                        test_df,
-                        args,
-                        ):
-
-    train_df = train_df.copy()
-    test_df = test_df.copy()
-
-    df = concat_train_test_df(train_df, test_df)
+def estimate_propensity(args, df):
+    if not (args.enable_ipw and (args.col_propensity not in df.columns)):
+        return df
 
     X_train = df.xs('train')[args.cols_features]
     y_train = df.xs('train')[args.col_treatment]
@@ -99,7 +93,12 @@ def estimate_propensity(train_df,
         print('\n### Confusion Matrix for Test:')
         display(conf_mat_df(y_test, y_pred_test))
 
+    train_df = df.xs('train')
+    test_df = df.xs('test')
+
     train_df.loc[:, args.col_propensity] = proba_train
     test_df.loc[:, args.col_propensity] = proba_test
 
-    return train_df, test_df
+    df = concat_train_test_df(train_df, test_df)
+
+    return df

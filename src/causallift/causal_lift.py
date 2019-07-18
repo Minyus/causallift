@@ -173,10 +173,11 @@ class CausalLift():
         train_df = train_df.reset_index(drop=True).copy()
         test_df = test_df.reset_index(drop=True).copy()
 
-        if args.enable_ipw and (args.col_propensity not in train_df.columns):
-            train_df, test_df = estimate_propensity(train_df, test_df, args)
+        df = concat_train_test_df(train_df, test_df)
 
-        self.df = concat_train_test_df(train_df, test_df)
+        df = estimate_propensity(args, df)
+
+        self.df = df
         self._separate_train_test() # for backward compatibility
         self.args = args
 
