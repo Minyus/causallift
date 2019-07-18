@@ -253,9 +253,6 @@ class CausalLift():
 
         verbose = verbose or self.args.verbose
 
-        # model_for_treated = self.model_for_treated
-        # model_for_untreated = self.model_for_untreated
-
         def recommendation_by_cate(df, args, treatment_fractions):
 
             cate_series = df[args.col_cate]
