@@ -145,3 +145,54 @@ def compute_cate(proba_treated, proba_untreated):
 def add_cate_to_df(args, df, cate_estimated):
     df.loc[:, args.col_cate] = cate_estimated.values
     return df
+
+
+def recommendation_by_cate(args, df, treatment_fractions):
+    cate_series = df[args.col_cate]
+
+    def recommendation(cate_series, treatment_fraction):
+        rank_series = cate_series.rank(method='first', ascending=False, pct=True)
+        r = np.where(rank_series <= treatment_fraction, 1.0, 0.0)
+        return r
+
+    recommendation_train = recommendation(cate_series.xs('train'), treatment_fractions.train)
+    recommendation_test = recommendation(cate_series.xs('test'), treatment_fractions.test)
+
+    df.loc[:, args.col_recommendation] = \
+        concat_train_test(recommendation_train, recommendation_test)
+
+    return df
+
+
+def estimate_effect(sim_treated_df, sim_untreated_df):
+    estimated_effect_df = pd.DataFrame()
+
+    estimated_effect_df['# samples'] = \
+        sim_treated_df['# samples chosen without uplift model'] \
+        + sim_untreated_df['# samples chosen without uplift model']
+
+    ## Original (without uplift model)
+
+    estimated_effect_df['observed conversion rate without uplift model'] = \
+        (sim_treated_df['# samples chosen without uplift model'] * sim_treated_df[
+            'observed conversion rate without uplift model']
+         + sim_untreated_df['# samples chosen without uplift model'] * sim_untreated_df[
+             'observed conversion rate without uplift model']) \
+        / (sim_treated_df['# samples chosen without uplift model'] + sim_untreated_df[
+            '# samples chosen without uplift model'])
+
+    ## Recommended (with uplift model)
+
+    estimated_effect_df['predicted conversion rate using uplift model'] = \
+        (sim_treated_df['# samples recommended by uplift model'] * sim_treated_df[
+            'predicted conversion rate using uplift model']
+         + sim_untreated_df['# samples recommended by uplift model'] * sim_untreated_df[
+             'predicted conversion rate using uplift model']) \
+        / (sim_treated_df['# samples recommended by uplift model'] + sim_untreated_df[
+            '# samples recommended by uplift model'])
+
+    estimated_effect_df['predicted improvement rate'] = \
+        estimated_effect_df['predicted conversion rate using uplift model'] / estimated_effect_df[
+            'observed conversion rate without uplift model']
+
+    return estimated_effect_df

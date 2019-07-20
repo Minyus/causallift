@@ -137,6 +137,10 @@ class CausalLift():
         self.proba_untreated = None
         self.cate_estimated = None
 
+        self.sim_treated_df = None
+        self.sim_untreated_df= None
+        self.estimated_effect_df = None
+
     def _separate_train_test(self):
         self.train_df = self.df.xs('train')
         self.test_df = self.df.xs('test')
@@ -192,73 +196,22 @@ class CausalLift():
 
         verbose = verbose or self.args.verbose
 
-        def recommendation_by_cate(df, args, treatment_fractions):
-
-            cate_series = df[args.col_cate]
-
-            def recommendation(cate_series, treatment_fraction):
-                rank_series = cate_series.rank(method='first', ascending=False, pct=True)
-                r = np.where(rank_series <= treatment_fraction, 1.0, 0.0)
-                return r
-
-            recommendation_train = recommendation(cate_series.xs('train'), treatment_fractions.train)
-            recommendation_test = recommendation(cate_series.xs('test'), treatment_fractions.test)
-
-            df.loc[:, args.col_recommendation] = \
-                concat_train_test(recommendation_train, recommendation_test)
-
-            return df
-
-        df = recommendation_by_cate(self.df, self.args, self.treatment_fractions)
-        self.df = df
-
-        treated_df = model_for_treated_simulate_recommendation(self.args, self.df, self.model_treated,
-                                                               self.score_original_treatment_treated_df)
-        untreated_df = model_for_untreated_simulate_recommendation(self.args, self.df, self.model_untreated,
-                                                                   self.score_original_treatment_untreated_df)
-
-        self.treated_df = treated_df
-        self.untreated_df = untreated_df
+        if not self.kedro_context:
+            self.df = recommendation_by_cate(self.args, self.df, self.treatment_fractions)
+            self.sim_treated_df = model_for_treated_simulate_recommendation(self.args, self.df, self.model_treated,
+                                                                   self.score_original_treatment_treated_df)
+            self.sim_untreated_df = model_for_untreated_simulate_recommendation(self.args, self.df, self.model_untreated,
+                                                                       self.score_original_treatment_untreated_df)
+            self.estimated_effect_df = estimate_effect(self.sim_treated_df, self.sim_untreated_df)
 
         if verbose >= 3:
             print('\n### Treated samples without and with uplift model:')
-            display(self.treated_df)
+            display(self.sim_treated_df)
             print('\n### Untreated samples without and with uplift model:')
-            display(self.untreated_df)
+            display(self.sim_untreated_df)
 
-        estimated_effect_df = pd.DataFrame()
-
-        estimated_effect_df['# samples'] = \
-            treated_df['# samples chosen without uplift model'] \
-            + untreated_df['# samples chosen without uplift model']
-
-        ## Original (without uplift model)
-
-        estimated_effect_df['observed conversion rate without uplift model'] = \
-            (treated_df['# samples chosen without uplift model'] * treated_df[
-                'observed conversion rate without uplift model']
-             + untreated_df['# samples chosen without uplift model'] * untreated_df[
-                 'observed conversion rate without uplift model']) \
-            / (treated_df['# samples chosen without uplift model'] + untreated_df[
-                '# samples chosen without uplift model'])
-
-        ## Recommended (with uplift model)
-
-        estimated_effect_df['predicted conversion rate using uplift model'] = \
-            (treated_df['# samples recommended by uplift model'] * treated_df[
-                'predicted conversion rate using uplift model']
-             + untreated_df['# samples recommended by uplift model'] * untreated_df[
-                 'predicted conversion rate using uplift model']) \
-            / (treated_df['# samples recommended by uplift model'] + untreated_df[
-                '# samples recommended by uplift model'])
-
-        estimated_effect_df['predicted improvement rate'] = \
-            estimated_effect_df['predicted conversion rate using uplift model'] / estimated_effect_df[
-                'observed conversion rate without uplift model']
-
-        self.estimated_effect_df = estimated_effect_df
         # if verbose >= 2:
         #    print('\n## Overall (both treated and untreated) samples without and with uplift model:')
         #    display(estimated_effect_df)
 
-        return estimated_effect_df
+        return self.estimated_effect_df
