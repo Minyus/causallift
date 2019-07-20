@@ -40,7 +40,8 @@ def treatment_fraction_(df, col_treatment='Treatment'):
     return len_t(df, col_treatment=col_treatment) / len(df)
 
 
-def treatment_fractions_(df, col_treatment='Treatment'):
+def treatment_fractions_(args, df):
+    col_treatment = args.col_treatment
     treatment_fractions = {
         'train': treatment_fraction_(df.xs('train'), col_treatment=col_treatment),
         'test': treatment_fraction_(df.xs('test'), col_treatment=col_treatment),

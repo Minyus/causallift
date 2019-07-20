@@ -107,20 +107,24 @@ class CausalLift():
                  test_df,
                  **kwargs):
 
+        self._init_attributes()
+
         self.args = parameters_()
         self.args.update(kwargs)
 
         assert self.args.runner in {'SequentialRunner', 'ParallelRunner', 'NoRunner'}
         # TODO # self.kedro_context = ProjectContext(Path.cwd(), env=None) if self.args.runner not in {'NoRunner'} else None
-        self.kedro_context = None # TODO
+
+        self.train_df = train_df
+        self.test_df = test_df
 
         if not self.kedro_context:
-            self.df = bundle_train_and_test_data(train_df, test_df)
+            self.df = bundle_train_and_test_data(self.train_df, self.test_df)
             self.args = impute_cols_features(self.args, self.df)
             self.df = estimate_propensity(self.args, self.df)
             [self.model_treated, self.score_original_treatment_treated_df] = model_for_treated_fit(self.args, self.df)
             [self.model_untreated, self.score_original_treatment_untreated_df] = model_for_untreated_fit(self.args, self.df)
-            self.treatment_fractions = treatment_fractions_(self.df, self.args.col_treatment)
+            self.treatment_fractions = treatment_fractions_(self.args, self.df)
 
         self.treatment_fraction_train = self.treatment_fractions.train # for backward compatibility
         self.treatment_fraction_test = self.treatment_fractions.test # for backward compatibility
@@ -132,6 +136,21 @@ class CausalLift():
                   self.treatment_fractions.test)
 
         self._separate_train_test()  # for backward compatibility
+
+    def _init_attributes(self):
+
+        self.args = None
+        self.kedro_context = None
+        self.train_df = None
+        self.test_df = None
+        self.df = None
+        self.model_treated = None
+        self.score_original_treatment_treated_df = None
+        self.model_untreated = None
+        self.score_original_treatment_untreated_df = None
+        self.treatment_fractions = None
+        self.treatment_fraction_train = None # for backward compatibility
+        self.treatment_fraction_test = None # for backward compatibility
 
         self.proba_treated = None
         self.proba_untreated = None
