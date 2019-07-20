@@ -122,8 +122,8 @@ class CausalLift():
             self.df = bundle_train_and_test_data(self.train_df, self.test_df)
             self.args = impute_cols_features(self.args, self.df)
             self.df = estimate_propensity(self.args, self.df)
-            [self.model_treated, self.score_original_treatment_treated_df] = model_for_treated_fit(self.args, self.df)
-            [self.model_untreated, self.score_original_treatment_untreated_df] = model_for_untreated_fit(self.args, self.df)
+            [self.treated__model, self.treated__eval_df] = model_for_treated_fit(self.args, self.df)
+            [self.untreated__model, self.untreated__eval_df] = model_for_untreated_fit(self.args, self.df)
             self.treatment_fractions = treatment_fractions_(self.args, self.df)
 
         self.treatment_fraction_train = self.treatment_fractions.train # for backward compatibility
@@ -139,25 +139,26 @@ class CausalLift():
 
     def _init_attributes(self):
 
-        self.args = None
         self.kedro_context = None
+
+        self.args = None
         self.train_df = None
         self.test_df = None
         self.df = None
-        self.model_treated = None
-        self.score_original_treatment_treated_df = None
-        self.model_untreated = None
-        self.score_original_treatment_untreated_df = None
+        self.treated__model = None
+        self.treated__eval_df = None
+        self.untreated__model = None
+        self.untreated__eval_df = None
         self.treatment_fractions = None
         self.treatment_fraction_train = None # for backward compatibility
         self.treatment_fraction_test = None # for backward compatibility
 
-        self.proba_treated = None
-        self.proba_untreated = None
+        self.treated__proba = None
+        self.untreated__proba = None
         self.cate_estimated = None
 
-        self.sim_treated_df = None
-        self.sim_untreated_df= None
+        self.treated__sim_eval_df = None
+        self.untreated__sim_eval_df= None
         self.estimated_effect_df = None
 
     def _separate_train_test(self):
@@ -178,9 +179,9 @@ class CausalLift():
         # verbose = verbose or self.args.verbose
 
         if not self.kedro_context:
-            self.proba_treated = model_for_treated_predict_proba(self.args, self.df, self.model_treated)
-            self.proba_untreated = model_for_untreated_predict_proba(self.args, self.df, self.model_untreated)
-            self.cate_estimated = compute_cate(self.proba_treated, self.proba_untreated)
+            self.treated__proba = model_for_treated_predict_proba(self.args, self.df, self.treated__model)
+            self.untreated__proba = model_for_untreated_predict_proba(self.args, self.df, self.untreated__model)
+            self.cate_estimated = compute_cate(self.treated__proba, self.untreated__proba)
             self.df = add_cate_to_df(self.args, self.df, self.cate_estimated)
 
         return self._separate_train_test()
@@ -217,17 +218,17 @@ class CausalLift():
 
         if not self.kedro_context:
             self.df = recommendation_by_cate(self.args, self.df, self.treatment_fractions)
-            self.sim_treated_df = model_for_treated_simulate_recommendation(self.args, self.df, self.model_treated,
-                                                                   self.score_original_treatment_treated_df)
-            self.sim_untreated_df = model_for_untreated_simulate_recommendation(self.args, self.df, self.model_untreated,
-                                                                       self.score_original_treatment_untreated_df)
-            self.estimated_effect_df = estimate_effect(self.sim_treated_df, self.sim_untreated_df)
+            self.treated__sim_eval_df = model_for_treated_simulate_recommendation(self.args, self.df, self.treated__model,
+                                                                                  self.treated__eval_df)
+            self.untreated__sim_eval_df = model_for_untreated_simulate_recommendation(self.args, self.df, self.untreated__model,
+                                                                                      self.untreated__eval_df)
+            self.estimated_effect_df = estimate_effect(self.treated__sim_eval_df, self.untreated__sim_eval_df)
 
         if verbose >= 3:
             print('\n### Treated samples without and with uplift model:')
-            display(self.sim_treated_df)
+            display(self.treated__sim_eval_df)
             print('\n### Untreated samples without and with uplift model:')
-            display(self.sim_untreated_df)
+            display(self.untreated__sim_eval_df)
 
         # if verbose >= 2:
         #    print('\n## Overall (both treated and untreated) samples without and with uplift model:')
