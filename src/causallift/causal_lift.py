@@ -10,6 +10,9 @@ import pandas as pd
 import numpy as np
 from easydict import EasyDict
 
+from .parameters import parameters_
+from .run import *
+
 
 class CausalLift():
     r"""
@@ -104,92 +107,23 @@ class CausalLift():
                  test_df,
                  **kwargs):
 
-        args = EasyDict()
-        args.cols_features = None
-        args.col_treatment = 'Treatment'
-        args.col_outcome = 'Outcome'
-        args.col_propensity = 'Propensity'
-        args.col_cate = 'CATE'
-        args.col_recommendation = 'Recommendation'
-        args.min_propensity = 0.01
-        args.max_propensity = 0.99
-        args.random_state = 0
-        args.verbose = 2
-        args.uplift_model_params = {
-            'max_depth': [3],
-            'learning_rate': [0.1],
-            'n_estimators': [100],
-            'silent': [True],
-            'objective': ['binary:logistic'],
-            'booster': ['gbtree'],
-            'n_jobs': [-1],
-            'nthread': [None],
-            'gamma': [0],
-            'min_child_weight': [1],
-            'max_delta_step': [0],
-            'subsample': [1],
-            'colsample_bytree': [1],
-            'colsample_bylevel': [1],
-            'reg_alpha': [0],
-            'reg_lambda': [1],
-            'scale_pos_weight': [1],
-            'base_score': [0.5],
-            'missing': [None],
-        }
-        args.enable_ipw = True
-        args.propensity_model_params = \
-            {
-                'C': [0.1, 1, 10],
-                'class_weight': [None],
-                'dual': [False],
-                'fit_intercept': [True],
-                'intercept_scaling': [1],
-                'max_iter': [100],
-                'multi_class': ['ovr'],
-                'n_jobs': [1],
-                'penalty': ['l1', 'l2'],
-                'solver': ['liblinear'],
-                'tol': [0.0001],
-                'warm_start': [False]
-            }
-        args.cv = 3
-        args.update(kwargs)
+        self.args = parameters_()
+        self.args.update(kwargs)
 
-        assert isinstance(train_df, pd.DataFrame)
-        assert isinstance(test_df, pd.DataFrame)
-        assert set(train_df.columns) == set(test_df.columns)
+        assert self.args.runner in {'SequentialRunner', 'ParallelRunner', 'NoRunner'}
+        # Todo # self.kedro_context = ProjectContext(Path.cwd(), env=None) if self.args.runner not in {'NoRunner'} else None
 
-        non_feature_cols = [
-            args.col_treatment,
-            args.col_outcome,
-            args.col_propensity,
-            args.col_cate,
-            args.col_recommendation,
-        ]
+        self.df = bundle_train_and_test_data(train_df, test_df)
+        self.args = impute_cols_features(self.args, self.df)
+        self.df = estimate_propensity(self.args, self.df)
+        [self.model_treated, self.score_original_treatment_treated_df] = model_for_treated_fit(self.args, self.df)
+        [self.model_untreated, self.score_original_treatment_untreated_df] = model_for_untreated_fit(self.args, self.df)
+        # self.model_treated = model_treated
+        # self.model_untreated = model_untreated
+        # self.score_original_treatment_treated_df = score_original_treatment_treated_df
+        # self.score_original_treatment_untreated_df = score_original_treatment_untreated_df
+        self.treatment_fractions = treatment_fractions_(self.df, self.args.col_treatment)
 
-        args.cols_features = \
-            args.cols_features or get_cols_features(train_df, non_feature_cols=non_feature_cols)
-
-        train_df = train_df.reset_index(drop=True).copy()
-        test_df = test_df.reset_index(drop=True).copy()
-
-        df = concat_train_test_df(train_df, test_df)
-
-        df = estimate_propensity(args, df)
-
-        self.df = df
-        self._separate_train_test() # for backward compatibility
-        self.args = args
-
-        [model_treated, score_original_treatment_treated_df] = model_for_treated_fit(self.args, self.df)
-        [model_untreated, score_original_treatment_untreated_df] = model_for_untreated_fit(self.args, self.df)
-        self.model_treated = model_treated
-        self.model_untreated = model_untreated
-        self.score_original_treatment_treated_df = score_original_treatment_treated_df
-        self.score_original_treatment_untreated_df = score_original_treatment_untreated_df
-
-        # fractions
-        self.treatment_fractions = EasyDict(treatment_fractions_(self.df, self.args.col_treatment))
         self.treatment_fraction_train = self.treatment_fractions.train # for backward compatibility
         self.treatment_fraction_test = self.treatment_fractions.test # for backward compatibility
 
@@ -198,6 +132,8 @@ class CausalLift():
                   self.treatment_fractions.train)
             print('### Treatment fraction in test dataset: ',
                   self.treatment_fractions.test)
+
+        self._separate_train_test()  # for backward compatibility
 
     def _separate_train_test(self):
         self.train_df = self.df.xs('train')

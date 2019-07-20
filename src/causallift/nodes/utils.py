@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 from sklearn.metrics import confusion_matrix
+from easydict import EasyDict
 
 
 def get_cols_features(df, non_feature_cols=[ \
@@ -44,7 +45,7 @@ def treatment_fractions_(df, col_treatment='Treatment'):
         'train': treatment_fraction_(df.xs('train'), col_treatment=col_treatment),
         'test': treatment_fraction_(df.xs('test'), col_treatment=col_treatment),
     }
-    return treatment_fractions
+    return EasyDict(treatment_fractions)
 
 
 def outcome_fraction_(df, col_outcome='Outcome'):
@@ -108,3 +109,29 @@ def conf_mat_df(y_true, y_pred):
     pred_labels = ['Pred_{}'.format(i) for i in range(num_class)]
     conf_mat_df = pd.DataFrame(conf_mat, index=true_labels, columns=pred_labels)
     return conf_mat_df
+
+
+def bundle_train_and_test_data(train_df, test_df):
+    assert isinstance(train_df, pd.DataFrame)
+    assert isinstance(test_df, pd.DataFrame)
+    assert set(train_df.columns) == set(test_df.columns)
+
+    train_df = train_df.reset_index(drop=True).copy()
+    test_df = test_df.reset_index(drop=True).copy()
+
+    df = concat_train_test_df(train_df, test_df)
+    return df
+
+
+def impute_cols_features(args, df):
+    non_feature_cols = [
+        args.col_treatment,
+        args.col_outcome,
+        args.col_propensity,
+        args.col_cate,
+        args.col_recommendation,
+    ]
+
+    args.cols_features = \
+        args.cols_features or get_cols_features(df, non_feature_cols=non_feature_cols)
+    return args
