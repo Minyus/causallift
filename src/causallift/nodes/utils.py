@@ -135,3 +135,13 @@ def impute_cols_features(args, df):
     args.cols_features = \
         args.cols_features or get_cols_features(df, non_feature_cols=non_feature_cols)
     return args
+
+
+def compute_cate(proba_treated, proba_untreated):
+    cate_estimated = proba_treated - proba_untreated
+    return cate_estimated
+
+
+def add_cate_to_df(args, df, cate_estimated):
+    df.loc[:, args.col_cate] = cate_estimated.values
+    return df
