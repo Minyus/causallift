@@ -7,6 +7,7 @@ from .default.parameters import *
 from .default.catalog import *
 from .run import *
 
+from kedro.io import MemoryDataSet, AbstractDataSet
 
 class CausalLift():
     r"""
@@ -95,19 +96,44 @@ class CausalLift():
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
         runner: str, optional
             Runner for kedro. 'SequentialRunner', 'ParallelRunner', or 'NoRunner' (default)
-        saving_datasets: dict, optional
+        dataset_catalog: dict, optional
             Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format if runner is set to either
             'SequentialRunner' or 'ParallelRunner'.
             In default, no data sets are saved as files.
             To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets
+        logging_config: dict, optional
+            Specify logging configuration.
+            Refer to https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema
+            In defalut:
+                {'disable_existing_loggers': False,
+                 'formatters': {'json_formatter': \
+                                    {'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
+                                     'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'},
+                                'simple':
+                                    {'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'}},
+                 'handlers': {'console': {'class': 'logging.StreamHandler',
+                                          'formatter': 'simple',
+                                          'level': 'INFO',
+                                          'stream': 'ext://sys.stdout'}},
+                 'loggers': {'anyconfig': {'handlers': ['console'],
+                                           'level': 'WARNING',
+                                           'propagate': False},
+                             'kedro.io': {'handlers': ['console'],
+                                          'level': 'INFO',
+                                          'propagate': False},
+                             'kedro.pipeline': {'handlers': ['console'],
+                                                'level': 'INFO',
+                                                'propagate': False}},
+                 'root': {'handlers': ['console'], 'level': 'INFO'},
+                 'version': 1}
 
     """
 
     def __init__(self,
-                 train_df,
-                 test_df,
-                 saving_datasets = {},
-                 logging_config = {},
+                 train_df: pd.DataFrame = None,
+                 test_df: pd.DataFrame = None,
+                 dataset_catalog: Dict[str, AbstractDataSet] = {},
+                 logging_config: Dict[str, Any] = {},
                  **kwargs):
 
         self.kedro_context = None
@@ -133,34 +159,30 @@ class CausalLift():
 
         # Instance attributes were defined above.
 
-        self.args = parameters_()
-        self.args.update(kwargs)
+        args_raw = parameters_()
+        args_raw.update(kwargs)
+        args_raw.update(dataset_catalog.get('args_raw', MemoryDataSet({}).load()))
 
-        self.train_df = train_df
-        self.test_df = test_df
-
-        assert self.args.runner in {'SequentialRunner', 'ParallelRunner', 'NoRunner'}
-        if self.args.runner not in {'NoRunner'}:
-            # TODO remove filepath dependency
+        assert args_raw.runner in {'SequentialRunner', 'ParallelRunner', None}
+        if args_raw.runner:
             self.kedro_context = FlexibleProjectContext(logging_config=logging_config)
-            datasets = datasets_()
-            datasets.update(saving_datasets)
-            # self.kedro_context.io.add_feed_dict(datasets, replace=True)
-            self.kedro_context.catalog.add_feed_dict(datasets, replace=True)
+            self.kedro_context.catalog.add_feed_dict({
+                'train_df': MemoryDataSet(train_df),
+                'test_df': MemoryDataSet(test_df),
+                'args_raw': MemoryDataSet(args_raw),
+            }, replace=True)
+            self.kedro_context.catalog.add_feed_dict(datasets_(), replace=True)
+            self.kedro_context.catalog.add_feed_dict(dataset_catalog, replace=True)
 
-        if self.kedro_context:
-            self.kedro_context.catalog.save('train_df', self.train_df)
-            self.kedro_context.catalog.save('test_df', self.test_df)
-            self.kedro_context.catalog.save('args_raw', self.args)
             self.kedro_context.run(tags=[
                 '011_bundle_train_and_test_data',
-                ], runner=self.args.runner)
+                ], runner=args_raw.runner)
             self.df = self.kedro_context.catalog.load('df_00')
 
             self.kedro_context.run(tags=[
                 '121_impute_cols_features',
                 '131_treatment_fractions_',
-                ], runner=self.args.runner)
+                ], runner=args_raw.runner)
             self.args = self.kedro_context.catalog.load('args')
             self.treatment_fractions = self.kedro_context.catalog.load(
                 'treatment_fractions')
@@ -204,7 +226,7 @@ class CausalLift():
         return self.train_df, self.test_df
 
     def estimate_cate_by_2_models(self,
-                                  verbose=None):
+                                  verbose: int = None):
         r"""
         Estimate CATE (Conditional Average Treatment Effect) using 2 XGBoost classifier models.
         args:
@@ -240,10 +262,10 @@ class CausalLift():
         return self._separate_train_test()
 
     def estimate_recommendation_impact(self,
-                                       cate_estimated=None,
-                                       treatment_fraction_train=None,
-                                       treatment_fraction_test=None,
-                                       verbose=None):
+                                       cate_estimated: pd.Series = None,
+                                       treatment_fraction_train: float = None,
+                                       treatment_fraction_test: float = None,
+                                       verbose: int = None):
         r"""
         Estimate the impact of recommendation based on uplift modeling.
         args:

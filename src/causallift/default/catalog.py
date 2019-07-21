@@ -4,9 +4,9 @@ from kedro.io import MemoryDataSet
 def datasets_():
     datasets = EasyDict()
 
-    datasets.args_raw = MemoryDataSet()
-    datasets.train_df = MemoryDataSet()
-    datasets.test_df = MemoryDataSet()
+    # datasets.args_raw = MemoryDataSet()
+    # datasets.train_df = MemoryDataSet()
+    # datasets.test_df = MemoryDataSet()
     # datasets.args = MemoryDataSet()
     # datasets.df_00 = MemoryDataSet()
     # datasets.df_01 = MemoryDataSet()
