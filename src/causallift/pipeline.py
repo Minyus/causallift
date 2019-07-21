@@ -27,7 +27,10 @@
 # limitations under the License.
 """Pipeline construction."""
 
-from kedro.pipeline import Pipeline
+from kedro.pipeline import Pipeline, node
+from .nodes.estimate_propensity import *
+from .nodes.model_for_each import *
+
 
 # Here you can define your data-driven pipeline by importing your functions
 # and adding them to the pipeline as follows:
@@ -57,6 +60,94 @@ def create_pipeline(**kwargs):
 
     """
 
-    pipeline = Pipeline([])
+    pipeline = Pipeline([
+        Pipeline([
+            node(bundle_train_and_test_data,
+                 ['train_df', 'test_df'],
+                 'df_00',
+                 ),
+            ], name='011_bundle_train_and_test_data'),
+        Pipeline([
+            node(impute_cols_features,
+                 ['args_raw', 'df_00'],
+                 'args',
+                 ),
+            ], name='121_impute_cols_features'),
+        Pipeline([
+            node(treatment_fractions_,
+                 ['args_raw', 'df_00'],
+                 'treatment_fractions',
+                 ),
+            ], name='131_treatment_fractions_'),
+        Pipeline([
+            node(estimate_propensity,
+                 ['args', 'df_00'],
+                 'df_01',
+                 ),
+            ], name='211_estimate_propensity'),
+        Pipeline([
+            node(model_for_treated_fit,
+                 ['args', 'df_01'],
+                 ['treated__model', 'treated__eval_df'],
+                 ),
+            node(model_for_untreated_fit,
+                 ['args', 'df_01'],
+                 ['untreated__model', 'untreated__eval_df'],
+                 ),
+            ], name='311_fit'),
+
+        Pipeline([
+            node(model_for_treated_predict_proba,
+                 ['args', 'df_01', 'treated__model'],
+                 'treated__proba',
+                 ),
+            node(model_for_untreated_predict_proba,
+                 ['args', 'df_01', 'untreated__model'],
+                 'untreated__proba',
+                 ),
+            ], name='321_predict_proba'),
+        Pipeline([
+            node(compute_cate,
+                 ['treated__proba', 'untreated__proba'],
+                 'cate_estimated',
+                 ),
+            ], name='411_compute_cate'),
+        Pipeline([
+           node(add_cate_to_df,
+                ['args', 'df_01', 'cate_estimated', ],
+                'df_02',
+                ),
+        ], name='421_add_cate_to_df'),
+
+        Pipeline([
+           node(recommendation_by_cate,
+                ['args', 'df_02', 'treatment_fractions'],
+                'df_03',
+                ),
+        ], name='511_recommendation_by_cate'),
+        Pipeline([
+           node(model_for_treated_simulate_recommendation,
+                ['args', 'df_03', 'treated__model', 'treated__eval_df'],
+                'treated__sim_eval_df',
+                ),
+            node(model_for_untreated_simulate_recommendation,
+                 ['args', 'df_03', 'untreated__model', 'untreated__eval_df'],
+                 'untreated__sim_eval_df',
+                 ),
+        ], name='521_simulate_recommendation'),
+        Pipeline([
+           node(estimate_effect,
+                ['treated__sim_eval_df', 'untreated__sim_eval_df'],
+                'estimated_effect_df',
+                ),
+        ], name='531_estimate_effect'),
+        # Pipeline([
+        #    node(FUNC,
+        #         ['IN'],
+        #         ['OUT'],
+        #         ),
+        # ], name='PIPELINE'),
+
+        ])
 
     return pipeline

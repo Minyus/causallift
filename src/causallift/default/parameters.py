@@ -51,5 +51,5 @@ def parameters_():
             'warm_start': [False]
         }
     args.cv = 3
-    args.runner = 'ParallelRunner'
+    args.runner = 'ParallelRunner' # 'SequentialRunner' # 'NoRunner' #
     return args

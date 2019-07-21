@@ -1,16 +1,10 @@
 """ causal_lift.py """
 
-from IPython.display import display
-
-from .nodes.utils import *
 from .nodes.model_for_each import *
 from .nodes.estimate_propensity import *
 
-import pandas as pd
-import numpy as np
-from easydict import EasyDict
-
-from .parameters import parameters_
+from .default.parameters import *
+from .default.catalog import *
 from .run import *
 
 
@@ -99,48 +93,23 @@ class CausalLift():
         cv: int, optional
             Cross-Validation for the Grid Search. 3 in default.
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+        runner: str, optional
+            Runner for kedro. 'SequentialRunner', 'ParallelRunner', or 'NoRunner' (default)
+        saving_datasets: dict, optional
+            Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format if runner is set to either
+            'SequentialRunner' or 'ParallelRunner'.
+            In default, no data sets are saved as files.
+            To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets
 
     """
 
     def __init__(self,
                  train_df,
                  test_df,
+                 saving_datasets = {},
                  **kwargs):
 
-        self._init_attributes()
-
-        self.args = parameters_()
-        self.args.update(kwargs)
-
-        assert self.args.runner in {'SequentialRunner', 'ParallelRunner', 'NoRunner'}
-        # TODO # self.kedro_context = ProjectContext(Path.cwd(), env=None) if self.args.runner not in {'NoRunner'} else None
-
-        self.train_df = train_df
-        self.test_df = test_df
-
-        if not self.kedro_context:
-            self.df = bundle_train_and_test_data(self.train_df, self.test_df)
-            self.args = impute_cols_features(self.args, self.df)
-            self.df = estimate_propensity(self.args, self.df)
-            [self.treated__model, self.treated__eval_df] = model_for_treated_fit(self.args, self.df)
-            [self.untreated__model, self.untreated__eval_df] = model_for_untreated_fit(self.args, self.df)
-            self.treatment_fractions = treatment_fractions_(self.args, self.df)
-
-        self.treatment_fraction_train = self.treatment_fractions.train # for backward compatibility
-        self.treatment_fraction_test = self.treatment_fractions.test # for backward compatibility
-
-        if self.args.verbose >= 3:
-            print('### Treatment fraction in train dataset: ',
-                  self.treatment_fractions.train)
-            print('### Treatment fraction in test dataset: ',
-                  self.treatment_fractions.test)
-
-        self._separate_train_test()  # for backward compatibility
-
-    def _init_attributes(self):
-
         self.kedro_context = None
-
         self.args = None
         self.train_df = None
         self.test_df = None
@@ -150,8 +119,8 @@ class CausalLift():
         self.untreated__model = None
         self.untreated__eval_df = None
         self.treatment_fractions = None
-        self.treatment_fraction_train = None # for backward compatibility
-        self.treatment_fraction_test = None # for backward compatibility
+        self.treatment_fraction_train = None
+        self.treatment_fraction_test = None
 
         self.treated__proba = None
         self.untreated__proba = None
@@ -160,6 +129,72 @@ class CausalLift():
         self.treated__sim_eval_df = None
         self.untreated__sim_eval_df= None
         self.estimated_effect_df = None
+
+        # Instance attributes were defined above.
+
+        self.args = parameters_()
+        self.args.update(kwargs)
+
+        self.train_df = train_df
+        self.test_df = test_df
+
+        assert self.args.runner in {'SequentialRunner', 'ParallelRunner', 'NoRunner'}
+        if self.args.runner not in {'NoRunner'}:
+            # TODO remove filepath dependency
+            self.kedro_context = FlexibleProjectContext(Path(__file__).parent.parent.parent, env='local')
+            datasets = datasets_()
+            datasets.update(saving_datasets)
+            self.kedro_context.io.add_feed_dict(datasets, replace=True)
+
+        if self.kedro_context:
+            self.kedro_context.catalog.save('train_df', self.train_df)
+            self.kedro_context.catalog.save('test_df', self.test_df)
+            self.kedro_context.catalog.save('args_raw', self.args)
+            self.kedro_context.run(tags=[
+                '011_bundle_train_and_test_data',
+                ], runner=self.args.runner)
+            self.df = self.kedro_context.catalog.load('df_00')
+
+            self.kedro_context.run(tags=[
+                '121_impute_cols_features',
+                '131_treatment_fractions_',
+                ], runner=self.args.runner)
+            self.args = self.kedro_context.catalog.load('args')
+            self.treatment_fractions = self.kedro_context.catalog.load(
+                'treatment_fractions')
+
+            self.kedro_context.run(tags=[
+                '211_estimate_propensity',
+                ], runner=self.args.runner)
+            self.df = self.kedro_context.catalog.load('df_01')
+
+            self.kedro_context.run(tags=[
+                '311_fit',
+                ], runner=self.args.runner)
+            self.treated__model = self.kedro_context.catalog.load('treated__model')
+            self.untreated__model = self.kedro_context.catalog.load('untreated__model')
+            self.treated__eval_df = self.kedro_context.catalog.load('treated__eval_df')
+            self.untreated__eval_df = self.kedro_context.catalog.load('untreated__eval_df')
+
+
+        if not self.kedro_context:
+            self.df = bundle_train_and_test_data(self.train_df, self.test_df)
+            self.args = impute_cols_features(self.args, self.df)
+            self.treatment_fractions = treatment_fractions_(self.args, self.df)
+            self.df = estimate_propensity(self.args, self.df)
+            [self.treated__model, self.treated__eval_df] = model_for_treated_fit(self.args, self.df)
+            [self.untreated__model, self.untreated__eval_df] = model_for_untreated_fit(self.args, self.df)
+
+        self.treatment_fraction_train = self.treatment_fractions.train
+        self.treatment_fraction_test = self.treatment_fractions.test
+
+        if self.args.verbose >= 3:
+            print('### Treatment fraction in train dataset: ',
+                  self.treatment_fractions.train)
+            print('### Treatment fraction in test dataset: ',
+                  self.treatment_fractions.test)
+
+        self._separate_train_test()
 
     def _separate_train_test(self):
         self.train_df = self.df.xs('train')
@@ -177,6 +212,22 @@ class CausalLift():
         """
 
         # verbose = verbose or self.args.verbose
+
+        if self.kedro_context:
+            # self.kedro_context.catalog.save('args', self.args)
+            self.kedro_context.run(tags=[
+                '321_predict_proba',
+            ], runner=self.args.runner)
+            self.treated__proba = self.kedro_context.catalog.load('treated__proba')
+            self.untreated__proba = self.kedro_context.catalog.load('untreated__proba')
+            self.kedro_context.run(tags=[
+                '411_compute_cate',
+            ], runner=self.args.runner)
+            self.cate_estimated = self.kedro_context.catalog.load('cate_estimated')
+            self.kedro_context.run(tags=[
+                '421_add_cate_to_df'
+            ], runner=self.args.runner)
+            self.df = self.kedro_context.catalog.load('df_02')
 
         if not self.kedro_context:
             self.treated__proba = model_for_treated_predict_proba(self.args, self.df, self.treated__model)
@@ -209,19 +260,36 @@ class CausalLift():
         """
 
         if cate_estimated is not None:
-            self.cate_estimated = cate_estimated # for backward compatibility
+            self.cate_estimated = cate_estimated
             self.df.loc[:, self.args.col_cate] = cate_estimated.values
         self.treatment_fractions.train = treatment_fraction_train or self.treatment_fractions.train
         self.treatment_fractions.test = treatment_fraction_test or self.treatment_fractions.test
 
         verbose = verbose or self.args.verbose
 
+        if self.kedro_context:
+            # self.kedro_context.catalog.save('args', self.args)
+            self.kedro_context.run(tags=[
+                '511_recommendation_by_cate',
+            ], runner=self.args.runner)
+            self.df = self.kedro_context.catalog.load('df_03')
+            self.kedro_context.run(tags=[
+                '521_simulate_recommendation',
+            ], runner=self.args.runner)
+            self.treated__sim_eval_df = self.kedro_context.catalog.load('treated__sim_eval_df')
+            self.untreated__sim_eval_df = self.kedro_context.catalog.load('untreated__sim_eval_df')
+
+            self.kedro_context.run(tags=[
+                '531_estimate_effect'
+            ], runner=self.args.runner)
+            self.estimated_effect_df = self.kedro_context.catalog.load('estimated_effect_df')
+
         if not self.kedro_context:
             self.df = recommendation_by_cate(self.args, self.df, self.treatment_fractions)
-            self.treated__sim_eval_df = model_for_treated_simulate_recommendation(self.args, self.df, self.treated__model,
-                                                                                  self.treated__eval_df)
-            self.untreated__sim_eval_df = model_for_untreated_simulate_recommendation(self.args, self.df, self.untreated__model,
-                                                                                      self.untreated__eval_df)
+            self.treated__sim_eval_df = model_for_treated_simulate_recommendation(
+                self.args, self.df, self.treated__model, self.treated__eval_df)
+            self.untreated__sim_eval_df = model_for_untreated_simulate_recommendation(
+                self.args, self.df, self.untreated__model, self.untreated__eval_df)
             self.estimated_effect_df = estimate_effect(self.treated__sim_eval_df, self.untreated__sim_eval_df)
 
         if verbose >= 3:

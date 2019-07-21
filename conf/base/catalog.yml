@@ -3,42 +3,43 @@
 # Documentation for this file format can be found in the kedro docs under `Accessing data`
 # You can access the kedro docs by running `kedro docs`
 
-args:
-  type: MemoryDataSet
-train_df:
-  type: MemoryDataSet
-test_df:
-  type: MemoryDataSet
-df_00:
-  type: MemoryDataSet
-df_01:
-  type: MemoryDataSet
-treated__model:
-  type: MemoryDataSet
-treated__eval_df:
-  type: MemoryDataSet
-untreated__model:
-  type: MemoryDataSet
-untreated__eval_df:
-  type: MemoryDataSet
-treatment_fractions:
-  type: MemoryDataSet
-  
-treated__proba:
-  type: MemoryDataSet
-untreated__proba:
-  type: MemoryDataSet
-cate_estimated:
-  type: MemoryDataSet
-df_02:
-  type: MemoryDataSet
-  
-df_03:
-  type: MemoryDataSet
-treated__sim_eval_df:
-  type: MemoryDataSet
-untreated__sim_eval_df:
-  type: MemoryDataSet
-estimated_effect_df:
-  type: MemoryDataSet
- 
+#args_raw:
+#  type: MemoryDataSet
+#args:
+#  type: MemoryDataSet
+#train_df:
+#  type: MemoryDataSet
+#test_df:
+#  type: MemoryDataSet
+#df_00:
+#  type: MemoryDataSet
+#df_01:
+#  type: MemoryDataSet
+#treated__model:
+#  type: MemoryDataSet
+#treated__eval_df:
+#  type: MemoryDataSet
+#untreated__model:
+#  type: MemoryDataSet
+#untreated__eval_df:
+#  type: MemoryDataSet
+#treatment_fractions:
+#  type: MemoryDataSet
+#
+#treated__proba:
+#  type: MemoryDataSet
+#untreated__proba:
+#  type: MemoryDataSet
+#cate_estimated:
+#  type: MemoryDataSet
+#df_02:
+#  type: MemoryDataSet
+#
+#df_03:
+#  type: MemoryDataSet
+#treated__sim_eval_df:
+#  type: MemoryDataSet
+#untreated__sim_eval_df:
+#  type: MemoryDataSet
+#estimated_effect_df:
+#  type: MemoryDataSet

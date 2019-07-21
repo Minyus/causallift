@@ -37,11 +37,13 @@ from kedro.cli.utils import KedroCliError
 from kedro.config import ConfigLoader, MissingConfigException
 from kedro.context import KedroContext
 from kedro.io import DataCatalog
-from kedro.runner import AbstractRunner
+from kedro.runner import AbstractRunner, ParallelRunner, SequentialRunner
 from kedro.utils import load_obj
 from kedro.pipeline import Pipeline
 
 from causallift.pipeline import create_pipeline
+
+from typing import Dict, Any
 
 
 class ProjectContext(KedroContext):
@@ -56,6 +58,57 @@ class ProjectContext(KedroContext):
     @property
     def pipeline(self) -> Pipeline:
         return create_pipeline()
+
+    def run(self, tags: Iterable[str] = None, runner: AbstractRunner = None,
+            only_missing: bool = False) -> Dict[str, Any]:
+        """Runs the pipeline with a specified runner.
+
+        Args:
+            tags: An optional list of node tags which should be used to
+                filter the nodes of the ``Pipeline``. If specified, only the nodes
+                containing *any* of these tags will be added to the ``Pipeline``.
+            runner: An optional parameter specifying the runner that you want to run
+                the pipeline with.
+            only_missing: An option to run only missing nodes.
+        Raises:
+            KedroContextError: If the resulting ``Pipeline`` is empty
+                or incorrect tags are provided.
+
+        """
+        # Report project name
+        logging.info("** Kedro project {}".format(self.project_path.name))
+
+        # Load the pipeline
+        pipeline = self.pipeline.only_nodes_with_tags(*tags) if tags else self.pipeline
+        if not pipeline.nodes:
+            msg = "Pipeline contains no nodes"
+            if tags:
+                msg += " with tags: {}".format(str(tags))
+            raise KedroContextError(msg)
+
+        # Run the runner
+        runner = runner or SequentialRunner()
+        if only_missing:
+            return runner.run_only_missing(pipeline, self.catalog)
+        else:
+            return runner.run(pipeline, self.catalog)
+
+
+class ProjectContext1(ProjectContext):
+    def run(self, tags: Iterable[str] = None, runner: Union[AbstractRunner, str] = None,
+            only_missing: bool = False) -> Dict[str, Any]:
+        if isinstance(runner, str):
+            assert runner in {"ParallelRunner", "SequentialRunner"}
+            runner = ParallelRunner() if runner == "ParallelRunner" else SequentialRunner()
+        return super().run(tags, runner, only_missing)
+
+class FlexibleProjectContext(ProjectContext1):
+    def run(self, tags: Iterable[str] = None, runner: Union[AbstractRunner, str] = None,
+            only_missing: bool = False) -> Dict[str, Any]:
+
+        d = super().run(tags, runner, only_missing)
+        self.catalog.add_feed_dict(d, replace=False)
+        return d
 
 
 def __kedro_context__(env: str = None, **kwargs) -> KedroContext:
