@@ -43,7 +43,9 @@ from kedro.pipeline import Pipeline
 
 from causallift.pipeline import create_pipeline
 
+from .default.logging import *
 from typing import Dict, Any
+
 
 
 class ProjectContext(KedroContext):
@@ -102,13 +104,20 @@ class ProjectContext1(ProjectContext):
             runner = ParallelRunner() if runner == "ParallelRunner" else SequentialRunner()
         return super().run(tags, runner, only_missing)
 
-class FlexibleProjectContext(ProjectContext1):
+class ProjectContext2(ProjectContext1):
     def run(self, tags: Iterable[str] = None, runner: Union[AbstractRunner, str] = None,
             only_missing: bool = False) -> Dict[str, Any]:
 
         d = super().run(tags, runner, only_missing)
         self.catalog.add_feed_dict(d, replace=False)
         return d
+
+class FlexibleProjectContext(ProjectContext2):
+    def __init__(self, logging_config: Dict = None):
+        self._project_path = Path().cwd().resolve()
+        logging_config = logging_config or conf_logging_()
+        logging.config.dictConfig(logging_config)
+        self._catalog = DataCatalog()
 
 
 def __kedro_context__(env: str = None, **kwargs) -> KedroContext:

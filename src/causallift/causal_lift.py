@@ -107,6 +107,7 @@ class CausalLift():
                  train_df,
                  test_df,
                  saving_datasets = {},
+                 logging_config = {},
                  **kwargs):
 
         self.kedro_context = None
@@ -141,10 +142,11 @@ class CausalLift():
         assert self.args.runner in {'SequentialRunner', 'ParallelRunner', 'NoRunner'}
         if self.args.runner not in {'NoRunner'}:
             # TODO remove filepath dependency
-            self.kedro_context = FlexibleProjectContext(Path(__file__).parent.parent.parent, env='local')
+            self.kedro_context = FlexibleProjectContext(logging_config=logging_config)
             datasets = datasets_()
             datasets.update(saving_datasets)
-            self.kedro_context.io.add_feed_dict(datasets, replace=True)
+            # self.kedro_context.io.add_feed_dict(datasets, replace=True)
+            self.kedro_context.catalog.add_feed_dict(datasets, replace=True)
 
         if self.kedro_context:
             self.kedro_context.catalog.save('train_df', self.train_df)
