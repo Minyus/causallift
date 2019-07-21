@@ -120,11 +120,11 @@ def create_pipeline(**kwargs):
         ], name='421_add_cate_to_df'),
 
         Pipeline([
-           node(recommendation_by_cate,
+           node(recommend_by_cate,
                 ['args', 'df_02', 'treatment_fractions'],
                 'df_03',
                 ),
-        ], name='511_recommendation_by_cate'),
+        ], name='511_recommend_by_cate'),
         Pipeline([
            node(model_for_treated_simulate_recommendation,
                 ['args', 'df_03', 'treated__model', 'treated__eval_df'],

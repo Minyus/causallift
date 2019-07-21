@@ -148,7 +148,7 @@ def add_cate_to_df(args, df, cate_estimated):
     return df
 
 
-def recommendation_by_cate(args, df, treatment_fractions):
+def recommend_by_cate(args, df, treatment_fractions):
     cate_series = df[args.col_cate]
 
     def recommendation(cate_series, treatment_fraction):

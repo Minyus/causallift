@@ -272,7 +272,7 @@ class CausalLift():
         if self.kedro_context:
             # self.kedro_context.catalog.save('args', self.args)
             self.kedro_context.run(tags=[
-                '511_recommendation_by_cate',
+                '511_recommend_by_cate',
             ], runner=self.args.runner)
             self.df = self.kedro_context.catalog.load('df_03')
             self.kedro_context.run(tags=[
