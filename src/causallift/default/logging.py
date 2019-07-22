@@ -27,7 +27,7 @@ def conf_logging_():
              },
              'kedro.pipeline': {
                  'handlers': ['console'],
-                 'level': 'WARNING',
+                 'level': 'INFO',
                  'propagate': False,
              },
              'causallift': {
