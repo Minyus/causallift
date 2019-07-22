@@ -97,27 +97,48 @@ class ProjectContext(KedroContext):
 
 
 class ProjectContext1(ProjectContext):
-    def run(self, tags: Iterable[str] = None, runner: Union[AbstractRunner, str] = None,
-            only_missing: bool = False) -> Dict[str, Any]:
+    r"Allow to specify runner by string."
+    def run(self, runner: Union[AbstractRunner, str] = None, **kwargs) -> Dict[str, Any]:
         if isinstance(runner, str):
             assert runner in {"ParallelRunner", "SequentialRunner"}
             runner = ParallelRunner() if runner == "ParallelRunner" else SequentialRunner()
-        return super().run(tags, runner, only_missing)
+        return super().run(runner=runner, **kwargs)
+
 
 class ProjectContext2(ProjectContext1):
-    def run(self, tags: Iterable[str] = None, runner: Union[AbstractRunner, str] = None,
-            only_missing: bool = False) -> Dict[str, Any]:
-
-        d = super().run(tags, runner, only_missing)
-        self.catalog.add_feed_dict(d, replace=False)
+    r"Keep the output datasets in the catalog."
+    def run(self, **kwargs) -> Dict[str, Any]:
+        d = super().run(**kwargs)
+        self.catalog.add_feed_dict(d, replace=True)
         return d
 
-class FlexibleProjectContext(ProjectContext2):
+
+class ProjectContext3(ProjectContext2):
+    r"Allow to overwrite the default logging config and remove yaml file dependency."
     def __init__(self, logging_config: Dict = None):
         self._project_path = Path().cwd().resolve()
         logging_config = logging_config or conf_logging_()
         logging.config.dictConfig(logging_config)
         self._catalog = DataCatalog()
+
+
+class ProjectContext4(ProjectContext3):
+    r"Overwrite the default runner and only_missing option for the run."
+    def __init__(self, runner: str = None, only_missing: bool = False, **kwargs):
+        super().__init__(**kwargs)
+        self._runner = runner
+        self._only_missing = only_missing
+    def run(self, runner: str = None, only_missing: bool = False, **kwargs) -> Dict[str, Any]:
+        runner = runner or self._runner
+        only_missing = only_missing or self._only_missing
+        return super().run(runner=runner, only_missing=only_missing, **kwargs)
+
+
+class FlexibleProjectContext(ProjectContext4):
+    r"Keep the keyword arguments in the same order as ProjectContext."
+    def run(self, tags: Iterable[str] = None, runner: str = None, only_missing: bool = False) \
+            -> Dict[str, Any]:
+        return super().run(tags=tags, runner=runner, only_missing=only_missing)
 
 
 def __kedro_context__(env: str = None, **kwargs) -> KedroContext:

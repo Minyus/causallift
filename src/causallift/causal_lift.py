@@ -164,8 +164,13 @@ class CausalLift():
         args_raw.update(dataset_catalog.get('args_raw', MemoryDataSet({}).load()))
 
         assert args_raw.runner in {'SequentialRunner', 'ParallelRunner', None}
+        assert args_raw.runner or (not args_raw.run_only_missing)
         if args_raw.runner:
-            self.kedro_context = FlexibleProjectContext(logging_config=logging_config)
+            self.kedro_context = FlexibleProjectContext(
+                logging_config=logging_config,
+                runner=args_raw.runner,
+                only_missing=args_raw.run_only_missing,
+            )
             self.kedro_context.catalog.add_feed_dict({
                 'train_df': MemoryDataSet(train_df),
                 'test_df': MemoryDataSet(test_df),
