@@ -9,6 +9,10 @@ from .run import *
 
 from kedro.io import MemoryDataSet, AbstractDataSet
 
+import logging
+log = logging.getLogger(__name__)
+
+
 class CausalLift():
     r"""
     Set up datasets for uplift modeling.
@@ -165,7 +169,7 @@ class CausalLift():
 
         assert args_raw.runner in {'SequentialRunner', 'ParallelRunner', None}
         if args_raw.runner is None and args_raw.run_only_missing:
-            print('[Warning] run_only_missing option is ignored since runner is None')
+            log.warning('[Warning] run_only_missing option is ignored since runner is None')
 
         if args_raw.runner:
             self.kedro_context = FlexibleProjectContext(
@@ -227,10 +231,10 @@ class CausalLift():
         self.treatment_fraction_test = self.treatment_fractions.test
 
         if self.args.verbose >= 3:
-            print('### Treatment fraction in train dataset: ',
-                  self.treatment_fractions.train)
-            print('### Treatment fraction in test dataset: ',
-                  self.treatment_fractions.test)
+            log.info('### Treatment fraction in train dataset: {}'.
+                     format(self.treatment_fractions.train))
+            log.info('### Treatment fraction in test dataset: {}'.
+                     format(self.treatment_fractions.test))
 
         self._separate_train_test()
 
@@ -331,13 +335,13 @@ class CausalLift():
             self.estimated_effect_df = estimate_effect(self.treated__sim_eval_df, self.untreated__sim_eval_df)
 
         if verbose >= 3:
-            print('\n### Treated samples without and with uplift model:')
+            log.info('\n### Treated samples without and with uplift model:')
             display(self.treated__sim_eval_df)
-            print('\n### Untreated samples without and with uplift model:')
+            log.info('\n### Untreated samples without and with uplift model:')
             display(self.untreated__sim_eval_df)
 
         # if verbose >= 2:
-        #    print('\n## Overall (both treated and untreated) samples without and with uplift model:')
+        #    log.info('\n## Overall (both treated and untreated) samples without and with uplift model:')
         #    display(estimated_effect_df)
 
         return self.estimated_effect_df

@@ -10,6 +10,9 @@ import pandas as pd
 from xgboost import XGBClassifier
 from sklearn.model_selection import GridSearchCV
 
+import logging
+log = logging.getLogger(__name__)
+
 
 class ModelForTreatedOrUntreated():
     def __init__(self, treatment_val=1.0):
@@ -23,7 +26,7 @@ class ModelForTreatedOrUntreated():
         params = args.uplift_model_params
 
         if args.verbose >= 2:
-            print('\n\n## Model for Treatment = {}'.format(treatment_val))
+            log.info('\n\n## Model for Treatment = {}'.format(treatment_val))
 
         df = df_.query('{}=={}'.format(args.col_treatment, treatment_val)).copy()
 
@@ -37,9 +40,9 @@ class ModelForTreatedOrUntreated():
 
             # avoid propensity near 0 or 1 which will result in too large weight
             if propensity.min() < args.min_propensity and args.verbose >= 2:
-                print('[Warning] Propensity scores below {} were clipped.'.format(args.min_propensity))
+                log.warning('[Warning] Propensity scores below {} were clipped.'.format(args.min_propensity))
             if propensity.max() > args.max_propensity and args.verbose >= 2:
-                print('[Warning] Propensity scores above {} were clipped.'.format(args.max_propensity))
+                log.warning('[Warning] Propensity scores above {} were clipped.'.format(args.max_propensity))
             propensity.clip(lower=args.min_propensity, upper=args.max_propensity, inplace=True)
 
             sample_weight = \
@@ -53,27 +56,28 @@ class ModelForTreatedOrUntreated():
 
         model.fit(X_train, y_train, sample_weight=sample_weight)
         if args.verbose >= 3:
-            print('### Best parameters of the model trained using samples with observational Treatment: {} \n {}'.
-                  format(treatment_val, model.best_params_))
+            log.info('### Best parameters of the model trained using samples '
+                     'with observational Treatment: {} \n {}'.
+                     format(treatment_val, model.best_params_))
 
         if args.verbose >= 2:
             if hasattr(model.best_estimator_, 'feature_importances_'):
                 fi_df = pd.DataFrame(
                     model.best_estimator_.feature_importances_.reshape(1, -1),
                     index=['feature importance'])
-                print('\n### Feature importances of the model trained using samples with observational Treatment:',
-                      treatment_val)
+                log.info('\n### Feature importances of the model trained using samples '
+                         'with observational Treatment: {}'.format(treatment_val))
                 display(fi_df)
             else:
-                print('### Feature importances not available.')
+                log.info('## Feature importances not available.')
 
         y_pred_train = model.predict(X_train)
         y_pred_test = model.predict(X_test)
 
         score_original_treatment_df = score_df(y_train, y_test, y_pred_train, y_pred_test, average='binary')
         if args.verbose >= 3:
-            print('\n### Outcome estimated by the model trained using samples with observational Treatment:',
-                  treatment_val)
+            log.info('\n### Outcome estimated by the model trained using samples '
+                     'with observational Treatment: {}'.format(treatment_val))
             display(score_original_treatment_df)
 
         return [model, score_original_treatment_df]
@@ -114,7 +118,7 @@ class ModelForTreatedOrUntreated():
         score_recommended_treatment_df = score_df(y_train, y_test,
                                                   y_pred_train, y_pred_test, average='binary')
         if verbose >= 3:
-            print('\n### Simulated outcome of samples recommended to be treatment: {} by the uplift model:'.
+            log.info('\n### Simulated outcome of samples recommended to be treatment: {} by the uplift model:'.
                   format(treatment_val))
             display(score_recommended_treatment_df)
 

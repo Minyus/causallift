@@ -3,9 +3,9 @@ def conf_logging_():
         {'disable_existing_loggers': False,
          'formatters': {'json_formatter': \
                             {'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
-                             'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'},
+                             'format': '[%(asctime)s] %(message)s'},
                         'simple':
-                            {'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'}},
+                            {'format': '[%(asctime)s] %(message)s'}},
          'handlers': {'console': {'class': 'logging.StreamHandler',
                                   'formatter': 'simple',
                                   'level': 'INFO',
@@ -18,7 +18,11 @@ def conf_logging_():
                                   'propagate': False},
                      'kedro.pipeline': {'handlers': ['console'],
                                         'level': 'INFO',
-                                        'propagate': False}},
+                                        'propagate': False},
+                     'causallift.': {'handlers': ['console'],
+                                        'level': 'INFO',
+                                        'propagate': False},
+                     },
          'root': {'handlers': ['console'], 'level': 'INFO'},
          'version': 1}
     return conf_logging
