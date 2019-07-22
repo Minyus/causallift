@@ -76,6 +76,15 @@ def fit_propensity(args, df):
 
 def estimate_propensity(args, df, model):
     if not (args.enable_ipw and (args.col_propensity not in df.columns)):
+        if args.enable_ipw:
+            if args.verbose >= 2:
+                log.info('Skip estimation of propensity score because '
+                         '{} column found in the data frame. '.
+                         format(args.col_propensity))
+        else:
+            if args.verbose >= 2:
+                log.info('Skip estimation of propensity score because '
+                         '"enable_ipw" is set to False.')
         return df
 
     X_train = df.xs('train')[args.cols_features]

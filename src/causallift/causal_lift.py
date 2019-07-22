@@ -212,15 +212,6 @@ class CausalLift():
                 ], runner=self.args.runner)
             self.df = self.kedro_context.catalog.load('df_01')
 
-            self.kedro_context.run(tags=[
-                '311_fit',
-                ], runner=self.args.runner)
-            self.treated__model = self.kedro_context.catalog.load('treated__model')
-            self.untreated__model = self.kedro_context.catalog.load('untreated__model')
-            self.treated__eval_df = self.kedro_context.catalog.load('treated__eval_df')
-            self.untreated__eval_df = self.kedro_context.catalog.load('untreated__eval_df')
-
-
         if self.runner is None:
             self.df = bundle_train_and_test_data(train_df, test_df)
             self.args = impute_cols_features(args_raw, self.df)
@@ -228,9 +219,6 @@ class CausalLift():
 
             self.propensity_model = fit_propensity(self.args, self.df)
             self.df = estimate_propensity(self.args, self.df, self.propensity_model)
-
-            [self.treated__model, self.treated__eval_df] = model_for_treated_fit(self.args, self.df)
-            [self.untreated__model, self.untreated__eval_df] = model_for_untreated_fit(self.args, self.df)
 
         self.treatment_fraction_train = self.treatment_fractions.train
         self.treatment_fraction_test = self.treatment_fractions.test
@@ -248,20 +236,22 @@ class CausalLift():
         self.test_df = self.df.xs('test')
         return self.train_df, self.test_df
 
-    def estimate_cate_by_2_models(self,
-                                  verbose: int = None):
+    def estimate_cate_by_2_models(self):
         r"""
         Estimate CATE (Conditional Average Treatment Effect) using 2 XGBoost classifier models.
         args:
-            verbose:
-                How much info to show.
-                If None (default), use the value set in the constructor.
+
         """
 
-        # verbose = verbose or self.args.verbose
-
         if self.runner:
-            # self.kedro_context.catalog.save('args', self.args)
+            self.kedro_context.run(tags=[
+                '311_fit',
+                ], runner=self.args.runner)
+            self.treated__model = self.kedro_context.catalog.load('treated__model')
+            self.untreated__model = self.kedro_context.catalog.load('untreated__model')
+            self.treated__eval_df = self.kedro_context.catalog.load('treated__eval_df')
+            self.untreated__eval_df = self.kedro_context.catalog.load('untreated__eval_df')
+
             self.kedro_context.run(tags=[
                 '321_predict_proba',
             ], runner=self.args.runner)
@@ -277,6 +267,8 @@ class CausalLift():
             self.df = self.kedro_context.catalog.load('df_02')
 
         if self.runner is None:
+            [self.treated__model, self.treated__eval_df] = model_for_treated_fit(self.args, self.df)
+            [self.untreated__model, self.untreated__eval_df] = model_for_untreated_fit(self.args, self.df)
             self.treated__proba = model_for_treated_predict_proba(self.args, self.df, self.treated__model)
             self.untreated__proba = model_for_untreated_predict_proba(self.args, self.df, self.untreated__model)
             self.cate_estimated = compute_cate(self.treated__proba, self.untreated__proba)
