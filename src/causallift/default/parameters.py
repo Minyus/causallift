@@ -17,7 +17,7 @@ def parameters_():
         'max_depth': [3],
         'learning_rate': [0.1],
         'n_estimators': [100],
-        'silent': [True],
+        'verbose': [0],
         'objective': ['binary:logistic'],
         'booster': ['gbtree'],
         'n_jobs': [-1],
