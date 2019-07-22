@@ -164,7 +164,9 @@ class CausalLift():
         args_raw.update(dataset_catalog.get('args_raw', MemoryDataSet({}).load()))
 
         assert args_raw.runner in {'SequentialRunner', 'ParallelRunner', None}
-        assert args_raw.runner or (not args_raw.run_only_missing)
+        if args_raw.runner is None and args_raw.run_only_missing:
+            print('[Warning] run_only_missing option is ignored since runner is None')
+
         if args_raw.runner:
             self.kedro_context = FlexibleProjectContext(
                 logging_config=logging_config,
@@ -193,7 +195,11 @@ class CausalLift():
                 'treatment_fractions')
 
             self.kedro_context.run(tags=[
-                '211_estimate_propensity',
+                '211_fit_propensity',
+                ], runner=self.args.runner)
+            self.propensity_model = self.kedro_context.catalog.load('propensity_model')
+            self.kedro_context.run(tags=[
+                '221_estimate_propensity',
                 ], runner=self.args.runner)
             self.df = self.kedro_context.catalog.load('df_01')
 
@@ -207,10 +213,13 @@ class CausalLift():
 
 
         if not self.kedro_context:
-            self.df = bundle_train_and_test_data(self.train_df, self.test_df)
-            self.args = impute_cols_features(self.args, self.df)
+            self.df = bundle_train_and_test_data(train_df, test_df)
+            self.args = impute_cols_features(args_raw, self.df)
             self.treatment_fractions = treatment_fractions_(self.args, self.df)
-            self.df = estimate_propensity(self.args, self.df)
+
+            self.propensity_model = fit_propensity(self.args, self.df)
+            self.df = estimate_propensity(self.args, self.df, self.propensity_model)
+
             [self.treated__model, self.treated__eval_df] = model_for_treated_fit(self.args, self.df)
             [self.untreated__model, self.untreated__eval_df] = model_for_untreated_fit(self.args, self.df)
 
@@ -314,7 +323,7 @@ class CausalLift():
             self.estimated_effect_df = self.kedro_context.catalog.load('estimated_effect_df')
 
         if not self.kedro_context:
-            self.df = recommendation_by_cate(self.args, self.df, self.treatment_fractions)
+            self.df = recommend_by_cate(self.args, self.df, self.treatment_fractions)
             self.treated__sim_eval_df = model_for_treated_simulate_recommendation(
                 self.args, self.df, self.treated__model, self.treated__eval_df)
             self.untreated__sim_eval_df = model_for_untreated_simulate_recommendation(

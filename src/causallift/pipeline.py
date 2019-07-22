@@ -79,12 +79,20 @@ def create_pipeline(**kwargs):
                  'treatment_fractions',
                  ),
             ], name='131_treatment_fractions_'),
+
+        Pipeline([
+            node(fit_propensity,
+                 ['args', 'df_00'],
+                 'propensity_model',
+                 ),
+        ], name='211_fit_propensity'),
         Pipeline([
             node(estimate_propensity,
-                 ['args', 'df_00'],
+                 ['args', 'df_00', 'propensity_model'],
                  'df_01',
                  ),
-            ], name='211_estimate_propensity'),
+            ], name='221_estimate_propensity'),
+
         Pipeline([
             node(model_for_treated_fit,
                  ['args', 'df_01'],

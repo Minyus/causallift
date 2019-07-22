@@ -24,9 +24,9 @@ except:
     print('[Warning] Could not import matplotlib.pyplot. ')
 
 
-def estimate_propensity(args, df):
+def fit_propensity(args, df):
     if not (args.enable_ipw and (args.col_propensity not in df.columns)):
-        return df
+        return None
 
     X_train = df.xs('train')[args.cols_features]
     y_train = df.xs('train')[args.col_treatment]
@@ -66,6 +66,18 @@ def estimate_propensity(args, df):
                                columns=args.cols_features,
                                index=['coefficient'])
         display(coef_df)
+
+    return model
+
+
+def estimate_propensity(args, df, model):
+    if not (args.enable_ipw and (args.col_propensity not in df.columns)):
+        return df
+
+    X_train = df.xs('train')[args.cols_features]
+    y_train = df.xs('train')[args.col_treatment]
+    X_test = df.xs('test')[args.cols_features]
+    y_test = df.xs('test')[args.col_treatment]
 
     proba_train = model.predict_proba(X_train)[:, 1]
     proba_test = model.predict_proba(X_test)[:, 1]
