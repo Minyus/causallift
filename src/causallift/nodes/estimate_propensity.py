@@ -29,7 +29,7 @@ except:
 
 def fit_propensity(args, df):
     if not (args.enable_ipw and (args.col_propensity not in df.columns)):
-        return None
+        return '_' # dummy dataset since None is not allowed.
 
     X_train = df.xs('train')[args.cols_features]
     y_train = df.xs('train')[args.col_treatment]
