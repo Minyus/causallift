@@ -142,11 +142,11 @@ def create_pipeline(**kwargs):
         ], name='511_recommend_by_cate'),
         Pipeline([
            node(model_for_treated_simulate_recommendation,
-                ['args', 'df_03', 'treated__model_dict'],
+                ['args', 'df_03', 'models_dict'],
                 'treated__sim_eval_df',
                 ),
             node(model_for_untreated_simulate_recommendation,
-                 ['args', 'df_03', 'untreated__model_dict'],
+                 ['args', 'df_03', 'models_dict'],
                  'untreated__sim_eval_df',
                  ),
         ], name='521_simulate_recommendation'),

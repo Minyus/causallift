@@ -147,8 +147,6 @@ class CausalLift():
         self.test_df = None
         self.df = None
         self.propensity_model = None
-        self.treated__model_dict = None
-        self.untreated__model_dict = None
         self.models_dict = None
         self.treatment_fractions = None
         self.treatment_fraction_train = None
@@ -243,10 +241,10 @@ class CausalLift():
         """
 
         if self.runner is None:
-            self.treated__model_dict = model_for_treated_fit(self.args, self.df)
-            self.untreated__model_dict = model_for_untreated_fit(self.args, self.df)
+            treated__model_dict = model_for_treated_fit(self.args, self.df)
+            untreated__model_dict = model_for_untreated_fit(self.args, self.df)
             self.models_dict = bundle_treated_and_untreated_models(
-                self.treated__model_dict, self.untreated__model_dict)
+                treated__model_dict, untreated__model_dict)
 
             self.treated__proba = model_for_treated_predict_proba(
                 self.args, self.df, self.models_dict)
@@ -258,11 +256,6 @@ class CausalLift():
         if self.runner:
             self.kedro_context.run(tags=[
                 '311_fit',
-                ], runner=self.args.runner)
-            self.treated__model_dict = self.kedro_context.catalog.load('treated__model_dict')
-            self.untreated__model_dict = self.kedro_context.catalog.load('untreated__model_dict')
-
-            self.kedro_context.run(tags=[
                 '312_bundle_2_models',
                 ], runner=self.args.runner)
             self.models_dict = self.kedro_context.catalog.load('models_dict')
@@ -316,9 +309,9 @@ class CausalLift():
         if self.runner is None:
             self.df = recommend_by_cate(self.args, self.df, self.treatment_fractions)
             self.treated__sim_eval_df = model_for_treated_simulate_recommendation(
-                self.args, self.df, self.treated__model_dict)
+                self.args, self.df, self.models_dict)
             self.untreated__sim_eval_df = model_for_untreated_simulate_recommendation(
-                self.args, self.df, self.untreated__model_dict)
+                self.args, self.df, self.models_dict)
             self.estimated_effect_df = estimate_effect(
                 self.treated__sim_eval_df, self.untreated__sim_eval_df)
 

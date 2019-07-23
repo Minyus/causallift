@@ -102,10 +102,10 @@ class ModelForTreatedOrUntreated():
         # return y_pred
 
 
-    def simulate_recommendation(self, args, df_, model_dict):
+    def simulate_recommendation(self, args, df_, models_dict):
 
-        model = model_dict['model']
-        score_original_treatment_df = model_dict['eval_df']
+        model = models_dict[self.treatment_label]['model']
+        score_original_treatment_df = models_dict[self.treatment_label]['eval_df']
 
         treatment_val = self.treatment_val
         verbose = args.verbose
