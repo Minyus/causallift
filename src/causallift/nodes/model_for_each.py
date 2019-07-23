@@ -18,6 +18,7 @@ class ModelForTreatedOrUntreated():
     def __init__(self, treatment_val=1.0):
         assert treatment_val in {0.0, 1.0}
         self.treatment_val = treatment_val
+        self.treatment_label = 'treated' if treatment_val else 'untreated'
     def fit(self, args, df_):
 
         assert isinstance(df_, pd.DataFrame)
@@ -83,8 +84,8 @@ class ModelForTreatedOrUntreated():
         model_dict = dict(model=model, eval_df=score_original_treatment_df)
         return model_dict
 
-    def predict_proba(self, args, df_, model_dict):
-        model = model_dict['model']
+    def predict_proba(self, args, df_, models_dict):
+        model = models_dict[self.treatment_label]['model']
 
         cols_features = args.cols_features
 
@@ -162,6 +163,7 @@ def model_for_treated_predict_proba(*lsargs, **kwargs):
 def model_for_treated_simulate_recommendation(*lsargs, **kwargs):
     return ModelForTreated().simulate_recommendation(*lsargs, **kwargs)
 
+
 def model_for_untreated_fit(*lsargs, **kwargs):
     return ModelForUntreated().fit(*lsargs, **kwargs)
 
@@ -170,3 +172,8 @@ def model_for_untreated_predict_proba(*lsargs, **kwargs):
 
 def model_for_untreated_simulate_recommendation(*lsargs, **kwargs):
     return ModelForUntreated().simulate_recommendation(*lsargs, **kwargs)
+
+
+def bundle_treated_and_untreated_models(treated_model, untreated_model):
+    models_dict = dict(treated=treated_model, untreated=untreated_model)
+    return models_dict

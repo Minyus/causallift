@@ -105,12 +105,19 @@ def create_pipeline(**kwargs):
             ], name='311_fit'),
 
         Pipeline([
+            node(bundle_treated_and_untreated_models,
+                 ['treated__model_dict', 'untreated__model_dict'],
+                 'models_dict',
+                 ),
+        ], name='312_bundle_2_models'),
+
+        Pipeline([
             node(model_for_treated_predict_proba,
-                 ['args', 'df_01', 'treated__model_dict'],
+                 ['args', 'df_01', 'models_dict'],
                  'treated__proba',
                  ),
             node(model_for_untreated_predict_proba,
-                 ['args', 'df_01', 'untreated__model_dict'],
+                 ['args', 'df_01', 'models_dict'],
                  'untreated__proba',
                  ),
             ], name='321_predict_proba'),

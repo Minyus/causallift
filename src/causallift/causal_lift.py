@@ -57,7 +57,7 @@ class CausalLift():
                 'max_depth':[3],
                 'learning_rate':[0.1],
                 'n_estimators':[100],
-                'silent':[True],
+                'verbose':[0],
                 'objective':['binary:logistic'],
                 'booster':['gbtree'],
                 'n_jobs':[-1],
@@ -149,6 +149,7 @@ class CausalLift():
         self.propensity_model = None
         self.treated__model_dict = None
         self.untreated__model_dict = None
+        self.models_dict = None
         self.treatment_fractions = None
         self.treatment_fraction_train = None
         self.treatment_fraction_test = None
@@ -178,6 +179,14 @@ class CausalLift():
         )
 
         self.runner = args_raw.runner
+
+        if self.runner is None:
+            self.df = bundle_train_and_test_data(train_df, test_df)
+            self.args = impute_cols_features(args_raw, self.df)
+            self.treatment_fractions = treatment_fractions_(self.args, self.df)
+
+            self.propensity_model = fit_propensity(self.args, self.df)
+            self.df = estimate_propensity(self.args, self.df, self.propensity_model)
 
         if self.runner:
             self.kedro_context.catalog.add_feed_dict({
@@ -210,14 +219,6 @@ class CausalLift():
                 ], runner=self.args.runner)
             self.df = self.kedro_context.catalog.load('df_01')
 
-        if self.runner is None:
-            self.df = bundle_train_and_test_data(train_df, test_df)
-            self.args = impute_cols_features(args_raw, self.df)
-            self.treatment_fractions = treatment_fractions_(self.args, self.df)
-
-            self.propensity_model = fit_propensity(self.args, self.df)
-            self.df = estimate_propensity(self.args, self.df, self.propensity_model)
-
         self.treatment_fraction_train = self.treatment_fractions.train
         self.treatment_fraction_test = self.treatment_fractions.test
 
@@ -241,12 +242,30 @@ class CausalLift():
 
         """
 
+        if self.runner is None:
+            self.treated__model_dict = model_for_treated_fit(self.args, self.df)
+            self.untreated__model_dict = model_for_untreated_fit(self.args, self.df)
+            self.models_dict = bundle_treated_and_untreated_models(
+                self.treated__model_dict, self.untreated__model_dict)
+
+            self.treated__proba = model_for_treated_predict_proba(
+                self.args, self.df, self.models_dict)
+            self.untreated__proba = model_for_untreated_predict_proba(
+                self.args, self.df, self.models_dict)
+            self.cate_estimated = compute_cate(self.treated__proba, self.untreated__proba)
+            self.df = add_cate_to_df(self.args, self.df, self.cate_estimated)
+
         if self.runner:
             self.kedro_context.run(tags=[
                 '311_fit',
                 ], runner=self.args.runner)
             self.treated__model_dict = self.kedro_context.catalog.load('treated__model_dict')
             self.untreated__model_dict = self.kedro_context.catalog.load('untreated__model_dict')
+
+            self.kedro_context.run(tags=[
+                '312_bundle_2_models',
+                ], runner=self.args.runner)
+            self.models_dict = self.kedro_context.catalog.load('models_dict')
 
             self.kedro_context.run(tags=[
                 '321_predict_proba',
@@ -261,16 +280,6 @@ class CausalLift():
                 '421_add_cate_to_df'
             ], runner=self.args.runner)
             self.df = self.kedro_context.catalog.load('df_02')
-
-        if self.runner is None:
-            self.treated__model_dict = model_for_treated_fit(self.args, self.df)
-            self.untreated__model_dict = model_for_untreated_fit(self.args, self.df)
-            self.treated__proba = model_for_treated_predict_proba(
-                self.args, self.df, self.treated__model_dict)
-            self.untreated__proba = model_for_untreated_predict_proba(
-                self.args, self.df, self.untreated__model_dict)
-            self.cate_estimated = compute_cate(self.treated__proba, self.untreated__proba)
-            self.df = add_cate_to_df(self.args, self.df, self.cate_estimated)
 
         return self._separate_train_test()
 
@@ -304,6 +313,15 @@ class CausalLift():
 
         verbose = verbose or self.args.verbose
 
+        if self.runner is None:
+            self.df = recommend_by_cate(self.args, self.df, self.treatment_fractions)
+            self.treated__sim_eval_df = model_for_treated_simulate_recommendation(
+                self.args, self.df, self.treated__model_dict)
+            self.untreated__sim_eval_df = model_for_untreated_simulate_recommendation(
+                self.args, self.df, self.untreated__model_dict)
+            self.estimated_effect_df = estimate_effect(
+                self.treated__sim_eval_df, self.untreated__sim_eval_df)
+
         if self.runner:
             # self.kedro_context.catalog.save('args', self.args)
             self.kedro_context.run(tags=[
@@ -321,15 +339,6 @@ class CausalLift():
                 '531_estimate_effect'
             ], runner=self.args.runner)
             self.estimated_effect_df = self.kedro_context.catalog.load('estimated_effect_df')
-
-        if self.runner is None:
-            self.df = recommend_by_cate(self.args, self.df, self.treatment_fractions)
-            self.treated__sim_eval_df = model_for_treated_simulate_recommendation(
-                self.args, self.df, self.treated__model_dict)
-            self.untreated__sim_eval_df = model_for_untreated_simulate_recommendation(
-                self.args, self.df, self.untreated__model_dict)
-            self.estimated_effect_df = estimate_effect(
-                self.treated__sim_eval_df, self.untreated__sim_eval_df)
 
         if verbose >= 3:
             log.info('\n### Treated samples without and with uplift model:')

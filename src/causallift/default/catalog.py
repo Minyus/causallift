@@ -11,8 +11,9 @@ def datasets_():
     # datasets.args = CSVLocalDataSet(filepath='../data/08_reporting/args.csv', version=None)
     # datasets.df_00 = MemoryDataSet()
     # datasets.df_01 = MemoryDataSet()
-    datasets.treated__model_dict = PickleLocalDataSet(filepath='../data/06_models/treated__model_dict.pickle', version=None)
-    datasets.untreated__model_dict = PickleLocalDataSet(filepath='../data/06_models/untreated__model_dict.pickle', version=None)
+    datasets.models_dict = PickleLocalDataSet(
+        filepath='../data/06_models/models_dict.pickle',
+        version=None)
     # datasets.treatment_fractions = MemoryDataSet()
     # datasets.treated__proba = MemoryDataSet()
     # datasets.untreated__proba = MemoryDataSet()
