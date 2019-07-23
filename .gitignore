@@ -131,7 +131,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
-notebooks/**
+# notebooks/**
 !notebooks/.gitkeep
 !notebooks/**.ipynb
 
