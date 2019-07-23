@@ -35,7 +35,7 @@ from warnings import warn
 
 from kedro.cli.utils import KedroCliError
 from kedro.config import ConfigLoader, MissingConfigException
-from kedro.context import KedroContext
+from kedro.context import KedroContext, KedroContextError
 from kedro.io import DataCatalog
 from kedro.runner import AbstractRunner, ParallelRunner, SequentialRunner
 from kedro.utils import load_obj
@@ -61,27 +61,43 @@ class ProjectContext(KedroContext):
     def pipeline(self) -> Pipeline:
         return create_pipeline()
 
-    def run(self, tags: Iterable[str] = None, runner: AbstractRunner = None,
-            only_missing: bool = False) -> Dict[str, Any]:
-        """Runs the pipeline with a specified runner.
+    def run(
+        self,
+        tags: Iterable[str] = None,
+        runner: AbstractRunner = None,
+        node_names: Iterable[str] = None,
+        only_missing: bool = False,
+    ) -> Dict[str, Any]:
+        """Runs the pipeline wi th a specified runner.
 
         Args:
             tags: An optional list of node tags which should be used to
                 filter the nodes of the ``Pipeline``. If specified, only the nodes
-                containing *any* of these tags will be added to the ``Pipeline``.
+                containing *any* of these tags will be run.
             runner: An optional parameter specifying the runner that you want to run
                 the pipeline with.
+            node_names: An optional list of node names which should be used to
+                filter the nodes of the ``Pipeline``. If specified, only the nodes
+                with these names will be run.
             only_missing: An option to run only missing nodes.
         Raises:
             KedroContextError: If the resulting ``Pipeline`` is empty
                 or incorrect tags are provided.
-
+        Returns:
+            Any node outputs that cannot be processed by the ``DataCatalog``.
+            These are returned in a dictionary, where the keys are defined
+            by the node outputs.
         """
         # Report project name
         logging.info("** Kedro project {}".format(self.project_path.name))
 
         # Load the pipeline
-        pipeline = self.pipeline.only_nodes_with_tags(*tags) if tags else self.pipeline
+        pipeline = self.pipeline
+        if node_names:
+            pipeline = pipeline.only_nodes(*node_names)
+        if tags:
+            pipeline = pipeline.only_nodes_with_tags(*tags)
+
         if not pipeline.nodes:
             msg = "Pipeline contains no nodes"
             if tags:
