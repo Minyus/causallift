@@ -197,24 +197,24 @@ class CausalLift():
 
             self.kedro_context.run(tags=[
                 '011_bundle_train_and_test_data',
-                ], runner=args_raw.runner)
+                ])
             self.df = self.kedro_context.catalog.load('df_00')
 
             self.kedro_context.run(tags=[
                 '121_impute_cols_features',
                 '131_treatment_fractions_',
-                ], runner=args_raw.runner)
+                ])
             self.args = self.kedro_context.catalog.load('args')
             self.treatment_fractions = self.kedro_context.catalog.load(
                 'treatment_fractions')
 
             self.kedro_context.run(tags=[
                 '211_fit_propensity',
-                ], runner=self.args.runner)
+                ])
             self.propensity_model = self.kedro_context.catalog.load('propensity_model')
             self.kedro_context.run(tags=[
                 '221_estimate_propensity',
-                ], runner=self.args.runner)
+                ])
             self.df = self.kedro_context.catalog.load('df_01')
 
         self.treatment_fraction_train = self.treatment_fractions.train
@@ -257,21 +257,21 @@ class CausalLift():
             self.kedro_context.run(tags=[
                 '311_fit',
                 '312_bundle_2_models',
-                ], runner=self.args.runner)
+                ])
             self.models_dict = self.kedro_context.catalog.load('models_dict')
 
             self.kedro_context.run(tags=[
                 '321_predict_proba',
-            ], runner=self.args.runner)
+            ])
             self.treated__proba = self.kedro_context.catalog.load('treated__proba')
             self.untreated__proba = self.kedro_context.catalog.load('untreated__proba')
             self.kedro_context.run(tags=[
                 '411_compute_cate',
-            ], runner=self.args.runner)
+            ])
             self.cate_estimated = self.kedro_context.catalog.load('cate_estimated')
             self.kedro_context.run(tags=[
                 '421_add_cate_to_df'
-            ], runner=self.args.runner)
+            ])
             self.df = self.kedro_context.catalog.load('df_02')
 
         return self._separate_train_test()
@@ -319,18 +319,18 @@ class CausalLift():
             # self.kedro_context.catalog.save('args', self.args)
             self.kedro_context.run(tags=[
                 '511_recommend_by_cate',
-            ], runner=self.args.runner)
+            ])
             self.df = self.kedro_context.catalog.load('df_03')
 
             self.kedro_context.run(tags=[
                 '521_simulate_recommendation',
-            ], runner=self.args.runner)
+            ])
             self.treated__sim_eval_df = self.kedro_context.catalog.load('treated__sim_eval_df')
             self.untreated__sim_eval_df = self.kedro_context.catalog.load('untreated__sim_eval_df')
 
             self.kedro_context.run(tags=[
                 '531_estimate_effect'
-            ], runner=self.args.runner)
+            ])
             self.estimated_effect_df = self.kedro_context.catalog.load('estimated_effect_df')
 
         if verbose >= 3:

@@ -46,6 +46,8 @@ from causallift.pipeline import create_pipeline
 from .default.logging import *
 from typing import Dict, Any
 
+import logging
+log = logging.getLogger(__name__)
 
 
 class ProjectContext(KedroContext):
@@ -147,14 +149,21 @@ class ProjectContext4(ProjectContext3):
     def run(self, runner: str = None, only_missing: bool = False, **kwargs) -> Dict[str, Any]:
         runner = runner or self._runner
         only_missing = only_missing or self._only_missing
+        log.info('[Run option] runner: {}, run_only_missing: {}'.format(runner, only_missing))
         return super().run(runner=runner, only_missing=only_missing, **kwargs)
 
 
 class FlexibleProjectContext(ProjectContext4):
     r"Keep the keyword arguments in the same order as ProjectContext."
-    def run(self, tags: Iterable[str] = None, runner: str = None, only_missing: bool = False) \
-            -> Dict[str, Any]:
-        return super().run(tags=tags, runner=runner, only_missing=only_missing)
+    def run(
+        self,
+        tags: Iterable[str] = None,
+        runner: AbstractRunner = None,
+        node_names: Iterable[str] = None,
+        only_missing: bool = False,
+    ) -> Dict[str, Any]:
+        return super().run(tags=tags, runner=runner, node_names=node_names,
+                           only_missing=only_missing)
 
 
 def __kedro_context__(env: str = None, **kwargs) -> KedroContext:
