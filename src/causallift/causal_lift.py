@@ -101,8 +101,8 @@ class CausalLift():
         runner: str, optional
             Runner for kedro. 'SequentialRunner', 'ParallelRunner', or 'NoRunner' (default)
         dataset_catalog: dict, optional
-            Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format if runner is set to either
-            'SequentialRunner' or 'ParallelRunner'.
+            Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format
+            if runner is set to either 'SequentialRunner' or 'ParallelRunner'.
             In default, no data sets are saved as files.
             To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets
         logging_config: dict, optional
@@ -147,10 +147,8 @@ class CausalLift():
         self.test_df = None
         self.df = None
         self.propensity_model = None
-        self.treated__model = None
-        self.treated__eval_df = None
-        self.untreated__model = None
-        self.untreated__eval_df = None
+        self.treated__model_dict = None
+        self.untreated__model_dict = None
         self.treatment_fractions = None
         self.treatment_fraction_train = None
         self.treatment_fraction_test = None
@@ -247,10 +245,8 @@ class CausalLift():
             self.kedro_context.run(tags=[
                 '311_fit',
                 ], runner=self.args.runner)
-            self.treated__model = self.kedro_context.catalog.load('treated__model')
-            self.untreated__model = self.kedro_context.catalog.load('untreated__model')
-            self.treated__eval_df = self.kedro_context.catalog.load('treated__eval_df')
-            self.untreated__eval_df = self.kedro_context.catalog.load('untreated__eval_df')
+            self.treated__model_dict = self.kedro_context.catalog.load('treated__model_dict')
+            self.untreated__model_dict = self.kedro_context.catalog.load('untreated__model_dict')
 
             self.kedro_context.run(tags=[
                 '321_predict_proba',
@@ -267,10 +263,12 @@ class CausalLift():
             self.df = self.kedro_context.catalog.load('df_02')
 
         if self.runner is None:
-            [self.treated__model, self.treated__eval_df] = model_for_treated_fit(self.args, self.df)
-            [self.untreated__model, self.untreated__eval_df] = model_for_untreated_fit(self.args, self.df)
-            self.treated__proba = model_for_treated_predict_proba(self.args, self.df, self.treated__model)
-            self.untreated__proba = model_for_untreated_predict_proba(self.args, self.df, self.untreated__model)
+            self.treated__model_dict = model_for_treated_fit(self.args, self.df)
+            self.untreated__model_dict = model_for_untreated_fit(self.args, self.df)
+            self.treated__proba = model_for_treated_predict_proba(
+                self.args, self.df, self.treated__model_dict)
+            self.untreated__proba = model_for_untreated_predict_proba(
+                self.args, self.df, self.untreated__model_dict)
             self.cate_estimated = compute_cate(self.treated__proba, self.untreated__proba)
             self.df = add_cate_to_df(self.args, self.df, self.cate_estimated)
 
@@ -312,6 +310,7 @@ class CausalLift():
                 '511_recommend_by_cate',
             ], runner=self.args.runner)
             self.df = self.kedro_context.catalog.load('df_03')
+
             self.kedro_context.run(tags=[
                 '521_simulate_recommendation',
             ], runner=self.args.runner)
@@ -326,10 +325,11 @@ class CausalLift():
         if self.runner is None:
             self.df = recommend_by_cate(self.args, self.df, self.treatment_fractions)
             self.treated__sim_eval_df = model_for_treated_simulate_recommendation(
-                self.args, self.df, self.treated__model, self.treated__eval_df)
+                self.args, self.df, self.treated__model_dict)
             self.untreated__sim_eval_df = model_for_untreated_simulate_recommendation(
-                self.args, self.df, self.untreated__model, self.untreated__eval_df)
-            self.estimated_effect_df = estimate_effect(self.treated__sim_eval_df, self.untreated__sim_eval_df)
+                self.args, self.df, self.untreated__model_dict)
+            self.estimated_effect_df = estimate_effect(
+                self.treated__sim_eval_df, self.untreated__sim_eval_df)
 
         if verbose >= 3:
             log.info('\n### Treated samples without and with uplift model:')

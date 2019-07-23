@@ -80,11 +80,12 @@ class ModelForTreatedOrUntreated():
                      'with observational Treatment: {}'.format(treatment_val))
             display(score_original_treatment_df)
 
-        return [model, score_original_treatment_df]
+        model_dict = dict(model=model, eval_df=score_original_treatment_df)
+        return model_dict
 
-    def predict_proba(self, args, df_, model):
-        # model = self.model
-        # cols_features = self.args.cols_features
+    def predict_proba(self, args, df_, model_dict):
+        model = model_dict['model']
+
         cols_features = args.cols_features
 
         X_train = df_.xs('train')[cols_features]
@@ -100,7 +101,10 @@ class ModelForTreatedOrUntreated():
         # return y_pred
 
 
-    def simulate_recommendation(self, args, df_, model, score_original_treatment_df):
+    def simulate_recommendation(self, args, df_, model_dict):
+
+        model = model_dict['model']
+        score_original_treatment_df = model_dict['eval_df']
 
         treatment_val = self.treatment_val
         verbose = args.verbose
@@ -149,21 +153,20 @@ class ModelForUntreated(ModelForTreatedOrUntreated):
         super().__init__(*lsargs, **kwargs)
 
 
-def model_for_treated_fit(args, df):
-    return ModelForTreated().fit(args, df)
+def model_for_treated_fit(*lsargs, **kwargs):
+    return ModelForTreated().fit(*lsargs, **kwargs)
 
-def model_for_treated_predict_proba(args, df, model):
-    return ModelForTreated().predict_proba(args, df, model)
+def model_for_treated_predict_proba(*lsargs, **kwargs):
+    return ModelForTreated().predict_proba(*lsargs, **kwargs)
 
-def model_for_treated_simulate_recommendation(args, df, model, score_original_treatment_df):
-    return ModelForTreated().simulate_recommendation(args, df, model, score_original_treatment_df)
+def model_for_treated_simulate_recommendation(*lsargs, **kwargs):
+    return ModelForTreated().simulate_recommendation(*lsargs, **kwargs)
 
+def model_for_untreated_fit(*lsargs, **kwargs):
+    return ModelForUntreated().fit(*lsargs, **kwargs)
 
-def model_for_untreated_fit(args, df):
-    return ModelForUntreated().fit(args, df)
+def model_for_untreated_predict_proba(*lsargs, **kwargs):
+    return ModelForUntreated().predict_proba(*lsargs, **kwargs)
 
-def model_for_untreated_predict_proba(args, df, model):
-    return ModelForUntreated().predict_proba(args, df, model)
-
-def model_for_untreated_simulate_recommendation(args, df, model, score_original_treatment_df):
-    return ModelForUntreated().simulate_recommendation(args, df, model, score_original_treatment_df)
+def model_for_untreated_simulate_recommendation(*lsargs, **kwargs):
+    return ModelForUntreated().simulate_recommendation(*lsargs, **kwargs)

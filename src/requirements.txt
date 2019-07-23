@@ -6,5 +6,5 @@ xgboost
 easydict
 # kedro==0.14.3
 # git+git://github.com/quantumblacklabs/kedro@64046d2c9d64334c2ef76fb8f340182307133f9a#egg=kedro
-# Manually install develop version of kedro by # pip3 install git+git://github.com/quantumblacklabs/kedro@64046d2c9d64334c2ef76fb8f340182307133f9a#egg=kedro
+# Manually install develop version of kedro by # pip3 install git+git://github.com/quantumblacklabs/kedro@e11bef3f3d8c05ff8bc5e2b458f2f8e0f376e6c2#egg=kedro
 
