@@ -112,18 +112,16 @@ class ProjectContext(KedroContext):
 
         # Run the runner
         runner = runner or SequentialRunner()
-        if only_missing and potentially_skippable(pipeline, self.catalog):
+        if only_missing and skippable(self.catalog):
             return runner.run_only_missing(pipeline, self.catalog)
         return runner.run(pipeline, self.catalog)
 
 
-def potentially_skippable(
-        pipeline: Pipeline,
+def skippable(
         catalog: DataCatalog
     ) -> bool:
-    free_outputs = pipeline.outputs() - set(catalog.list())
     missing = {ds for ds in catalog.list() if not catalog.exists(ds)}
-    return (not missing) or missing in free_outputs
+    return not missing
 
 
 class ProjectContext1(ProjectContext):
