@@ -99,36 +99,96 @@ class CausalLift():
             Cross-Validation for the Grid Search. 3 in default.
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
         runner: str, optional
-            Runner for kedro. 'SequentialRunner', 'ParallelRunner', or 'NoRunner' (default)
+            If set to 'SequentialRunner' (default) or 'ParallelRunner', the pipeline is run by kedro
+            sequentially or in parallel, respectively.
+            If set to None, the pipeline is run by native Python.
+        conditionally_skip: bool, optional
+            Skip running the pipeline if the output files already exist and
+            runner is set to either 'SequentialRunner' or 'ParallelRunner'.
+            True in default.
         dataset_catalog: dict, optional
             Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format
             if runner is set to either 'SequentialRunner' or 'ParallelRunner'.
-            In default, no data sets are saved as files.
             To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets
+            In default:
+                dict(
+                    models_dict=PickleLocalDataSet(
+                        filepath='../data/06_models/models_dict.pickle',
+                        version=None)
+                    )
         logging_config: dict, optional
             Specify logging configuration.
             Refer to https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema
             In defalut:
                 {'disable_existing_loggers': False,
-                 'formatters': {'json_formatter': \
-                                    {'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
-                                     'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'},
-                                'simple':
-                                    {'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'}},
-                 'handlers': {'console': {'class': 'logging.StreamHandler',
-                                          'formatter': 'simple',
-                                          'level': 'INFO',
-                                          'stream': 'ext://sys.stdout'}},
-                 'loggers': {'anyconfig': {'handlers': ['console'],
-                                           'level': 'WARNING',
-                                           'propagate': False},
-                             'kedro.io': {'handlers': ['console'],
-                                          'level': 'INFO',
-                                          'propagate': False},
-                             'kedro.pipeline': {'handlers': ['console'],
-                                                'level': 'INFO',
-                                                'propagate': False}},
-                 'root': {'handlers': ['console'], 'level': 'INFO'},
+                 'formatters': {
+                     'json_formatter': {
+                         'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
+                         'format': '[%(asctime)s|%(name)s|%(funcName)s|%(levelname)s] %(message)s',
+                     },
+                     'simple': {
+                         'format': '[%(asctime)s|%(name)s|%(levelname)s] %(message)s',
+                     },
+                 },
+                 'handlers': {
+                     'console': {
+                         'class': 'logging.StreamHandler',
+                         'formatter': 'simple',
+                         'level': 'INFO',
+                         'stream': 'ext://sys.stdout',
+                     },
+                    'info_file_handler': {
+                        'class': 'logging.handlers.RotatingFileHandler',
+                        'level': 'INFO',
+                        'formatter': 'simple',
+                        'filename': './info.log',
+                        'maxBytes': 10485760, # 10MB
+                        'backupCount': 20,
+                        'encoding': 'utf8',
+                        'delay': True,
+                    },
+                     'error_file_handler': {
+                         'class': 'logging.handlers.RotatingFileHandler',
+                         'level': 'ERROR',
+                         'formatter': 'simple',
+                         'filename': './errors.log',
+                         'maxBytes': 10485760,  # 10MB
+                         'backupCount': 20,
+                         'encoding': 'utf8',
+                         'delay': True,
+                     },
+                 },
+                 'loggers': {
+                     'anyconfig': {
+                         'handlers': ['console', 'info_file_handler', 'error_file_handler'],
+                         'level': 'WARNING',
+                         'propagate': False,
+                     },
+                     'kedro.io': {
+                         'handlers': ['console', 'info_file_handler', 'error_file_handler'],
+                         'level': 'WARNING',
+                         'propagate': False,
+                     },
+                     'kedro.pipeline': {
+                         'handlers': ['console', 'info_file_handler', 'error_file_handler'],
+                         'level': 'INFO',
+                         'propagate': False,
+                     },
+                     'kedro.runner': {
+                         'handlers': ['console', 'info_file_handler', 'error_file_handler'],
+                         'level': 'INFO',
+                         'propagate': False,
+                     },
+                     'causallift': {
+                         'handlers': ['console', 'info_file_handler', 'error_file_handler'],
+                         'level': 'INFO',
+                         'propagate': False,
+                     },
+                 },
+                 'root': {
+                     'handlers': ['console', 'info_file_handler', 'error_file_handler'],
+                     'level': 'INFO',
+                 },
                  'version': 1}
 
     """
@@ -167,13 +227,13 @@ class CausalLift():
         args_raw.update(dataset_catalog.get('args_raw', MemoryDataSet({}).load()))
 
         assert args_raw.runner in {'SequentialRunner', 'ParallelRunner', None}
-        if args_raw.runner is None and args_raw.run_only_missing:
-            log.warning('[Warning] run_only_missing option is ignored since runner is None')
+        if args_raw.runner is None and args_raw.conditionally_skip:
+            log.warning('[Warning] conditionally_skip option is ignored since runner is None')
 
         self.kedro_context = FlexibleProjectContext(
             logging_config=logging_config,
             runner=args_raw.runner,
-            only_missing=args_raw.run_only_missing,
+            only_missing=args_raw.conditionally_skip,
         )
 
         self.runner = args_raw.runner
