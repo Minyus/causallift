@@ -4,10 +4,12 @@ def conf_logging_():
          'formatters': {
              'json_formatter': {
                  'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
-                 'format': '[%(asctime)s] %(message)s',
+                 # 'format': '[%(asctime)s] %(message)s',
+                 'format': '[%(asctime)s|%(name)s|%(funcName)s|%(levelname)s] %(message)s',
              },
              'simple': {
-                 'format': '[%(asctime)s] %(message)s',
+                 # 'format': '[%(asctime)s] %(message)s',
+                 'format': '[%(asctime)s|%(name)s|%(levelname)s] %(message)s',
              },
          },
          'handlers': {'console': {'class': 'logging.StreamHandler',
@@ -30,6 +32,11 @@ def conf_logging_():
                  'level': 'INFO',
                  'propagate': False,
              },
+             'kedro.runner': {
+                 'handlers': ['console'],
+                 'level': 'INFO',
+                 'propagate': False,
+             },
              'causallift': {
                  'handlers': ['console'],
                  'level': 'INFO',
@@ -38,7 +45,7 @@ def conf_logging_():
          },
          'root': {
              'handlers': ['console'],
-             'level': 'WARNING',
+             'level': 'INFO',
          },
          'version': 1}
     return conf_logging

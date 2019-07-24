@@ -91,7 +91,7 @@ class ProjectContext(KedroContext):
             by the node outputs.
         """
         # Report project name
-        logging.info("** Kedro project {}".format(self.project_path.name))
+        # logging.info("** Kedro project {}".format(self.project_path.name))
 
         # Load the pipeline
         pipeline = self.pipeline
@@ -134,27 +134,18 @@ class ProjectContext2(ProjectContext1):
 class ProjectContext3(ProjectContext2):
     r"Allow to overwrite the default logging config and remove yaml file dependency."
     def __init__(self, logging_config: Dict = None):
-        self._project_path = Path().cwd().resolve()
+        self._project_path = Path().cwd().resolve() # No longer used.
         logging_config = logging_config or conf_logging_()
         logging.config.dictConfig(logging_config)
         self._catalog = DataCatalog()
 
 
-class ProjectContext4(ProjectContext3):
+class FlexibleProjectContext(ProjectContext3):
     r"Overwrite the default runner and only_missing option for the run."
     def __init__(self, runner: str = None, only_missing: bool = False, **kwargs):
         super().__init__(**kwargs)
         self._runner = runner
         self._only_missing = only_missing
-    def run(self, runner: str = None, only_missing: bool = False, **kwargs) -> Dict[str, Any]:
-        runner = runner or self._runner
-        only_missing = only_missing or self._only_missing
-        log.info('[Run option] runner: {}, run_only_missing: {}'.format(runner, only_missing))
-        return super().run(runner=runner, only_missing=only_missing, **kwargs)
-
-
-class FlexibleProjectContext(ProjectContext4):
-    r"Keep the keyword arguments in the same order as ProjectContext."
     def run(
         self,
         tags: Iterable[str] = None,
@@ -162,8 +153,22 @@ class FlexibleProjectContext(ProjectContext4):
         node_names: Iterable[str] = None,
         only_missing: bool = False,
     ) -> Dict[str, Any]:
-        return super().run(tags=tags, runner=runner, node_names=node_names,
-                           only_missing=only_missing)
+        runner = runner or self._runner
+        only_missing = only_missing or self._only_missing
+        log.info(
+            'Run pipeline (' +
+            ('nodes: {}, '.format(node_names) if node_names else '') +
+            ('tags: {}, '.format(tags) if tags else '') +
+            '{}, '.format(runner) +
+            'only_missing: {})'.format(only_missing) +
+            ')'
+        )
+        return super().run(
+            tags=tags,
+            runner=runner,
+            node_names=node_names,
+            only_missing=only_missing,
+        )
 
 
 def __kedro_context__(env: str = None, **kwargs) -> KedroContext:
