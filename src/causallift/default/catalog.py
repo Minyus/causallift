@@ -1,27 +1,30 @@
-from easydict import EasyDict
-from kedro.io import MemoryDataSet, PickleLocalDataSet, CSVLocalDataSet
+from kedro.io import MemoryDataSet, PickleLocalDataSet, CSVLocalDataSet, JSONLocalDataSet
 
 
 def datasets_():
-    datasets = EasyDict()
-
-    # datasets.args_raw = CSVLocalDataSet(filepath='../data/01_raw/args_raw.csv', version=None)
-    # datasets.train_df = CSVLocalDataSet(filepath='../data/01_raw/train_df.csv', version=None)
-    # datasets.test_df = CSVLocalDataSet(filepath='../data/01_raw/test_df.csv', version=None)
-    # datasets.args = CSVLocalDataSet(filepath='../data/08_reporting/args.csv', version=None)
-    # datasets.df_00 = MemoryDataSet()
-    # datasets.df_01 = MemoryDataSet()
-    datasets.models_dict = PickleLocalDataSet(
-        filepath='../data/06_models/models_dict.pickle',
-        version=None)
-    # datasets.treatment_fractions = MemoryDataSet()
-    # datasets.treated__proba = MemoryDataSet()
-    # datasets.untreated__proba = MemoryDataSet()
-    # datasets.cate_estimated = MemoryDataSet()
-    # datasets.df_02 = MemoryDataSet()
-    # datasets.df_03 = CSVLocalDataSet(filepath='../data/07_model_output/df.csv', version=None)
-    # datasets.treated__sim_eval_df = MemoryDataSet()
-    # datasets.untreated__sim_eval_df = MemoryDataSet()
-    # datasets.estimated_effect_df = CSVLocalDataSet(filepath='../data/08_reporting/estimated_effect_df.csv', version=None)
-
+    datasets = dict(
+        # args_raw = CSVLocalDataSet(filepath='../data/01_raw/args_raw.csv', version=None),
+        # train_df = CSVLocalDataSet(filepath='../data/01_raw/train_df.csv', version=None),
+        # test_df = CSVLocalDataSet(filepath='../data/01_raw/test_df.csv', version=None),
+        # args = JSONLocalDataSet(filepath='../data/08_reporting/args.csv', version=None),
+        # df_00 = MemoryDataSet(),
+        propensity_model  = PickleLocalDataSet(
+            filepath='../data/06_models/propensity_model.pickle',
+            version=None
+        ),
+        df_01 = MemoryDataSet(),
+        models_dict = PickleLocalDataSet(
+            filepath='../data/06_models/models_dict.pickle',
+            version=None
+        ),
+        # treatment_fractions = MemoryDataSet(),
+        # treated__proba = MemoryDataSet(),
+        # untreated__proba = MemoryDataSet(),
+        # cate_estimated = MemoryDataSet(),
+        # df_02 = MemoryDataSet(),
+        # df_03 = CSVLocalDataSet(filepath='../data/07_model_output/df.csv', version=None),
+        # treated__sim_eval_df = MemoryDataSet(),
+        # untreated__sim_eval_df = MemoryDataSet(),
+        estimated_effect_df = CSVLocalDataSet(filepath='../data/08_reporting/estimated_effect_df.csv', version=None),
+    )
     return datasets

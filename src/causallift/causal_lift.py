@@ -7,6 +7,7 @@ from .default.parameters import *
 from .default.catalog import *
 from .run import *
 
+from easydict import EasyDict
 from kedro.io import MemoryDataSet, AbstractDataSet
 
 import logging
@@ -103,18 +104,23 @@ class CausalLift():
             sequentially or in parallel, respectively.
             If set to None, the pipeline is run by native Python.
         conditionally_skip: bool, optional
-            Skip running the pipeline if the output files already exist and
-            runner is set to either 'SequentialRunner' or 'ParallelRunner'.
+            [Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']
+            Skip running the pipeline if the output files already exist.
             True in default.
         dataset_catalog: dict, optional
-            Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format
-            if runner is set to either 'SequentialRunner' or 'ParallelRunner'.
+            [Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']
+            Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
             To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets
             In default:
                 dict(
-                    models_dict=PickleLocalDataSet(
+                    propensity_model  = PickleLocalDataSet(
+                        filepath='../data/06_models/propensity_model.pickle',
+                        version=None
+                    ),
+                    models_dict = PickleLocalDataSet(
                         filepath='../data/06_models/models_dict.pickle',
-                        version=None)
+                        version=None
+                    ),
                     )
         logging_config: dict, optional
             Specify logging configuration.
@@ -222,7 +228,7 @@ class CausalLift():
 
         # Instance attributes were defined above.
 
-        args_raw = parameters_()
+        args_raw = EasyDict(parameters_())
         args_raw.update(kwargs)
         args_raw.update(dataset_catalog.get('args_raw', MemoryDataSet({}).load()))
 
