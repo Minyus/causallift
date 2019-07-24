@@ -1,0 +1,9 @@
+numpy
+pandas
+matplotlib
+scikit-learn
+xgboost
+easydict
+# kedro==0.14.3
+# Manually install develop version of kedro by # pip3 install git+git://github.com/quantumblacklabs/kedro@develop#egg=kedro
+
