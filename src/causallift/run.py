@@ -30,21 +30,25 @@
 
 import logging.config
 from pathlib import Path
-from typing import Iterable, Type, Union
+from typing import Iterable, Type, Union, Dict, Any
 from warnings import warn
 
 from kedro.cli.utils import KedroCliError
 from kedro.config import ConfigLoader, MissingConfigException
 from kedro.context import KedroContext, KedroContextError
 from kedro.io import DataCatalog
-from kedro.runner import AbstractRunner, ParallelRunner, SequentialRunner
+
+from kedro.pipeline import Pipeline
+from kedro.runner import AbstractRunner
+from kedro.runner import SequentialRunner
+from kedro.runner import ParallelRunner
+
 from kedro.utils import load_obj
 from kedro.pipeline import Pipeline
 
 from causallift.pipeline import create_pipeline
 
 from .default.logging import *
-from typing import Dict, Any
 
 import logging
 log = logging.getLogger(__name__)
@@ -108,10 +112,18 @@ class ProjectContext(KedroContext):
 
         # Run the runner
         runner = runner or SequentialRunner()
-        if only_missing:
+        if only_missing and potentially_skippable(pipeline, self.catalog):
             return runner.run_only_missing(pipeline, self.catalog)
-        else:
-            return runner.run(pipeline, self.catalog)
+        return runner.run(pipeline, self.catalog)
+
+
+def potentially_skippable(
+        pipeline: Pipeline,
+        catalog: DataCatalog
+    ) -> bool:
+    free_outputs = pipeline.outputs() - set(catalog.list())
+    missing = {ds for ds in catalog.list() if not catalog.exists(ds)}
+    return (not missing) or missing in free_outputs
 
 
 class ProjectContext1(ProjectContext):
