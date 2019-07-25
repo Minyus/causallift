@@ -42,7 +42,7 @@ def generate_data(N=1000,
         error_std : float, optional
             Standard deviation (scale) of distribution from which errors are drawn.
         tau : np.array or float, optional
-           Array of coefficients to multiply by X to get y if treated.
+            Array of coefficients to multiply by X to get y if treated.
             More/larger negative values will simulate more "sleeping dogs"
             If float scalar is input, effect of features is not considered.
         tau_std : float, optional

@@ -51,7 +51,8 @@ class CausalLift():
         uplift_model_params: dict, optional
             Parameters used to fit 2 XGBoost classifier models.
             Refer to https://xgboost.readthedocs.io/en/latest/parameter.html
-            If None (default):
+            If None (default)::
+
                 {
                 'max_depth':[3],
                 'learning_rate':[0.1],
@@ -73,13 +74,15 @@ class CausalLift():
                 'base_score':[0.5],
                 'missing':[None],
                 }
+
         enable_ipw: boolean, optional
             Enable Inverse Probability Weighting based on the estimated propensity score.
             True in default.
         propensity_model_params: dict, optional
             Parameters used to fit logistic regression model to estimate propensity score.
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
-            If None (default):
+            If None (default)::
+
                 {
                 'C': [0.1, 1, 10],
                 'class_weight': [None],
@@ -94,6 +97,7 @@ class CausalLift():
                 'tol': [0.0001],
                 'warm_start': [False]
                 }
+
         cv: int, optional
             Cross-Validation for the Grid Search. 3 in default.
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
@@ -109,7 +113,8 @@ class CausalLift():
             [Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']
             Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
             To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets
-            In default:
+            In default::
+
                 dict(
                     propensity_model  = PickleLocalDataSet(
                         filepath='../data/06_models/propensity_model.pickle',
@@ -120,10 +125,12 @@ class CausalLift():
                         version=None
                     ),
                     )
+
         logging_config: dict, optional
             Specify logging configuration.
             Refer to https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema
-            In defalut:
+            In default::
+
                 {'disable_existing_loggers': False,
                  'formatters': {
                      'json_formatter': {
@@ -347,6 +354,7 @@ class CausalLift():
                                        verbose: int = None):
         r"""
         Estimate the impact of recommendation based on uplift modeling.
+
         args:
             cate_estimated:
                 Pandas series containing the CATE.
