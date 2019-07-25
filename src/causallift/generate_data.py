@@ -1,5 +1,4 @@
-""" generate_data.py """
-""" 
+"""
 The original code is at https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py
 licensed under the BSD 2-Clause "Simplified" License
 Copyright 2018, Wayfair, Inc.

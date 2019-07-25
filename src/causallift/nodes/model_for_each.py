@@ -1,6 +1,3 @@
-""" model_for_each.py """
-""" 2 supervised models """
-
 from IPython.display import display
 
 from .utils import *

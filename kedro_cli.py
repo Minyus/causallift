@@ -154,11 +154,11 @@ def package():
 @cli.command("build-docs")
 def build_docs():
     """Build the project documentation."""
-    python_call("pip", ["install", "src/[docs]"])
-    python_call("pip", ["install", "-r", "src/requirements.txt"])
-    python_call(
-        "ipykernel", ["install", "--user", "--name=causallift"]
-    )
+    # python_call("pip", ["install", "src/[docs]"])
+    # python_call("pip", ["install", "-r", "src/requirements.txt"])
+    # python_call(
+    #     "ipykernel", ["install", "--user", "--name=causallift"]
+    # )
     if Path("docs/build").exists():
         shutil.rmtree("docs/build")
     call(

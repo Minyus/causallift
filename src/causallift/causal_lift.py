@@ -1,5 +1,3 @@
-""" causal_lift.py """
-
 from .nodes.model_for_each import *
 from .nodes.estimate_propensity import *
 

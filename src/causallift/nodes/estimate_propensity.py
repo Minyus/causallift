@@ -1,5 +1,3 @@
-""" estimate_propensity.py """
-
 from IPython.display import display
 from .utils import (get_cols_features,
                     concat_train_test,
