@@ -39,8 +39,8 @@ with open("requirements.txt", "r", encoding="utf-8") as f:
 setup(
     name="causallift",
     version="1.0.0", # Align with __version__ in __init__.py
-    packages=find_packages(exclude=["tests"]),
-    pakcage_dir={"": "src"},
+    packages=find_packages(where="src", exclude=["tests"]),
+    package_dir={"": "src"},
     entry_points={"console_scripts": [entry_point]},
     install_requires=requires,
         license='BSD 2-Clause',
