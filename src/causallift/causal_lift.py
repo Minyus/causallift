@@ -18,9 +18,9 @@ class CausalLift():
     Optionally, propensity scores are estimated based on logistic regression.
 
     args:
-        train_df: pd.DataFrame
+        train_df:
             Pandas Data Frame containing samples used for training
-        test_df: pd.DataFrame
+        test_df:
             Pandas Data Frame containing samples used for testing
         cols_features: list of str, optional
             List of column names used as features.
@@ -109,7 +109,7 @@ class CausalLift():
             [Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']
             Skip running the pipeline if the output files already exist.
             True in default.
-        dataset_catalog: dict, optional
+        dataset_catalog:
             [Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']
             Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
             To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets
@@ -126,7 +126,7 @@ class CausalLift():
                     ),
                     )
 
-        logging_config: dict, optional
+        logging_config:
             Specify logging configuration.
             Refer to https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema
             In default::
