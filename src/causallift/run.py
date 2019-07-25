@@ -170,7 +170,7 @@ class FlexibleProjectContext(ProjectContext3):
             ('nodes: {}, '.format(node_names) if node_names else '') +
             ('tags: {}, '.format(tags) if tags else '') +
             '{}, '.format(runner) +
-            'only_missing: {})'.format(only_missing) +
+            'only_missing: {}'.format(only_missing) +
             ')'
         )
         return super().run(
