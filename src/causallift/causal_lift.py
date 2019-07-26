@@ -122,6 +122,9 @@ class CausalLift():
             In default::
 
                 dict(
+                    # args_raw = CSVLocalDataSet(filepath='../data/01_raw/args_raw.csv', version=None),
+                    # train_df = CSVLocalDataSet(filepath='../data/01_raw/train_df.csv', version=None),
+                    # test_df = CSVLocalDataSet(filepath='../data/01_raw/test_df.csv', version=None),
                     propensity_model  = PickleLocalDataSet(
                         filepath='../data/06_models/propensity_model.pickle',
                         version=None
@@ -130,7 +133,25 @@ class CausalLift():
                         filepath='../data/06_models/models_dict.pickle',
                         version=None
                     ),
-                    )
+                    df_03 = CSVLocalDataSet(
+                        filepath='../data/07_model_output/df.csv',
+                        load_args=dict(index_col=['partition', 'index'], float_precision='high'),
+                        save_args=dict(index=True, float_format='%.16e'),
+                        version=None,
+                    ),
+                    treated__sim_eval_df = CSVLocalDataSet(
+                        filepath='../data/08_reporting/treated__sim_eval_df.csv',
+                        version=None,
+                    ),
+                    untreated__sim_eval_df = CSVLocalDataSet(
+                        filepath='../data/08_reporting/untreated__sim_eval_df.csv',
+                        version=None,
+                    ),
+                    estimated_effect_df = CSVLocalDataSet(
+                        filepath='../data/08_reporting/estimated_effect_df.csv',
+                        version=None,
+                    ),
+                )
 
         logging_config:
             Specify logging configuration.
@@ -256,7 +277,7 @@ class CausalLift():
         self.runner = args_raw.runner
 
         if self.runner is None:
-            self.df = bundle_train_and_test_data(train_df, test_df)
+            self.df = bundle_train_and_test_data(args_raw, train_df, test_df)
             self.args = impute_cols_features(args_raw, self.df)
             self.treatment_fractions = treatment_fractions_(self.args, self.df)
 

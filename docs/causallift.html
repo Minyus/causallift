@@ -304,6 +304,8 @@ Refer to <a class="reference external" href="https://scikit-learn.org/stable/mod
 <li><strong>index_name</strong> – str, optional
 Index name of the pandas dataframe after resetting the index. ‘index’ in default.
 If None, the index will not be reset.</li>
+<li><strong>partition_name</strong> – str, optional
+Additional index name to indicate the partition, train or test. ‘partition’ in default.</li>
 <li><strong>runner</strong> – str, optional
 If set to ‘SequentialRunner’ (default) or ‘ParallelRunner’, the pipeline is run by Kedro
 sequentially or in parallel, respectively.
@@ -318,6 +320,9 @@ Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
 To find available file formats, refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets">https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets</a>
 In default:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
+    <span class="c1"># args_raw = CSVLocalDataSet(filepath=&#39;../data/01_raw/args_raw.csv&#39;, version=None),</span>
+    <span class="c1"># train_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/train_df.csv&#39;, version=None),</span>
+    <span class="c1"># test_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/test_df.csv&#39;, version=None),</span>
     <span class="n">propensity_model</span>  <span class="o">=</span> <span class="n">PickleLocalDataSet</span><span class="p">(</span>
         <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/06_models/propensity_model.pickle&#39;</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
@@ -326,7 +331,25 @@ In default:</p>
         <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/06_models/models_dict.pickle&#39;</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">),</span>
-    <span class="p">)</span>
+    <span class="n">df_03</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/07_model_output/df.csv&#39;</span><span class="p">,</span>
+        <span class="n">load_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;partition&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">],</span> <span class="n">float_precision</span><span class="o">=</span><span class="s1">&#39;high&#39;</span><span class="p">),</span>
+        <span class="n">save_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.16e</span><span class="s1">&#39;</span><span class="p">),</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">treated__sim_eval_df</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/08_reporting/treated__sim_eval_df.csv&#39;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">untreated__sim_eval_df</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/08_reporting/untreated__sim_eval_df.csv&#39;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">estimated_effect_df</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/08_reporting/estimated_effect_df.csv&#39;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </li>

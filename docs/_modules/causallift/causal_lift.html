@@ -269,6 +269,8 @@
 <span class="sd">        index_name: str, optional</span>
 <span class="sd">            Index name of the pandas dataframe after resetting the index. &#39;index&#39; in default.</span>
 <span class="sd">            If None, the index will not be reset.</span>
+<span class="sd">        partition_name: str, optional</span>
+<span class="sd">            Additional index name to indicate the partition, train or test. &#39;partition&#39; in default.</span>
 <span class="sd">        runner: str, optional</span>
 <span class="sd">            If set to &#39;SequentialRunner&#39; (default) or &#39;ParallelRunner&#39;, the pipeline is run by Kedro</span>
 <span class="sd">            sequentially or in parallel, respectively.</span>
@@ -285,6 +287,9 @@
 <span class="sd">            In default::</span>
 
 <span class="sd">                dict(</span>
+<span class="sd">                    # args_raw = CSVLocalDataSet(filepath=&#39;../data/01_raw/args_raw.csv&#39;, version=None),</span>
+<span class="sd">                    # train_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/train_df.csv&#39;, version=None),</span>
+<span class="sd">                    # test_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/test_df.csv&#39;, version=None),</span>
 <span class="sd">                    propensity_model  = PickleLocalDataSet(</span>
 <span class="sd">                        filepath=&#39;../data/06_models/propensity_model.pickle&#39;,</span>
 <span class="sd">                        version=None</span>
@@ -293,7 +298,25 @@
 <span class="sd">                        filepath=&#39;../data/06_models/models_dict.pickle&#39;,</span>
 <span class="sd">                        version=None</span>
 <span class="sd">                    ),</span>
-<span class="sd">                    )</span>
+<span class="sd">                    df_03 = CSVLocalDataSet(</span>
+<span class="sd">                        filepath=&#39;../data/07_model_output/df.csv&#39;,</span>
+<span class="sd">                        load_args=dict(index_col=[&#39;partition&#39;, &#39;index&#39;], float_precision=&#39;high&#39;),</span>
+<span class="sd">                        save_args=dict(index=True, float_format=&#39;%.16e&#39;),</span>
+<span class="sd">                        version=None,</span>
+<span class="sd">                    ),</span>
+<span class="sd">                    treated__sim_eval_df = CSVLocalDataSet(</span>
+<span class="sd">                        filepath=&#39;../data/08_reporting/treated__sim_eval_df.csv&#39;,</span>
+<span class="sd">                        version=None,</span>
+<span class="sd">                    ),</span>
+<span class="sd">                    untreated__sim_eval_df = CSVLocalDataSet(</span>
+<span class="sd">                        filepath=&#39;../data/08_reporting/untreated__sim_eval_df.csv&#39;,</span>
+<span class="sd">                        version=None,</span>
+<span class="sd">                    ),</span>
+<span class="sd">                    estimated_effect_df = CSVLocalDataSet(</span>
+<span class="sd">                        filepath=&#39;../data/08_reporting/estimated_effect_df.csv&#39;,</span>
+<span class="sd">                        version=None,</span>
+<span class="sd">                    ),</span>
+<span class="sd">                )</span>
 
 <span class="sd">        logging_config:</span>
 <span class="sd">            Specify logging configuration.</span>
@@ -419,7 +442,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="n">args_raw</span><span class="o">.</span><span class="n">runner</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">bundle_train_and_test_data</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">bundle_train_and_test_data</span><span class="p">(</span><span class="n">args_raw</span><span class="p">,</span> <span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">impute_cols_features</span><span class="p">(</span><span class="n">args_raw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span> <span class="o">=</span> <span class="n">treatment_fractions_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
 

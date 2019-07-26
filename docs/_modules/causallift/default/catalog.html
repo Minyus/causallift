@@ -163,7 +163,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for causallift.default.catalog</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">kedro.io</span> <span class="k">import</span> <span class="n">MemoryDataSet</span><span class="p">,</span> <span class="n">PickleLocalDataSet</span><span class="p">,</span> <span class="n">CSVLocalDataSet</span><span class="p">,</span> <span class="n">JSONLocalDataSet</span>
+<span></span><span class="kn">from</span> <span class="nn">kedro.io</span> <span class="k">import</span> <span class="n">PickleLocalDataSet</span><span class="p">,</span> <span class="n">CSVLocalDataSet</span><span class="p">,</span> <span class="n">JSONLocalDataSet</span>
 
 
 <div class="viewcode-block" id="datasets_"><a class="viewcode-back" href="../../../causallift.default.html#causallift.default.catalog.datasets_">[docs]</a><span class="k">def</span> <span class="nf">datasets_</span><span class="p">():</span>
@@ -171,26 +171,32 @@
         <span class="c1"># args_raw = CSVLocalDataSet(filepath=&#39;../data/01_raw/args_raw.csv&#39;, version=None),</span>
         <span class="c1"># train_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/train_df.csv&#39;, version=None),</span>
         <span class="c1"># test_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/test_df.csv&#39;, version=None),</span>
-        <span class="c1"># args = JSONLocalDataSet(filepath=&#39;../data/08_reporting/args.csv&#39;, version=None),</span>
-        <span class="c1"># df_00 = MemoryDataSet(),</span>
         <span class="n">propensity_model</span>  <span class="o">=</span> <span class="n">PickleLocalDataSet</span><span class="p">(</span>
             <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/06_models/propensity_model.pickle&#39;</span><span class="p">,</span>
             <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
         <span class="p">),</span>
-        <span class="n">df_01</span> <span class="o">=</span> <span class="n">MemoryDataSet</span><span class="p">(),</span>
         <span class="n">models_dict</span> <span class="o">=</span> <span class="n">PickleLocalDataSet</span><span class="p">(</span>
             <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/06_models/models_dict.pickle&#39;</span><span class="p">,</span>
             <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
         <span class="p">),</span>
-        <span class="c1"># treatment_fractions = MemoryDataSet(),</span>
-        <span class="c1"># treated__proba = MemoryDataSet(),</span>
-        <span class="c1"># untreated__proba = MemoryDataSet(),</span>
-        <span class="c1"># cate_estimated = MemoryDataSet(),</span>
-        <span class="c1"># df_02 = MemoryDataSet(),</span>
-        <span class="c1"># df_03 = CSVLocalDataSet(filepath=&#39;../data/07_model_output/df.csv&#39;, version=None),</span>
-        <span class="c1"># treated__sim_eval_df = MemoryDataSet(),</span>
-        <span class="c1"># untreated__sim_eval_df = MemoryDataSet(),</span>
-        <span class="n">estimated_effect_df</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/08_reporting/estimated_effect_df.csv&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+        <span class="n">df_03</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+            <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/07_model_output/df.csv&#39;</span><span class="p">,</span>
+            <span class="n">load_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;partition&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">],</span> <span class="n">float_precision</span><span class="o">=</span><span class="s1">&#39;high&#39;</span><span class="p">),</span>
+            <span class="n">save_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.16e</span><span class="s1">&#39;</span><span class="p">),</span>
+            <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">treated__sim_eval_df</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+            <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/08_reporting/treated__sim_eval_df.csv&#39;</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">untreated__sim_eval_df</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+            <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/08_reporting/untreated__sim_eval_df.csv&#39;</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">estimated_effect_df</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+            <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/08_reporting/estimated_effect_df.csv&#39;</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">),</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">datasets</span></div>
 </pre></div>

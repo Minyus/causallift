@@ -170,19 +170,36 @@
 <span class="kn">from</span> <span class="nn">easydict</span> <span class="k">import</span> <span class="n">EasyDict</span>
 
 
-<div class="viewcode-block" id="get_cols_features"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.get_cols_features">[docs]</a><span class="k">def</span> <span class="nf">get_cols_features</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">non_feature_cols</span><span class="o">=</span><span class="p">[</span> \
+<div class="viewcode-block" id="get_cols_features"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.get_cols_features">[docs]</a><span class="k">def</span> <span class="nf">get_cols_features</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">non_feature_cols</span><span class="o">=</span><span class="p">[</span>
         <span class="s1">&#39;Treatment&#39;</span><span class="p">,</span> <span class="s1">&#39;Outcome&#39;</span><span class="p">,</span> <span class="s1">&#39;TransformedOutcome&#39;</span><span class="p">,</span> <span class="s1">&#39;Propensity&#39;</span><span class="p">,</span> <span class="s1">&#39;Recommendation&#39;</span><span class="p">]):</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">column</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">non_feature_cols</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="concat_train_test"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.concat_train_test">[docs]</a><span class="k">def</span> <span class="nf">concat_train_test</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">train</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">test</span><span class="p">)],</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">])</span></div>
-    <span class="c1"># series.xs(&#39;train&#39;) or series.xs(&#39;test&#39;) to split</span>
+<div class="viewcode-block" id="concat_train_test"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.concat_train_test">[docs]</a><span class="k">def</span> <span class="nf">concat_train_test</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Concatenate train and test series.</span>
+<span class="sd">    Use series.xs(&#39;train&#39;) or series.xs(&#39;test&#39;) to split</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">train</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">test</span><span class="p">)],</span>
+        <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span>
+        <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">partition_name</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">index_name</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">series</span></div>
 
 
-<div class="viewcode-block" id="concat_train_test_df"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.concat_train_test_df">[docs]</a><span class="k">def</span> <span class="nf">concat_train_test_df</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">],</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">])</span></div>
-    <span class="c1"># df.xs(&#39;train&#39;) or df.xs(&#39;test&#39;) to split</span>
+<div class="viewcode-block" id="concat_train_test_df"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.concat_train_test_df">[docs]</a><span class="k">def</span> <span class="nf">concat_train_test_df</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Concatenate train and test data frames.</span>
+<span class="sd">    Use df.xs(&#39;train&#39;) or df.xs(&#39;test&#39;) to split.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">],</span>
+        <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span>
+        <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">partition_name</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">index_name</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
 
 
 <div class="viewcode-block" id="len_t"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.len_t">[docs]</a><span class="k">def</span> <span class="nf">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s1">&#39;Treatment&#39;</span><span class="p">):</span>
@@ -278,6 +295,7 @@
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">test_df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
     <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">test_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">col_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">train_df</span><span class="o">.</span><span class="n">columns</span><span class="p">])</span>
 
     <span class="n">index_name</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">index_name</span>
 
@@ -289,7 +307,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">train_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">test_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">concat_train_test_df</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">concat_train_test_df</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span></div>
 
 
@@ -329,7 +347,7 @@
     <span class="n">recommendation_test</span> <span class="o">=</span> <span class="n">recommendation</span><span class="p">(</span><span class="n">cate_series</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">),</span> <span class="n">treatment_fractions</span><span class="o">.</span><span class="n">test</span><span class="p">)</span>
 
     <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">args</span><span class="o">.</span><span class="n">col_recommendation</span><span class="p">]</span> <span class="o">=</span> \
-        <span class="n">concat_train_test</span><span class="p">(</span><span class="n">recommendation_train</span><span class="p">,</span> <span class="n">recommendation_test</span><span class="p">)</span>
+        <span class="n">concat_train_test</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">recommendation_train</span><span class="p">,</span> <span class="n">recommendation_test</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
 

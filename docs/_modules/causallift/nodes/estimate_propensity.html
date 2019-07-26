@@ -164,18 +164,7 @@
             
   <h1>Source code for causallift.nodes.estimate_propensity</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">get_cols_features</span><span class="p">,</span>
-                    <span class="n">concat_train_test</span><span class="p">,</span>
-                    <span class="n">concat_train_test_df</span><span class="p">,</span>
-                    <span class="n">len_t</span><span class="p">,</span>
-                    <span class="n">len_o</span><span class="p">,</span>
-                    <span class="n">len_to</span><span class="p">,</span>
-                    <span class="n">treatment_fraction_</span><span class="p">,</span>
-                    <span class="n">outcome_fraction_</span><span class="p">,</span>
-                    <span class="n">overall_uplift_gain_</span><span class="p">,</span>
-                    <span class="n">gain_tuple</span><span class="p">,</span>
-                    <span class="n">score_df</span><span class="p">,</span>
-                    <span class="n">conf_mat_df</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="o">*</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
@@ -287,7 +276,7 @@
     <span class="n">train_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span><span class="p">]</span> <span class="o">=</span> <span class="n">proba_train</span>
     <span class="n">test_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span><span class="p">]</span> <span class="o">=</span> <span class="n">proba_test</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">concat_train_test_df</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">concat_train_test_df</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
 </pre></div>
