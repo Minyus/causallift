@@ -31,7 +31,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(['var1', 'var2', 'var3'], result)
 
     def test_concat_train_test_should_concatnate_both_sets_into_series_with_keys(self):
-        args = EasyDict(dict(index_name='index'))
+        args = EasyDict(dict(index_name='index', partition_name='partition'))
 
         train_array = np.random.rand(3)
         test_array = np.random.rand(3)
@@ -41,7 +41,7 @@ class UtilsTest(unittest.TestCase):
         np.testing.assert_array_equal(test_array, result.xs('test'))
 
     def test_concat_train_test_df_should_concatnate_both_sets_into_frames_with_keys(self):
-        args = EasyDict(dict(index_name='index'))
+        args = EasyDict(dict(index_name='index', partition_name='partition'))
         train_df = pd.DataFrame(data=np.random.rand(3, 3), columns=['var1', 'var2', 'var3'])
         train_df.index.name = args.index_name
         test_df = pd.DataFrame(data=np.random.rand(3, 3), columns=['var1', 'var2', 'var3'])

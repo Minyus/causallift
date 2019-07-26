@@ -48,6 +48,7 @@ def parameters_():
             },
         cv = 3,
         index_name = 'index',
+        partition_name = 'partition',
         runner = 'SequentialRunner', # 'ParallelRunner' # None
         conditionally_skip = True,
     )

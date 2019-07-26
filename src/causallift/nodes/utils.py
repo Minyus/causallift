@@ -18,7 +18,7 @@ def concat_train_test(args, train, test):
     series = pd.concat(
         [pd.Series(train), pd.Series(test)],
         keys=['train', 'test'],
-        names=['partition', args.index_name],
+        names=[args.partition_name, args.index_name],
     )
     return series
 
@@ -31,7 +31,7 @@ def concat_train_test_df(args, train, test):
     df = pd.concat(
         [train, test],
         keys=['train', 'test'],
-        names=['partition', args.index_name],
+        names=[args.partition_name, args.index_name],
     )
     return df
 

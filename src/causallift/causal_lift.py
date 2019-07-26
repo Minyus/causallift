@@ -104,6 +104,8 @@ class CausalLift():
         index_name: str, optional
             Index name of the pandas dataframe after resetting the index. 'index' in default.
             If None, the index will not be reset.
+        partition_name: str, optional
+            Additional index name to indicate the partition, train or test. 'partition' in default.
         runner: str, optional
             If set to 'SequentialRunner' (default) or 'ParallelRunner', the pipeline is run by Kedro
             sequentially or in parallel, respectively.
