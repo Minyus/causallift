@@ -63,7 +63,7 @@ def create_pipeline(**kwargs):
     pipeline = Pipeline([
         Pipeline([
             node(bundle_train_and_test_data,
-                 ['train_df', 'test_df'],
+                 ['args_raw', 'train_df', 'test_df'],
                  'df_00',
                  ),
             ], name='011_bundle_train_and_test_data'),

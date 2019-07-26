@@ -301,15 +301,19 @@ If None (default):</p>
 <li><strong>cv</strong> – int, optional
 Cross-Validation for the Grid Search. 3 in default.
 Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</a></li>
+<li><strong>index_name</strong> – str, optional
+Index name of the pandas dataframe after resetting the index. ‘index’ in default.
+If None, the index will not be reset.</li>
 <li><strong>runner</strong> – str, optional
-If set to ‘SequentialRunner’ (default) or ‘ParallelRunner’, the pipeline is run by kedro
+If set to ‘SequentialRunner’ (default) or ‘ParallelRunner’, the pipeline is run by Kedro
 sequentially or in parallel, respectively.
-If set to None, the pipeline is run by native Python.</li>
+If set to None, the pipeline is run by native Python.
+Refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners">https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners</a></li>
 <li><strong>conditionally_skip</strong> – bool, optional
-[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]
+<em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em>
 Skip running the pipeline if the output files already exist.
 True in default.</li>
-<li><strong>dataset_catalog</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDataSet</span></code>]) – <p>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]
+<li><strong>dataset_catalog</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDataSet</span></code>]) – <p><em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em>
 Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
 To find available file formats, refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets">https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets</a>
 In default:</p>

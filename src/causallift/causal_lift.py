@@ -101,16 +101,20 @@ class CausalLift():
         cv: int, optional
             Cross-Validation for the Grid Search. 3 in default.
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+        index_name: str, optional
+            Index name of the pandas dataframe after resetting the index. 'index' in default.
+            If None, the index will not be reset.
         runner: str, optional
-            If set to 'SequentialRunner' (default) or 'ParallelRunner', the pipeline is run by kedro
+            If set to 'SequentialRunner' (default) or 'ParallelRunner', the pipeline is run by Kedro
             sequentially or in parallel, respectively.
             If set to None, the pipeline is run by native Python.
+            Refer to https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners
         conditionally_skip: bool, optional
-            [Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']
+            *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']*
             Skip running the pipeline if the output files already exist.
             True in default.
         dataset_catalog:
-            [Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']
+            *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']*
             Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
             To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets
             In default::

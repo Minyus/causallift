@@ -109,13 +109,20 @@ def conf_mat_df(y_true, y_pred):
     return conf_mat_df
 
 
-def bundle_train_and_test_data(train_df, test_df):
+def bundle_train_and_test_data(args, train_df, test_df):
     assert isinstance(train_df, pd.DataFrame)
     assert isinstance(test_df, pd.DataFrame)
     assert set(train_df.columns) == set(test_df.columns)
 
-    train_df = train_df.reset_index(drop=True).copy()
-    test_df = test_df.reset_index(drop=True).copy()
+    index_name = args.index_name
+
+    if index_name is not None:
+        train_df = train_df.reset_index(drop=True).copy()
+        train_df.index.name = index_name
+        test_df = test_df.reset_index(drop=True).copy()
+        test_df.index.name = index_name
+    else:
+        assert train_df.index.name == test_df.index.name
 
     df = concat_train_test_df(train_df, test_df)
     return df

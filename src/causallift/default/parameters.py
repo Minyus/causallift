@@ -47,6 +47,7 @@ def parameters_():
                 'warm_start': [False]
             },
         cv = 3,
+        index_name = 'index',
         runner = 'SequentialRunner', # 'ParallelRunner' # None
         conditionally_skip = True,
     )
