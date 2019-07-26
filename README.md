@@ -1,8 +1,11 @@
 # CausalLift: Python package for Uplift Modeling in real-world business; applicable for both A/B testing and observational data
 
+version 1.0.0 will be available soon in PyPI
+
 [![PyPI version](https://badge.fury.io/py/causallift.svg)](https://badge.fury.io/py/causallift)
+[![Python Version](https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7-blue.svg)](https://pypi.org/project/kedro/)
 [![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD-yellow.svg)](https://opensource.org/licenses/BSD-2-Clause)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_example.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Minyus/causallift/blob/v1.0/notebooks/demo/CausalLift_demo.ipynb)
 
 If you are simply building a Machine Learning model and executing promotion campaigns to the customers who are predicted to buy a product, for example, it is not efficient.
 
@@ -116,7 +119,8 @@ Option 3: clone the [GitHub repository](https://github.com/Minyus/causallift.git
 - matplotlib
 - scikit-learn
 - xgboost
-
+- easydict
+- kedro 0.15.0
 
 ## How to use CausalLift?
 
@@ -242,7 +246,7 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 
 ## What was the tested environment of CausalLift?
 
-- Google Colab (Python 3.6.7)
+- Google Colab (Python 3.6.8)
 
 
 ## Related Python packages
