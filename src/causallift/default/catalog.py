@@ -22,9 +22,17 @@ def datasets_():
         # untreated__proba = MemoryDataSet(),
         # cate_estimated = MemoryDataSet(),
         # df_02 = MemoryDataSet(),
-        # df_03 = CSVLocalDataSet(filepath='../data/07_model_output/df.csv', version=None),
+        df_03 = CSVLocalDataSet(
+            filepath='../data/07_model_output/df.csv',
+            load_args=dict(index_col=['partition', 'index'], float_precision='high'),
+            save_args=dict(index=True, float_format='%.16e'),
+            version=None,
+        ),
         # treated__sim_eval_df = MemoryDataSet(),
         # untreated__sim_eval_df = MemoryDataSet(),
-        estimated_effect_df = CSVLocalDataSet(filepath='../data/08_reporting/estimated_effect_df.csv', version=None),
+        estimated_effect_df = CSVLocalDataSet(
+            filepath='../data/08_reporting/estimated_effect_df.csv',
+            version=None,
+        ),
     )
     return datasets

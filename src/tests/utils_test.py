@@ -8,6 +8,7 @@ from causallift import utils
 import pandas as pd
 import numpy as np
 import random
+from easydict import EasyDict
 
 
 class UtilsTest(unittest.TestCase):
@@ -30,19 +31,23 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(['var1', 'var2', 'var3'], result)
 
     def test_concat_train_test_should_concatnate_both_sets_into_series_with_keys(self):
-        train_df = pd.DataFrame(data=np.random.rand(3, 3), columns=['var1', 'var2', 'var3'])
-        test_df = pd.DataFrame(data=np.random.rand(3, 3), columns=['var1', 'var2', 'var3'])
+        args = EasyDict(dict(index_name='index'))
 
-        result = utils.concat_train_test(train=train_df, test=test_df)
+        train_array = np.random.rand(3)
+        test_array = np.random.rand(3)
+        result = utils.concat_train_test(args=args, train=train_array, test=test_array)
 
-        pd.testing.assert_series_equal(pd.Series(train_df), result.xs('train'))
-        pd.testing.assert_series_equal(pd.Series(test_df), result.xs('test'))
+        np.testing.assert_array_equal(train_array, result.xs('train'))
+        np.testing.assert_array_equal(test_array, result.xs('test'))
 
     def test_concat_train_test_df_should_concatnate_both_sets_into_frames_with_keys(self):
+        args = EasyDict(dict(index_name='index'))
         train_df = pd.DataFrame(data=np.random.rand(3, 3), columns=['var1', 'var2', 'var3'])
+        train_df.index.name = args.index_name
         test_df = pd.DataFrame(data=np.random.rand(3, 3), columns=['var1', 'var2', 'var3'])
+        test_df.index.name = args.index_name
 
-        result = utils.concat_train_test_df(train=train_df, test=test_df)
+        result = utils.concat_train_test_df(args=args, train=train_df, test=test_df)
 
         pd.testing.assert_frame_equal(train_df, result.xs('train'))
         pd.testing.assert_frame_equal(test_df, result.xs('test'))

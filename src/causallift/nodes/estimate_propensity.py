@@ -1,16 +1,5 @@
 from IPython.display import display
-from .utils import (get_cols_features,
-                    concat_train_test,
-                    concat_train_test_df,
-                    len_t,
-                    len_o,
-                    len_to,
-                    treatment_fraction_,
-                    outcome_fraction_,
-                    overall_uplift_gain_,
-                    gain_tuple,
-                    score_df,
-                    conf_mat_df)
+from .utils import *
 
 import pandas as pd
 from sklearn.model_selection import GridSearchCV
@@ -122,6 +111,6 @@ def estimate_propensity(args, df, model):
     train_df.loc[:, args.col_propensity] = proba_train
     test_df.loc[:, args.col_propensity] = proba_test
 
-    df = concat_train_test_df(train_df, test_df)
+    df = concat_train_test_df(args, train_df, test_df)
 
     return df

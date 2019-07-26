@@ -103,7 +103,7 @@ def generate_data(N=1000,
     if discrete_outcome:
         y = y > 0
 
-    names = list(range(n_features))
+    names = ['Feature_{}'.format(i) for i in range(n_features)]
     names.extend(['Treatment', 'Outcome'])
 
     df = pd.DataFrame(np.concatenate(( \

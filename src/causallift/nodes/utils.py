@@ -5,19 +5,36 @@ from sklearn.metrics import confusion_matrix
 from easydict import EasyDict
 
 
-def get_cols_features(df, non_feature_cols=[ \
+def get_cols_features(df, non_feature_cols=[
         'Treatment', 'Outcome', 'TransformedOutcome', 'Propensity', 'Recommendation']):
     return [column for column in df.columns if column not in non_feature_cols]
 
 
-def concat_train_test(train, test):
-    return pd.concat([pd.Series(train), pd.Series(test)], keys=['train', 'test'])
-    # series.xs('train') or series.xs('test') to split
+def concat_train_test(args, train, test):
+    r"""
+    Concatenate train and test series.
+    Use series.xs('train') or series.xs('test') to split
+    """
+    series = pd.concat(
+        [pd.Series(train), pd.Series(test)],
+        keys=['train', 'test'],
+        names=['partition', args.index_name],
+    )
+    return series
 
 
-def concat_train_test_df(train, test):
-    return pd.concat([train, test], keys=['train', 'test'])
-    # df.xs('train') or df.xs('test') to split
+def concat_train_test_df(args, train, test):
+    r"""
+    Concatenate train and test data frames.
+    Use df.xs('train') or df.xs('test') to split.
+    """
+    df = pd.concat(
+        [train, test],
+        keys=['train', 'test'],
+        names=['partition', args.index_name],
+    )
+    return df
+
 
 
 def len_t(df, treatment=1.0, col_treatment='Treatment'):
@@ -113,6 +130,7 @@ def bundle_train_and_test_data(args, train_df, test_df):
     assert isinstance(train_df, pd.DataFrame)
     assert isinstance(test_df, pd.DataFrame)
     assert set(train_df.columns) == set(test_df.columns)
+    assert all([isinstance(col_name, str) for col_name in train_df.columns])
 
     index_name = args.index_name
 
@@ -124,7 +142,7 @@ def bundle_train_and_test_data(args, train_df, test_df):
     else:
         assert train_df.index.name == test_df.index.name
 
-    df = concat_train_test_df(train_df, test_df)
+    df = concat_train_test_df(args, train_df, test_df)
     return df
 
 
@@ -164,7 +182,7 @@ def recommend_by_cate(args, df, treatment_fractions):
     recommendation_test = recommendation(cate_series.xs('test'), treatment_fractions.test)
 
     df.loc[:, args.col_recommendation] = \
-        concat_train_test(recommendation_train, recommendation_test)
+        concat_train_test(args, recommendation_train, recommendation_test)
 
     return df
 

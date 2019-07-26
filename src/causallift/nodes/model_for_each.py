@@ -92,7 +92,7 @@ class ModelForTreatedOrUntreated():
         y_pred_train = model.predict_proba(X_train)[:, 1]
         y_pred_test = model.predict_proba(X_test)[:, 1]
 
-        return concat_train_test(y_pred_train, y_pred_test)
+        return concat_train_test(args, y_pred_train, y_pred_test)
 
         # X = df_[cols_features]
         # y_pred = model.predict_proba(X)[:, 1]
