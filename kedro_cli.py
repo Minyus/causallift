@@ -172,6 +172,23 @@ def build_docs():
     )
     call(["sphinx-build", "-M", "html", "docs/source", "docs/build", "-a"])
 
+    """ Prepare to publish the Sphinx document on the GitHub Pages """
+    from distutils.dir_util import copy_tree
+    copy_tree("docs/build/html", "docs")
+
+    def replace(pattern: str, repl: str, path: str):
+        p = Path(path)
+        p.write_text(p.read_text().replace(pattern, repl))
+    replace(
+        r"<head>",
+        r'<head>'
+        '\n'
+        r'  <base href="{{site.github.url}}" charset="utf-8"/>',
+        "docs/index.html")
+
+    Path("docs/.nojekyll").touch()
+    Path("docs/_config.yml").touch()
+
 
 @cli.command("activate-nbstripout")
 def activate_nbstripout():

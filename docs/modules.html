@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>causallift &mdash; causallift 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/qb1-sphinx-rtd.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/theme-overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="causallift package" href="causallift.html" />
+    <link rel="prev" title="Welcome to project’s causallift API docs!" href="index.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> causallift
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">causallift</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="causallift.html">causallift package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="causallift.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="causallift.nodes.html">causallift.nodes package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="causallift.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="causallift.html#module-causallift.causal_lift">causallift.causal_lift module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="causallift.html#module-causallift.generate_data">causallift.generate_data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="causallift.html#module-causallift.pipeline">causallift.pipeline module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="causallift.html#module-causallift.run">causallift.run module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">causallift</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>causallift</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="causallift">
+<h1>causallift<a class="headerlink" href="#causallift" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="causallift.html">causallift package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="causallift.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="causallift.nodes.html">causallift.nodes package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="causallift.nodes.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="causallift.nodes.html#module-causallift.nodes.estimate_propensity">causallift.nodes.estimate_propensity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="causallift.nodes.html#module-causallift.nodes.model_for_each">causallift.nodes.model_for_each module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="causallift.nodes.html#module-causallift.nodes.utils">causallift.nodes.utils module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.html#module-causallift.causal_lift">causallift.causal_lift module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.html#module-causallift.generate_data">causallift.generate_data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.html#module-causallift.pipeline">causallift.pipeline module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.html#module-causallift.run">causallift.run module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="causallift.html" class="btn btn-neutral float-right" title="causallift package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to project’s causallift API docs!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Yusuke Minami.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+      <script type="text/javascript" src="_static/copybutton.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

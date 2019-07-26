@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>causallift.pipeline &mdash; causallift 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/qb1-sphinx-rtd.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/theme-overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> causallift
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">causallift</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../causallift.html">causallift package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../causallift.nodes.html">causallift.nodes package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.causal_lift">causallift.causal_lift module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.generate_data">causallift.generate_data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.pipeline">causallift.pipeline module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.run">causallift.run module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">causallift</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>causallift.pipeline</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for causallift.pipeline</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2018-2019 QuantumBlack Visual Analytics Limited</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1"># http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,</span>
+<span class="c1"># EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES</span>
+<span class="c1"># OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND</span>
+<span class="c1"># NONINFRINGEMENT. IN NO EVENT WILL THE LICENSOR OR OTHER CONTRIBUTORS</span>
+<span class="c1"># BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN</span>
+<span class="c1"># ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF, OR IN</span>
+<span class="c1"># CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</span>
+<span class="c1">#</span>
+<span class="c1"># The QuantumBlack Visual Analytics Limited (&quot;QuantumBlack&quot;) name and logo</span>
+<span class="c1"># (either separately or in combination, &quot;QuantumBlack Trademarks&quot;) are</span>
+<span class="c1"># trademarks of QuantumBlack. The License does not grant you any right or</span>
+<span class="c1"># license to the QuantumBlack Trademarks. You may not use the QuantumBlack</span>
+<span class="c1"># Trademarks or any confusingly similar mark as a trademark for your product,</span>
+<span class="c1">#     or use the QuantumBlack Trademarks in any other manner that might cause</span>
+<span class="c1"># confusion in the marketplace, including but not limited to in advertising,</span>
+<span class="c1"># on websites, or on software.</span>
+<span class="c1">#</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;Pipeline construction.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">kedro.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">node</span>
+<span class="kn">from</span> <span class="nn">.nodes.estimate_propensity</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.nodes.model_for_each</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<span class="c1"># Here you can define your data-driven pipeline by importing your functions</span>
+<span class="c1"># and adding them to the pipeline as follows:</span>
+<span class="c1">#</span>
+<span class="c1"># from nodes.data_wrangling import clean_data, compute_features</span>
+<span class="c1">#</span>
+<span class="c1"># pipeline = Pipeline([</span>
+<span class="c1">#     node(clean_data, &#39;customers&#39;, &#39;prepared_customers&#39;),</span>
+<span class="c1">#     node(compute_features, &#39;prepared_customers&#39;, [&#39;X_train&#39;, &#39;Y_train&#39;])</span>
+<span class="c1"># ])</span>
+<span class="c1">#</span>
+<span class="c1"># Once you have your pipeline defined, you can run it from the root of your</span>
+<span class="c1"># project by calling:</span>
+<span class="c1">#</span>
+<span class="c1"># $ kedro run</span>
+<span class="c1">#</span>
+
+
+<div class="viewcode-block" id="create_pipeline"><a class="viewcode-back" href="../../causallift.html#causallift.pipeline.create_pipeline">[docs]</a><span class="k">def</span> <span class="nf">create_pipeline</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create the project&#39;s pipeline.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        kwargs: Ignore any additional arguments added in the future.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Pipeline: The resulting pipeline.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">bundle_train_and_test_data</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;train_df&#39;</span><span class="p">,</span> <span class="s1">&#39;test_df&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;df_00&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;011_bundle_train_and_test_data&#39;</span><span class="p">),</span>
+        <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">impute_cols_features</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;args_raw&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;args&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;121_impute_cols_features&#39;</span><span class="p">),</span>
+        <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">treatment_fractions_</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;args_raw&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;treatment_fractions&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;131_treatment_fractions_&#39;</span><span class="p">),</span>
+
+        <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">fit_propensity</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;propensity_model&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;211_fit_propensity&#39;</span><span class="p">),</span>
+        <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">estimate_propensity</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">,</span> <span class="s1">&#39;propensity_model&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;df_01&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;221_estimate_propensity&#39;</span><span class="p">),</span>
+
+        <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">model_for_treated_fit</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;treated__model_dict&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">model_for_untreated_fit</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;untreated__model_dict&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;311_fit&#39;</span><span class="p">),</span>
+
+        <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">bundle_treated_and_untreated_models</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;treated__model_dict&#39;</span><span class="p">,</span> <span class="s1">&#39;untreated__model_dict&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;models_dict&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;312_bundle_2_models&#39;</span><span class="p">),</span>
+
+        <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">model_for_treated_predict_proba</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">,</span> <span class="s1">&#39;models_dict&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;treated__proba&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">model_for_untreated_predict_proba</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">,</span> <span class="s1">&#39;models_dict&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;untreated__proba&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;321_predict_proba&#39;</span><span class="p">),</span>
+        <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">compute_cate</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;treated__proba&#39;</span><span class="p">,</span> <span class="s1">&#39;untreated__proba&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;cate_estimated&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;411_compute_cate&#39;</span><span class="p">),</span>
+        <span class="n">Pipeline</span><span class="p">([</span>
+           <span class="n">node</span><span class="p">(</span><span class="n">add_cate_to_df</span><span class="p">,</span>
+                <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">,</span> <span class="s1">&#39;cate_estimated&#39;</span><span class="p">,</span> <span class="p">],</span>
+                <span class="s1">&#39;df_02&#39;</span><span class="p">,</span>
+                <span class="p">),</span>
+        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;421_add_cate_to_df&#39;</span><span class="p">),</span>
+
+        <span class="n">Pipeline</span><span class="p">([</span>
+           <span class="n">node</span><span class="p">(</span><span class="n">recommend_by_cate</span><span class="p">,</span>
+                <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_02&#39;</span><span class="p">,</span> <span class="s1">&#39;treatment_fractions&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;df_03&#39;</span><span class="p">,</span>
+                <span class="p">),</span>
+        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;511_recommend_by_cate&#39;</span><span class="p">),</span>
+        <span class="n">Pipeline</span><span class="p">([</span>
+           <span class="n">node</span><span class="p">(</span><span class="n">model_for_treated_simulate_recommendation</span><span class="p">,</span>
+                <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_03&#39;</span><span class="p">,</span> <span class="s1">&#39;models_dict&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;treated__sim_eval_df&#39;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">model_for_untreated_simulate_recommendation</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_03&#39;</span><span class="p">,</span> <span class="s1">&#39;models_dict&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;untreated__sim_eval_df&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;521_simulate_recommendation&#39;</span><span class="p">),</span>
+        <span class="n">Pipeline</span><span class="p">([</span>
+           <span class="n">node</span><span class="p">(</span><span class="n">estimate_effect</span><span class="p">,</span>
+                <span class="p">[</span><span class="s1">&#39;treated__sim_eval_df&#39;</span><span class="p">,</span> <span class="s1">&#39;untreated__sim_eval_df&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;estimated_effect_df&#39;</span><span class="p">,</span>
+                <span class="p">),</span>
+        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;531_estimate_effect&#39;</span><span class="p">),</span>
+        <span class="c1"># Pipeline([</span>
+        <span class="c1">#    node(FUNC,</span>
+        <span class="c1">#         [&#39;IN&#39;],</span>
+        <span class="c1">#         [&#39;OUT&#39;],</span>
+        <span class="c1">#         ),</span>
+        <span class="c1"># ], name=&#39;PIPELINE&#39;),</span>
+
+        <span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">pipeline</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Yusuke Minami.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="../../_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+      <script type="text/javascript" src="../../_static/copybutton.js"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

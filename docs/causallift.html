@@ -1,0 +1,898 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>causallift package &mdash; causallift 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/qb1-sphinx-rtd.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/theme-overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="causallift.nodes package" href="causallift.nodes.html" />
+    <link rel="prev" title="causallift" href="modules.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> causallift
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">causallift</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">causallift package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="causallift.nodes.html">causallift.nodes package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-causallift.causal_lift">causallift.causal_lift module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-causallift.generate_data">causallift.generate_data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-causallift.pipeline">causallift.pipeline module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-causallift.run">causallift.run module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">causallift</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">causallift</a> &raquo;</li>
+        
+      <li>causallift package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="module-causallift">
+<span id="causallift-package"></span><h1>causallift package<a class="headerlink" href="#module-causallift" title="Permalink to this headline">¶</a></h1>
+<p>CausalLift</p>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="causallift.nodes.html">causallift.nodes package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="causallift.nodes.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.nodes.html#module-causallift.nodes.estimate_propensity">causallift.nodes.estimate_propensity module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.nodes.html#module-causallift.nodes.model_for_each">causallift.nodes.model_for_each module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.nodes.html#module-causallift.nodes.utils">causallift.nodes.utils module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-causallift.causal_lift">
+<span id="causallift-causal-lift-module"></span><h2>causallift.causal_lift module<a class="headerlink" href="#module-causallift.causal_lift" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="causallift.causal_lift.CausalLift">
+<em class="property">class </em><code class="descclassname">causallift.causal_lift.</code><code class="descname">CausalLift</code><span class="sig-paren">(</span><em>train_df=None</em>, <em>test_df=None</em>, <em>dataset_catalog={}</em>, <em>logging_config={}</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Set up datasets for uplift modeling.
+Optionally, propensity scores are estimated based on logistic regression.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>train_df</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]) – Pandas Data Frame containing samples used for training</li>
+<li><strong>test_df</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]) – Pandas Data Frame containing samples used for testing</li>
+<li><strong>cols_features</strong> – list of str, optional
+List of column names used as features.
+If None (default), all the columns except for outcome,
+propensity, CATE, and recommendation.</li>
+<li><strong>col_treatment</strong> – str, optional
+Name of treatment column. ‘Treatment’ in default.</li>
+<li><strong>col_outcome</strong> – str, optional
+Name of outcome column. ‘Outcome’ in default.</li>
+<li><strong>col_propensity</strong> – str, optional
+Name of propensity column. ‘Propensity’ in default.</li>
+<li><strong>col_cate</strong> – str, optional
+Name of CATE (Conditional Average Treatment Effect) column. ‘CATE’ in default.</li>
+<li><strong>col_recommendation</strong> – str, optional
+Name of recommendation column. ‘Recommendation’ in default.</li>
+<li><strong>min_propensity</strong> – float, optional
+Minimum propensity score. 0.01 in default.</li>
+<li><strong>max_propensity</strong> – float, optional
+Maximum propensity score. 0.99 in defualt.</li>
+<li><strong>random_state</strong> – int, optional
+The seed used by the random number generator. 0 in default.</li>
+<li><strong>verbose</strong> – int, optional
+How much info to show. Valid values are:
+0 to show nothing,
+1 to show only warning,
+2 (default) to show useful info,
+3 to show more info.</li>
+<li><strong>uplift_model_params</strong> – <p>dict, optional
+Parameters used to fit 2 XGBoost classifier models.
+Refer to <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/parameter.html">https://xgboost.readthedocs.io/en/latest/parameter.html</a>
+If None (default):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="s1">&#39;max_depth&#39;</span><span class="p">:[</span><span class="mi">3</span><span class="p">],</span>
+<span class="s1">&#39;learning_rate&#39;</span><span class="p">:[</span><span class="mf">0.1</span><span class="p">],</span>
+<span class="s1">&#39;n_estimators&#39;</span><span class="p">:[</span><span class="mi">100</span><span class="p">],</span>
+<span class="s1">&#39;verbose&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">],</span>
+<span class="s1">&#39;objective&#39;</span><span class="p">:[</span><span class="s1">&#39;binary:logistic&#39;</span><span class="p">],</span>
+<span class="s1">&#39;booster&#39;</span><span class="p">:[</span><span class="s1">&#39;gbtree&#39;</span><span class="p">],</span>
+<span class="s1">&#39;n_jobs&#39;</span><span class="p">:[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="s1">&#39;nthread&#39;</span><span class="p">:[</span><span class="kc">None</span><span class="p">],</span>
+<span class="s1">&#39;gamma&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">],</span>
+<span class="s1">&#39;min_child_weight&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">],</span>
+<span class="s1">&#39;max_delta_step&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">],</span>
+<span class="s1">&#39;subsample&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">],</span>
+<span class="s1">&#39;colsample_bytree&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">],</span>
+<span class="s1">&#39;colsample_bylevel&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">],</span>
+<span class="s1">&#39;reg_alpha&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">],</span>
+<span class="s1">&#39;reg_lambda&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">],</span>
+<span class="s1">&#39;scale_pos_weight&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">],</span>
+<span class="s1">&#39;base_score&#39;</span><span class="p">:[</span><span class="mf">0.5</span><span class="p">],</span>
+<span class="s1">&#39;missing&#39;</span><span class="p">:[</span><span class="kc">None</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><strong>enable_ipw</strong> – boolean, optional
+Enable Inverse Probability Weighting based on the estimated propensity score.
+True in default.</li>
+<li><strong>propensity_model_params</strong> – <p>dict, optional
+Parameters used to fit logistic regression model to estimate propensity score.
+Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</a>
+If None (default):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+<span class="s1">&#39;class_weight&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">],</span>
+<span class="s1">&#39;dual&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">False</span><span class="p">],</span>
+<span class="s1">&#39;fit_intercept&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">],</span>
+<span class="s1">&#39;intercept_scaling&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="s1">&#39;max_iter&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">],</span>
+<span class="s1">&#39;multi_class&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ovr&#39;</span><span class="p">],</span>
+<span class="s1">&#39;n_jobs&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="s1">&#39;penalty&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;l1&#39;</span><span class="p">,</span><span class="s1">&#39;l2&#39;</span><span class="p">],</span>
+<span class="s1">&#39;solver&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;liblinear&#39;</span><span class="p">],</span>
+<span class="s1">&#39;tol&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0001</span><span class="p">],</span>
+<span class="s1">&#39;warm_start&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><strong>cv</strong> – int, optional
+Cross-Validation for the Grid Search. 3 in default.
+Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</a></li>
+<li><strong>runner</strong> – str, optional
+If set to ‘SequentialRunner’ (default) or ‘ParallelRunner’, the pipeline is run by kedro
+sequentially or in parallel, respectively.
+If set to None, the pipeline is run by native Python.</li>
+<li><strong>conditionally_skip</strong> – bool, optional
+[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]
+Skip running the pipeline if the output files already exist.
+True in default.</li>
+<li><strong>dataset_catalog</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDataSet</span></code>]) – <p>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]
+Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
+To find available file formats, refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets">https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets</a>
+In default:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">propensity_model</span>  <span class="o">=</span> <span class="n">PickleLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/06_models/propensity_model.pickle&#39;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">),</span>
+    <span class="n">models_dict</span> <span class="o">=</span> <span class="n">PickleLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/06_models/models_dict.pickle&#39;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><strong>logging_config</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]) – <p>Specify logging configuration.
+Refer to <a class="reference external" href="https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema">https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema</a>
+In default:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;disable_existing_loggers&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+ <span class="s1">&#39;formatters&#39;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s1">&#39;json_formatter&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;pythonjsonlogger.jsonlogger.JsonFormatter&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">|</span><span class="si">%(name)s</span><span class="s1">|</span><span class="si">%(funcName)s</span><span class="s1">|</span><span class="si">%(levelname)s</span><span class="s1">] </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+     <span class="p">},</span>
+     <span class="s1">&#39;simple&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">|</span><span class="si">%(name)s</span><span class="s1">|</span><span class="si">%(levelname)s</span><span class="s1">] </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+     <span class="p">},</span>
+ <span class="p">},</span>
+ <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s1">&#39;console&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.StreamHandler&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;simple&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;stream&#39;</span><span class="p">:</span> <span class="s1">&#39;ext://sys.stdout&#39;</span><span class="p">,</span>
+     <span class="p">},</span>
+    <span class="s1">&#39;info_file_handler&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.handlers.RotatingFileHandler&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;simple&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;./info.log&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;maxBytes&#39;</span><span class="p">:</span> <span class="mi">10485760</span><span class="p">,</span> <span class="c1"># 10MB</span>
+        <span class="s1">&#39;backupCount&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="s1">&#39;encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;delay&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">},</span>
+     <span class="s1">&#39;error_file_handler&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.handlers.RotatingFileHandler&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;simple&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;./errors.log&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;maxBytes&#39;</span><span class="p">:</span> <span class="mi">10485760</span><span class="p">,</span>  <span class="c1"># 10MB</span>
+         <span class="s1">&#39;backupCount&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+         <span class="s1">&#39;encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;delay&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+     <span class="p">},</span>
+ <span class="p">},</span>
+ <span class="s1">&#39;loggers&#39;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s1">&#39;anyconfig&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;WARNING&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+     <span class="p">},</span>
+     <span class="s1">&#39;kedro.io&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;WARNING&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+     <span class="p">},</span>
+     <span class="s1">&#39;kedro.pipeline&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+     <span class="p">},</span>
+     <span class="s1">&#39;kedro.runner&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+     <span class="p">},</span>
+     <span class="s1">&#39;causallift&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+     <span class="p">},</span>
+ <span class="p">},</span>
+ <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+     <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+ <span class="p">},</span>
+ <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="causallift.causal_lift.CausalLift.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>train_df=None</em>, <em>test_df=None</em>, <em>dataset_catalog={}</em>, <em>logging_config={}</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="causallift.causal_lift.CausalLift.estimate_cate_by_2_models">
+<code class="descname">estimate_cate_by_2_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift.estimate_cate_by_2_models"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift.estimate_cate_by_2_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate CATE (Conditional Average Treatment Effect) using 2 XGBoost classifier models.
+args:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="causallift.causal_lift.CausalLift.estimate_recommendation_impact">
+<code class="descname">estimate_recommendation_impact</code><span class="sig-paren">(</span><em>cate_estimated=None</em>, <em>treatment_fraction_train=None</em>, <em>treatment_fraction_test=None</em>, <em>verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift.estimate_recommendation_impact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift.estimate_recommendation_impact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the impact of recommendation based on uplift modeling.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cate_estimated</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code>]) – Pandas series containing the CATE.
+If None (default), use the ones calculated by estimate_cate_by_2_models method.</li>
+<li><strong>treatment_fraction_train</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The fraction of treatment in train dataset.
+If None (default), use the ones calculated by estimate_cate_by_2_models method.</li>
+<li><strong>treatment_fraction_test</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The fraction of treatment in test dataset.
+If None (default), use the ones calculated by estimate_cate_by_2_models method.</li>
+<li><strong>verbose</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – How much info to show.
+If None (default), use the value set in the constructor.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-causallift.generate_data">
+<span id="causallift-generate-data-module"></span><h2>causallift.generate_data module<a class="headerlink" href="#module-causallift.generate_data" title="Permalink to this headline">¶</a></h2>
+<p>The original code is at <a class="reference external" href="https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py">https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py</a>
+licensed under the BSD 2-Clause “Simplified” License
+Copyright 2018, Wayfair, Inc.</p>
+<p>This code is an enhanced (backward-compatible) version that can simulate observational dataset including “sleeping dogs.”</p>
+<p>“Sleeping dogs” (people who will “buy” if not treated but will not “buy” if treated) can be simulated by negative values in tau parameter.
+Observational data which includes confounding can be simulated by non-zero values in propensity_coef parameter.
+A/B Test (RCT) with a 50:50 split can be simulated by all-zeros values in propensity_coef parameter (default).
+The first element in each list parameter specifies the intercept.</p>
+<dl class="function">
+<dt id="causallift.generate_data.generate_data">
+<code class="descclassname">causallift.generate_data.</code><code class="descname">generate_data</code><span class="sig-paren">(</span><em>N=1000, n_features=3, beta=[1,-2,3,-0.8], error_std=0.5, tau=3, discrete_outcome=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/generate_data.html#generate_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.generate_data.generate_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates random data with a ground truth data generating process.
+Draws random values for features from [0, 1), errors from a 0-centered
+distribution with std <cite>error_std</cite>, and creates an outcome y.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>N</strong> – int, optional
+Number of observations.</li>
+<li><strong>n_features</strong> – int, optional
+Number of features.</li>
+<li><strong>beta</strong> – np.array, optional
+Array of beta coefficients to multiply by X to get y.</li>
+<li><strong>error_std</strong> – float, optional
+Standard deviation (scale) of distribution from which errors are drawn.</li>
+<li><strong>tau</strong> – np.array or float, optional
+Array of coefficients to multiply by X to get y if treated.
+More/larger negative values will simulate more “sleeping dogs”
+If float scalar is input, effect of features is not considered.</li>
+<li><strong>tau_std</strong> – float, optional
+When not None, draws tau from a normal distribution centered around tau
+with standard deviation tau_std rather than just using a constant value
+of tau.</li>
+<li><strong>discrete_outcome</strong> – boolean, optional
+If True, outcomes are 0 or 1; otherwise continuous.</li>
+<li><strong>seed</strong> – int, optional
+Random seed fed to np.random.seed to allow for deterministic behavior.</li>
+<li><strong>feature_effect</strong> – float, optional
+Effect of beta on outcome if treated.</li>
+<li><strong>propensity_coef</strong> – np.array, optional
+Array of coefficients to multiply by X to get propensity log-odds to be treated.</li>
+<li><strong>index_name</strong> – str, optional
+Index name in the output DataFrame. If None (default), index name will not be set.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
+<dt>pd.DataFrame</dt>
+<dd><p class="first last">A DataFrame containing the generated data.</p>
+</dd>
+</dl>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">df</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-causallift.pipeline">
+<span id="causallift-pipeline-module"></span><h2>causallift.pipeline module<a class="headerlink" href="#module-causallift.pipeline" title="Permalink to this headline">¶</a></h2>
+<p>Pipeline construction.</p>
+<dl class="function">
+<dt id="causallift.pipeline.create_pipeline">
+<code class="descclassname">causallift.pipeline.</code><code class="descname">create_pipeline</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/pipeline.html#create_pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.pipeline.create_pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the project’s pipeline.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kwargs</strong> – Ignore any additional arguments added in the future.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The resulting pipeline.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Pipeline</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-causallift.run">
+<span id="causallift-run-module"></span><h2>causallift.run module<a class="headerlink" href="#module-causallift.run" title="Permalink to this headline">¶</a></h2>
+<p>Application entry point.</p>
+<dl class="class">
+<dt id="causallift.run.FlexibleProjectContext">
+<em class="property">class </em><code class="descclassname">causallift.run.</code><code class="descname">FlexibleProjectContext</code><span class="sig-paren">(</span><em>runner=None</em>, <em>only_missing=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#FlexibleProjectContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.FlexibleProjectContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#causallift.run.ProjectContext3" title="causallift.run.ProjectContext3"><code class="xref py py-class docutils literal notranslate"><span class="pre">causallift.run.ProjectContext3</span></code></a></p>
+<p>Overwrite the default runner and only_missing option for the run.</p>
+<dl class="method">
+<dt id="causallift.run.FlexibleProjectContext.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>runner=None</em>, <em>only_missing=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#FlexibleProjectContext.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.FlexibleProjectContext.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a context object by providing the root of a Kedro project and
+the environment configuration subfolders (see <code class="docutils literal notranslate"><span class="pre">kedro.config.ConfigLoader</span></code>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>project_path</strong> – Project path to define the context for.</li>
+<li><strong>env</strong> – Optional argument for configuration default environment to be used</li>
+<li><strong>running the pipeline. Default environment is 'local'.</strong> (<em>for</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="causallift.run.FlexibleProjectContext.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>tags=None</em>, <em>runner=None</em>, <em>node_names=None</em>, <em>only_missing=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#FlexibleProjectContext.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.FlexibleProjectContext.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the pipeline wi th a specified runner.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tags</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – An optional list of node tags which should be used to
+filter the nodes of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>. If specified, only the nodes
+containing <em>any</em> of these tags will be run.</li>
+<li><strong>runner</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractRunner</span></code>]) – An optional parameter specifying the runner that you want to run
+the pipeline with.</li>
+<li><strong>node_names</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – An optional list of node names which should be used to
+filter the nodes of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>. If specified, only the nodes
+with these names will be run.</li>
+<li><strong>only_missing</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – An option to run only missing nodes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KedroContextError</span></code> – If the resulting <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> is empty
+or incorrect tags are provided.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Any node outputs that cannot be processed by the <code class="docutils literal notranslate"><span class="pre">DataCatalog</span></code>.
+These are returned in a dictionary, where the keys are defined
+by the node outputs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="causallift.run.ProjectContext">
+<em class="property">class </em><code class="descclassname">causallift.run.</code><code class="descname">ProjectContext</code><span class="sig-paren">(</span><em>project_path</em>, <em>env='local'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#ProjectContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.ProjectContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">kedro.context.context.KedroContext</span></code></p>
+<p>Users can override the remaining methods from the parent class here, or create new ones
+(e.g. as required by plugins)</p>
+<dl class="attribute">
+<dt id="causallift.run.ProjectContext.pipeline">
+<code class="descname">pipeline</code><a class="headerlink" href="#causallift.run.ProjectContext.pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract property for Pipeline getter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Defined pipeline.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="causallift.run.ProjectContext.project_name">
+<code class="descname">project_name</code><em class="property"> = 'CausalLift'</em><a class="headerlink" href="#causallift.run.ProjectContext.project_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="causallift.run.ProjectContext.project_version">
+<code class="descname">project_version</code><em class="property"> = '0.15.0'</em><a class="headerlink" href="#causallift.run.ProjectContext.project_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="causallift.run.ProjectContext.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>tags=None</em>, <em>runner=None</em>, <em>node_names=None</em>, <em>only_missing=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#ProjectContext.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.ProjectContext.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the pipeline wi th a specified runner.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tags</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – An optional list of node tags which should be used to
+filter the nodes of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>. If specified, only the nodes
+containing <em>any</em> of these tags will be run.</li>
+<li><strong>runner</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractRunner</span></code>]) – An optional parameter specifying the runner that you want to run
+the pipeline with.</li>
+<li><strong>node_names</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – An optional list of node names which should be used to
+filter the nodes of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>. If specified, only the nodes
+with these names will be run.</li>
+<li><strong>only_missing</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – An option to run only missing nodes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KedroContextError</span></code> – If the resulting <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> is empty
+or incorrect tags are provided.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Any node outputs that cannot be processed by the <code class="docutils literal notranslate"><span class="pre">DataCatalog</span></code>.
+These are returned in a dictionary, where the keys are defined
+by the node outputs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="causallift.run.ProjectContext1">
+<em class="property">class </em><code class="descclassname">causallift.run.</code><code class="descname">ProjectContext1</code><span class="sig-paren">(</span><em>project_path</em>, <em>env='local'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#ProjectContext1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.ProjectContext1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#causallift.run.ProjectContext" title="causallift.run.ProjectContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">causallift.run.ProjectContext</span></code></a></p>
+<p>Allow to specify runner by string.</p>
+<dl class="method">
+<dt id="causallift.run.ProjectContext1.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>runner=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#ProjectContext1.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.ProjectContext1.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the pipeline wi th a specified runner.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tags</strong> – An optional list of node tags which should be used to
+filter the nodes of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>. If specified, only the nodes
+containing <em>any</em> of these tags will be run.</li>
+<li><strong>runner</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractRunner</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – An optional parameter specifying the runner that you want to run
+the pipeline with.</li>
+<li><strong>node_names</strong> – An optional list of node names which should be used to
+filter the nodes of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>. If specified, only the nodes
+with these names will be run.</li>
+<li><strong>only_missing</strong> – An option to run only missing nodes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KedroContextError</span></code> – If the resulting <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> is empty
+or incorrect tags are provided.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Any node outputs that cannot be processed by the <code class="docutils literal notranslate"><span class="pre">DataCatalog</span></code>.
+These are returned in a dictionary, where the keys are defined
+by the node outputs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="causallift.run.ProjectContext2">
+<em class="property">class </em><code class="descclassname">causallift.run.</code><code class="descname">ProjectContext2</code><span class="sig-paren">(</span><em>project_path</em>, <em>env='local'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#ProjectContext2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.ProjectContext2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#causallift.run.ProjectContext1" title="causallift.run.ProjectContext1"><code class="xref py py-class docutils literal notranslate"><span class="pre">causallift.run.ProjectContext1</span></code></a></p>
+<p>Keep the output datasets in the catalog.</p>
+<dl class="method">
+<dt id="causallift.run.ProjectContext2.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#ProjectContext2.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.ProjectContext2.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the pipeline wi th a specified runner.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tags</strong> – An optional list of node tags which should be used to
+filter the nodes of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>. If specified, only the nodes
+containing <em>any</em> of these tags will be run.</li>
+<li><strong>runner</strong> – An optional parameter specifying the runner that you want to run
+the pipeline with.</li>
+<li><strong>node_names</strong> – An optional list of node names which should be used to
+filter the nodes of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>. If specified, only the nodes
+with these names will be run.</li>
+<li><strong>only_missing</strong> – An option to run only missing nodes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KedroContextError</span></code> – If the resulting <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> is empty
+or incorrect tags are provided.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Any node outputs that cannot be processed by the <code class="docutils literal notranslate"><span class="pre">DataCatalog</span></code>.
+These are returned in a dictionary, where the keys are defined
+by the node outputs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="causallift.run.ProjectContext3">
+<em class="property">class </em><code class="descclassname">causallift.run.</code><code class="descname">ProjectContext3</code><span class="sig-paren">(</span><em>logging_config=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#ProjectContext3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.ProjectContext3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#causallift.run.ProjectContext2" title="causallift.run.ProjectContext2"><code class="xref py py-class docutils literal notranslate"><span class="pre">causallift.run.ProjectContext2</span></code></a></p>
+<p>Allow to overwrite the default logging config and remove yaml file dependency.</p>
+<dl class="method">
+<dt id="causallift.run.ProjectContext3.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>logging_config=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#ProjectContext3.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.ProjectContext3.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a context object by providing the root of a Kedro project and
+the environment configuration subfolders (see <code class="docutils literal notranslate"><span class="pre">kedro.config.ConfigLoader</span></code>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>project_path</strong> – Project path to define the context for.</li>
+<li><strong>env</strong> – Optional argument for configuration default environment to be used</li>
+<li><strong>running the pipeline. Default environment is 'local'.</strong> (<em>for</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="causallift.run.main">
+<code class="descclassname">causallift.run.</code><code class="descname">main</code><span class="sig-paren">(</span><em>tags=None</em>, <em>env=None</em>, <em>runner=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application main entry point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tags</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – An optional list of node tags which should be used to
+filter the nodes of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>. If specified, only the nodes
+containing <em>any</em> of these tags will be added to the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>.</li>
+<li><strong>env</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – An optional parameter specifying the environment in which
+the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> should be run. If not specified defaults to “local”.</li>
+<li><strong>runner</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractRunner</span></code>]]) – An optional parameter specifying the runner that you want to run
+the pipeline with.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="causallift.run.skippable">
+<code class="descclassname">causallift.run.</code><code class="descname">skippable</code><span class="sig-paren">(</span><em>catalog</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#skippable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.skippable" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="causallift.nodes.html" class="btn btn-neutral float-right" title="causallift.nodes package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral" title="causallift" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Yusuke Minami.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+      <script type="text/javascript" src="_static/copybutton.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
