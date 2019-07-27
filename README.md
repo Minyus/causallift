@@ -280,8 +280,17 @@ https://en.wikipedia.org/wiki/Uplift_modelling
 - Support for classification models other than Logistic Regression to estimate propensity scores which would need calibration
 - Support for multiple treatments
 
-Any feedback, suggestions, pull requests to enhance/correct documentation, usability, and features are welcomed!
-Separate pull requests for each improvement are appreciated rather than a single big pull request.
+
+## Contributing
+
+Any feedback is welcome!
+
+Please create an issue for questions, suggestions, and feature requests.
+Please open pull requests to improve documentation, usability, and features against `v1.0` branch. (`v0.0 is no longer active.)
+
+Separate pull requests for each improvement are appreciated rather than a big pull request.
+It is encouraged to adopt PEP 8 style guide, Google docstrings, and PEP 484 type hints.
+It is recommended to use an intelligent IDE such as PyCharm.
 
 If you could write a review about CausalLift in any natural languages (English, Chinese, Japanese, etc.) or implement similar features in any programming languages (R, SAS, etc.), please let me know. I will add the link here.
 
