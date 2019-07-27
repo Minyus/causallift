@@ -1,11 +1,31 @@
 # CausalLift: Python package for Uplift Modeling in real-world business; applicable for both A/B testing and observational data
 
-version 1.0.0 will be available soon in PyPI
+[![PyPI version](https://badge.fury.io/py/causallift.svg)](
+https://badge.fury.io/py/causallift
+)
+![Python Version](https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7-blue.svg)
+[![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD-yellow.svg)](
+https://opensource.org/licenses/BSD-2-Clause
+)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/github/Minyus/causallift/blob/v1.0/notebooks/demo/CausalLift_demo.ipynb
+)
 
-[![PyPI version](https://badge.fury.io/py/causallift.svg)](https://badge.fury.io/py/causallift)
-[![Python Version](https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7-blue.svg)](https://pypi.org/project/kedro/)
-[![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD-yellow.svg)](https://opensource.org/licenses/BSD-2-Clause)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Minyus/causallift/blob/v1.0/notebooks/demo/CausalLift_demo.ipynb)
+The latest version 1.0.0 adopts [Kedro](https://kedro.readthedocs.io/) to add the following new features and will be available soon in PyPI.
+
+- [Parallel execution] Train the 2 models in parallel
+- [File management] Save and load intermediate files such as the trained models
+- [Logging] Show and/or log processing status such as timestamp and the running task
+- [Documentation] Generate the API document by Sphinx and visualize the process flow
+
+You can install the pre-release development revision from GitHub:
+```bash
+    pip3 install git+git://github.com/quantumblacklabs/kedro@develop#egg=kedro
+    pip3 install git+git://github.com/Minyus/causallift@v1.0
+```
+
+
+## Introduction
 
 If you are simply building a Machine Learning model and executing promotion campaigns to the customers who are predicted to buy a product, for example, it is not efficient.
 
@@ -124,9 +144,11 @@ Option 3: clone the [GitHub repository](https://github.com/Minyus/causallift.git
 
 ## How to use CausalLift?
 
-Please see the [CausalLift example]( 
-https://colab.research.google.com/github/Minyus/causallift/blob/master/examples/CausalLift_example.ipynb
-) available in Google Colab (free cloud CPU/GPU) environment.
+Please see the demo code in Google Colab (free cloud CPU/GPU environment) :
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/github/Minyus/causallift/blob/v1.0/notebooks/demo/CausalLift_demo.ipynb
+)
 
 To run the code, navigate to "Runtime" >> "Run all".
 
@@ -167,86 +189,15 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 
 ## What parameters are available for CausalLift?
 
-        cols_features: list of str, optional
-            List of column names used as features.
-            If None (default), all the columns except for outcome,
-            propensity, CATE, and recommendation.
-        col_treatment: str, optional
-            Name of treatment column. 'Treatment' in default.
-        col_outcome: str, optional
-            Name of outcome column. 'Outcome' in default.
-        col_propensity: str, optional
-            Name of propensity column. 'Propensity' in default.
-        col_cate: str, optional
-            Name of CATE (Conditional Average Treatment Effect) column. 'CATE' in default.
-        col_recommendation: str, optional
-            Name of recommendation column. 'Recommendation' in default.
-        min_propensity: float, optional
-            Minimum propensity score. 0.01 in default.
-        max_propensity: float, optional
-            Maximum propensity score. 0.99 in defualt.
-        random_state: int, optional
-            The seed used by the random number generator. 0 in default.
-        verbose: int, optional
-            How much info to show. Valid values are:
-            0 to show nothing,
-            1 to show only warning,
-            2 (default) to show useful info,
-            3 to show more info.
-        uplift_model_params: dict, optional
-            Parameters used to fit 2 XGBoost classifier models.
-            Refer to https://xgboost.readthedocs.io/en/latest/parameter.html
-            If None (default):
-                {
-                'max_depth':[3],
-                'learning_rate':[0.1],
-                'n_estimators':[100],
-                'silent':[True],
-                'objective':['binary:logistic'],
-                'booster':['gbtree'],
-                'n_jobs':[-1],
-                'nthread':[None],
-                'gamma':[0],
-                'min_child_weight':[1],
-                'max_delta_step':[0],
-                'subsample':[1],
-                'colsample_bytree':[1],
-                'colsample_bylevel':[1],
-                'reg_alpha':[0],
-                'reg_lambda':[1],
-                'scale_pos_weight':[1],
-                'base_score':[0.5],
-                'missing':[None],
-                }
-        enable_ipw: boolean, optional
-            Enable Inverse Probability Weighting based on the estimated propensity score.
-            True in default.
-        propensity_model_params: dict, optional
-            Parameters used to fit logistic regression model to estimate propensity score.
-            Refer to https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
-            If None (default):
-                {
-                'C': [0.1, 1, 10],
-                'class_weight': [None],
-                'dual': [False],
-                'fit_intercept': [True],
-                'intercept_scaling': [1],
-                'max_iter': [100],
-                'multi_class': ['ovr'],
-                'n_jobs': [1],
-                'penalty': ['l1','l2'],
-                'solver': ['liblinear'],
-                'tol': [0.0001],
-                'warm_start': [False]
-                }
-        cv: int, optional
-            Cross-Validation for the Grid Search. 3 in default.
-            Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+Please see [here](https://github.com/Minyus/causallift/blob/v1.0/src/causallift/causal_lift.py#L20)
 
 
-## What was the tested environment of CausalLift?
+## Supported Python versions
 
-- Google Colab (Python 3.6.8)
+- Python 3.5
+- Python 3.6
+- Python 3.7
+
 
 
 ## Related Python packages
@@ -322,7 +273,7 @@ https://en.wikipedia.org/wiki/Uplift_modelling
 
 ## To-dos
 
-- Improve documentation (using Sphinx)
+- Improve documentation
 - Add examples of applying uplift modeling to more publicly available datasets (such as [Lending Club Loan Data](https://www.kaggle.com/wendykan/lending-club-loan-data) as [pymatch](https://github.com/benmiroglio/pymatch) did.
 - Clarify the model summary output including visualization
 - Support for classification models other than XGBoost (Random Forest, LightGBM, etc.) to predict outcome
