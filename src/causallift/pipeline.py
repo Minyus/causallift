@@ -70,9 +70,13 @@ def create_pipeline(**kwargs):
         Pipeline([
             node(impute_cols_features,
                  ['args_raw', 'df_00'],
+                 'args_intermediate',
+                 ),
+            node(schedule_propensity_scoring,
+                 ['args_intermediate', 'df_00'],
                  'args',
                  ),
-            ], name='121_impute_cols_features'),
+            ], name='121_prepare_args'),
         Pipeline([
             node(treatment_fractions_,
                  ['args_raw', 'df_00'],

@@ -235,9 +235,13 @@
         <span class="n">Pipeline</span><span class="p">([</span>
             <span class="n">node</span><span class="p">(</span><span class="n">impute_cols_features</span><span class="p">,</span>
                  <span class="p">[</span><span class="s1">&#39;args_raw&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;args_intermediate&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">schedule_propensity_scoring</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;args_intermediate&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">],</span>
                  <span class="s1">&#39;args&#39;</span><span class="p">,</span>
                  <span class="p">),</span>
-            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;121_impute_cols_features&#39;</span><span class="p">),</span>
+            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;121_prepare_args&#39;</span><span class="p">),</span>
         <span class="n">Pipeline</span><span class="p">([</span>
             <span class="n">node</span><span class="p">(</span><span class="n">treatment_fractions_</span><span class="p">,</span>
                  <span class="p">[</span><span class="s1">&#39;args_raw&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">],</span>

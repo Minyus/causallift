@@ -279,10 +279,11 @@ class CausalLift():
         if self.runner is None:
             self.df = bundle_train_and_test_data(args_raw, train_df, test_df)
             self.args = impute_cols_features(args_raw, self.df)
+            self.args = schedule_propensity_scoring(self.args, self.df)
             self.treatment_fractions = treatment_fractions_(self.args, self.df)
-
-            self.propensity_model = fit_propensity(self.args, self.df)
-            self.df = estimate_propensity(self.args, self.df, self.propensity_model)
+            if self.args.need_propensity_scoring:
+                self.propensity_model = fit_propensity(self.args, self.df)
+                self.df = estimate_propensity(self.args, self.df, self.propensity_model)
 
         if self.runner:
             self.kedro_context.catalog.add_feed_dict({
@@ -299,21 +300,26 @@ class CausalLift():
             self.df = self.kedro_context.catalog.load('df_00')
 
             self.kedro_context.run(tags=[
-                '121_impute_cols_features',
+                '121_prepare_args',
                 '131_treatment_fractions_',
                 ])
             self.args = self.kedro_context.catalog.load('args')
             self.treatment_fractions = self.kedro_context.catalog.load(
                 'treatment_fractions')
 
-            self.kedro_context.run(tags=[
-                '211_fit_propensity',
-                ])
-            self.propensity_model = self.kedro_context.catalog.load('propensity_model')
-            self.kedro_context.run(tags=[
-                '221_estimate_propensity',
-                ])
-            self.df = self.kedro_context.catalog.load('df_01')
+            if self.args.need_propensity_scoring:
+                self.kedro_context.run(tags=[
+                    '211_fit_propensity',
+                    ])
+                self.propensity_model = self.kedro_context.catalog.load('propensity_model')
+                self.kedro_context.run(tags=[
+                    '221_estimate_propensity',
+                    ])
+                self.df = self.kedro_context.catalog.load('df_01')
+            else:
+                self.kedro_context.catalog.add_feed_dict({
+                    'df_01': MemoryDataSet(self.df),
+                }, replace=True)
 
         self.treatment_fraction_train = self.treatment_fractions.train
         self.treatment_fraction_test = self.treatment_fractions.test
