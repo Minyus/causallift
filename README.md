@@ -296,10 +296,14 @@ If you could write a review about CausalLift in any natural languages (English, 
 ## Article about CausalList in Japanese
 - https://qiita.com/Minyus86/items/07ce57a8bddc49c2bbf5
 
-## About author 
+## Author:
 
 Yusuke Minami
 
-- https://github.com/Minyus
+- [@Minyus](https://github.com/Minyus)
 - https://www.linkedin.com/in/yusukeminami/
 - https://twitter.com/Minyus86
+
+## Contributors:
+
+[@farismosman](https://github.com/farismosman)
