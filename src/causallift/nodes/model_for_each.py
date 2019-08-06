@@ -135,35 +135,35 @@ class ModelForTreatedOrUntreated():
 
 
 class ModelForTreated(ModelForTreatedOrUntreated):
-    def __init__(self, *lsargs, **kwargs):
+    def __init__(self, *posargs, **kwargs):
         kwargs.update(treatment_val=1.0)
-        super().__init__(*lsargs, **kwargs)
+        super().__init__(*posargs, **kwargs)
 
 
 class ModelForUntreated(ModelForTreatedOrUntreated):
-    def __init__(self, *lsargs, **kwargs):
+    def __init__(self, *posargs, **kwargs):
         kwargs.update(treatment_val=0.0)
-        super().__init__(*lsargs, **kwargs)
+        super().__init__(*posargs, **kwargs)
 
 
-def model_for_treated_fit(*lsargs, **kwargs):
-    return ModelForTreated().fit(*lsargs, **kwargs)
+def model_for_treated_fit(*posargs, **kwargs):
+    return ModelForTreated().fit(*posargs, **kwargs)
 
-def model_for_treated_predict_proba(*lsargs, **kwargs):
-    return ModelForTreated().predict_proba(*lsargs, **kwargs)
+def model_for_treated_predict_proba(*posargs, **kwargs):
+    return ModelForTreated().predict_proba(*posargs, **kwargs)
 
-def model_for_treated_simulate_recommendation(*lsargs, **kwargs):
-    return ModelForTreated().simulate_recommendation(*lsargs, **kwargs)
+def model_for_treated_simulate_recommendation(*posargs, **kwargs):
+    return ModelForTreated().simulate_recommendation(*posargs, **kwargs)
 
 
-def model_for_untreated_fit(*lsargs, **kwargs):
-    return ModelForUntreated().fit(*lsargs, **kwargs)
+def model_for_untreated_fit(*posargs, **kwargs):
+    return ModelForUntreated().fit(*posargs, **kwargs)
 
-def model_for_untreated_predict_proba(*lsargs, **kwargs):
-    return ModelForUntreated().predict_proba(*lsargs, **kwargs)
+def model_for_untreated_predict_proba(*posargs, **kwargs):
+    return ModelForUntreated().predict_proba(*posargs, **kwargs)
 
-def model_for_untreated_simulate_recommendation(*lsargs, **kwargs):
-    return ModelForUntreated().simulate_recommendation(*lsargs, **kwargs)
+def model_for_untreated_simulate_recommendation(*posargs, **kwargs):
+    return ModelForUntreated().simulate_recommendation(*posargs, **kwargs)
 
 
 def bundle_treated_and_untreated_models(treated_model, untreated_model):
