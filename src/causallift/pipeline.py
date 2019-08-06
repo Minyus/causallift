@@ -83,6 +83,12 @@ def create_pipeline(**kwargs):
                  'treatment_fractions',
                  ),
             ], name='131_treatment_fractions_'),
+        Pipeline([
+            node(initialize_model,
+                 ['args_raw'],
+                 'init_model',
+                 ),
+        ], name='141_initialize_model'),
 
         Pipeline([
             node(fit_propensity,
@@ -99,11 +105,11 @@ def create_pipeline(**kwargs):
 
         Pipeline([
             node(model_for_treated_fit,
-                 ['args', 'df_01'],
+                 ['args', 'df_01', 'init_model'],
                  'treated__model_dict',
                  ),
             node(model_for_untreated_fit,
-                 ['args', 'df_01'],
+                 ['args', 'df_01', 'init_model'],
                  'untreated__model_dict',
                  ),
             ], name='311_fit'),

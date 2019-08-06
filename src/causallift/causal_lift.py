@@ -245,6 +245,7 @@ class CausalLift():
         self.test_df = None
         self.df = None
         self.propensity_model = None
+        self.init_model = None
         self.models_dict = None
         self.treatment_fractions = None
         self.treatment_fraction_train = None
@@ -284,6 +285,7 @@ class CausalLift():
             if self.args.need_propensity_scoring:
                 self.propensity_model = fit_propensity(self.args, self.df)
                 self.df = estimate_propensity(self.args, self.df, self.propensity_model)
+            self.init_model = initialize_model(self.args)
 
         if self.runner:
             self.kedro_context.catalog.add_feed_dict({
@@ -302,10 +304,12 @@ class CausalLift():
             self.kedro_context.run(tags=[
                 '121_prepare_args',
                 '131_treatment_fractions_',
+                '141_initialize_model',
                 ])
             self.args = self.kedro_context.catalog.load('args')
             self.treatment_fractions = self.kedro_context.catalog.load(
                 'treatment_fractions')
+            self.init_model = self.kedro_context.catalog.load(('init_model'))
 
             if self.args.need_propensity_scoring:
                 self.kedro_context.run(tags=[
@@ -345,8 +349,8 @@ class CausalLift():
         """
 
         if self.runner is None:
-            treated__model_dict = model_for_treated_fit(self.args, self.df)
-            untreated__model_dict = model_for_untreated_fit(self.args, self.df)
+            treated__model_dict = model_for_treated_fit(self.args, self.df, self.init_model)
+            untreated__model_dict = model_for_untreated_fit(self.args, self.df, self.init_model)
             self.models_dict = bundle_treated_and_untreated_models(
                 treated__model_dict, untreated__model_dict)
 

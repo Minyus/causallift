@@ -16,12 +16,10 @@ class ModelForTreatedOrUntreated():
         assert treatment_val in {0.0, 1.0}
         self.treatment_val = treatment_val
         self.treatment_label = 'treated' if treatment_val else 'untreated'
-    def fit(self, args, df_):
+    def fit(self, args, df_, model):
 
         assert isinstance(df_, pd.DataFrame)
         treatment_val = self.treatment_val
-        seed = args.random_state
-        params = args.uplift_model_params
 
         if args.verbose >= 2:
             log.info('\n\n## Model for Treatment = {}'.format(treatment_val))
@@ -48,9 +46,6 @@ class ModelForTreatedOrUntreated():
         else:
             # do not use sample weight
             sample_weight = np.ones_like(y_train, dtype=float)
-
-        model = GridSearchCV(XGBClassifier(random_state=seed),
-                             params, cv=args.cv, return_train_score=False, n_jobs=-1)
 
         model.fit(X_train, y_train, sample_weight=sample_weight)
         if args.verbose >= 3:
@@ -174,3 +169,15 @@ def model_for_untreated_simulate_recommendation(*lsargs, **kwargs):
 def bundle_treated_and_untreated_models(treated_model, untreated_model):
     models_dict = dict(treated=treated_model, untreated=untreated_model)
     return models_dict
+
+
+def initialize_model(args):
+
+    model = \
+        GridSearchCV(XGBClassifier(random_state=args.random_state),
+                         args.uplift_model_params,
+                         cv=args.cv, return_train_score=False, n_jobs=-1) \
+        if isinstance(args.uplift_model_params, dict) else \
+        args.uplift_model_params
+
+    return model
