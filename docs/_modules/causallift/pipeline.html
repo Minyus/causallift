@@ -248,6 +248,12 @@
                  <span class="s1">&#39;treatment_fractions&#39;</span><span class="p">,</span>
                  <span class="p">),</span>
             <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;131_treatment_fractions_&#39;</span><span class="p">),</span>
+        <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="n">node</span><span class="p">(</span><span class="n">initialize_model</span><span class="p">,</span>
+                 <span class="p">[</span><span class="s1">&#39;args_raw&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;init_model&#39;</span><span class="p">,</span>
+                 <span class="p">),</span>
+        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;141_initialize_model&#39;</span><span class="p">),</span>
 
         <span class="n">Pipeline</span><span class="p">([</span>
             <span class="n">node</span><span class="p">(</span><span class="n">fit_propensity</span><span class="p">,</span>
@@ -264,11 +270,11 @@
 
         <span class="n">Pipeline</span><span class="p">([</span>
             <span class="n">node</span><span class="p">(</span><span class="n">model_for_treated_fit</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">],</span>
+                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">,</span> <span class="s1">&#39;init_model&#39;</span><span class="p">],</span>
                  <span class="s1">&#39;treated__model_dict&#39;</span><span class="p">,</span>
                  <span class="p">),</span>
             <span class="n">node</span><span class="p">(</span><span class="n">model_for_untreated_fit</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">],</span>
+                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">,</span> <span class="s1">&#39;init_model&#39;</span><span class="p">],</span>
                  <span class="s1">&#39;untreated__model_dict&#39;</span><span class="p">,</span>
                  <span class="p">),</span>
             <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;311_fit&#39;</span><span class="p">),</span>

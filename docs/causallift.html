@@ -220,36 +220,39 @@ Optionally, propensity scores are estimated based on logistic regression.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>train_df</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]) – Pandas Data Frame containing samples used for training</li>
 <li><strong>test_df</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]) – Pandas Data Frame containing samples used for testing</li>
-<li><strong>cols_features</strong> – list of str, optional
+<li><strong>cols_features</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[List[str]]</span></code>) -
 List of column names used as features.
-If None (default), all the columns except for outcome,
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), all the columns except for outcome,
 propensity, CATE, and recommendation.</li>
-<li><strong>col_treatment</strong> – str, optional
+<li><strong>col_treatment</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
 Name of treatment column. ‘Treatment’ in default.</li>
-<li><strong>col_outcome</strong> – str, optional
+<li><strong>col_outcome</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
 Name of outcome column. ‘Outcome’ in default.</li>
-<li><strong>col_propensity</strong> – str, optional
+<li><strong>col_propensity</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
 Name of propensity column. ‘Propensity’ in default.</li>
-<li><strong>col_cate</strong> – str, optional
+<li><strong>col_cate</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
 Name of CATE (Conditional Average Treatment Effect) column. ‘CATE’ in default.</li>
-<li><strong>col_recommendation</strong> – str, optional
+<li><strong>col_recommendation</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
 Name of recommendation column. ‘Recommendation’ in default.</li>
-<li><strong>min_propensity</strong> – float, optional
+<li><strong>min_propensity</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[float]</span></code>) -
 Minimum propensity score. 0.01 in default.</li>
-<li><strong>max_propensity</strong> – float, optional
+<li><strong>max_propensity</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[float]</span></code>) -
 Maximum propensity score. 0.99 in defualt.</li>
-<li><strong>random_state</strong> – int, optional
+<li><strong>random_state</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
 The seed used by the random number generator. 0 in default.</li>
-<li><strong>verbose</strong> – int, optional
-How much info to show. Valid values are:
-0 to show nothing,
-1 to show only warning,
-2 (default) to show useful info,
-3 to show more info.</li>
-<li><strong>uplift_model_params</strong> – <p>dict, optional
+<li><strong>verbose</strong> – <p>(<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
+How much info to show. Valid values are:</p>
+<ul>
+<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">0</span></code> to show nothing,</li>
+<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">1</span></code> to show only warning,</li>
+<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">2</span></code> (default) to show useful info,</li>
+<li><code class="xref py py-obj docutils literal notranslate"><span class="pre">3</span></code> to show more info.</li>
+</ul>
+</li>
+<li><strong>uplift_model_params</strong> – <p>(<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[dict,</span> <span class="pre">sklearn.base.BaseEstimator]</span></code>) -
 Parameters used to fit 2 XGBoost classifier models.
 Refer to <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/parameter.html">https://xgboost.readthedocs.io/en/latest/parameter.html</a>
-If None (default):</p>
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="s1">&#39;max_depth&#39;</span><span class="p">:[</span><span class="mi">3</span><span class="p">],</span>
 <span class="s1">&#39;learning_rate&#39;</span><span class="p">:[</span><span class="mf">0.1</span><span class="p">],</span>
@@ -274,13 +277,13 @@ If None (default):</p>
 </pre></div>
 </div>
 </li>
-<li><strong>enable_ipw</strong> – boolean, optional
+<li><strong>enable_ipw</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[bool]</span></code>) -
 Enable Inverse Probability Weighting based on the estimated propensity score.
 True in default.</li>
-<li><strong>propensity_model_params</strong> – <p>dict, optional
+<li><strong>propensity_model_params</strong> – <p>(<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[dict]</span></code>) -
 Parameters used to fit logistic regression model to estimate propensity score.
 Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</a>
-If None (default):</p>
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
 <span class="s1">&#39;class_weight&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">],</span>
@@ -298,24 +301,25 @@ If None (default):</p>
 </pre></div>
 </div>
 </li>
-<li><strong>cv</strong> – int, optional
-Cross-Validation for the Grid Search. 3 in default.
+<li><strong>cv</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
+Cross-Validation for the Grid Search. <code class="xref py py-obj docutils literal notranslate"><span class="pre">3</span></code> in default.
 Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</a></li>
-<li><strong>index_name</strong> – str, optional
-Index name of the pandas dataframe after resetting the index. ‘index’ in default.
-If None, the index will not be reset.</li>
-<li><strong>partition_name</strong> – str, optional
+<li><strong>index_name</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
+Index name of the pandas data frame after resetting the index. ‘index’ in default.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, the index will not be reset.</li>
+<li><strong>partition_name</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
 Additional index name to indicate the partition, train or test. ‘partition’ in default.</li>
-<li><strong>runner</strong> – str, optional
+<li><strong>runner</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
 If set to ‘SequentialRunner’ (default) or ‘ParallelRunner’, the pipeline is run by Kedro
 sequentially or in parallel, respectively.
-If set to None, the pipeline is run by native Python.
+If set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> , the pipeline is run by native Python.
 Refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners">https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners</a></li>
-<li><strong>conditionally_skip</strong> – bool, optional
+<li><strong>conditionally_skip</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[bool]</span></code>) -
 <em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em>
 Skip running the pipeline if the output files already exist.
 True in default.</li>
-<li><strong>dataset_catalog</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDataSet</span></code>]) – <p><em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em>
+<li><strong>dataset_catalog</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDataSet</span></code>]) – <p>(<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[dict]</span></code>) -
+<em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em>
 Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
 To find available file formats, refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets">https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets</a>
 In default:</p>
@@ -353,7 +357,8 @@ In default:</p>
 </pre></div>
 </div>
 </li>
-<li><strong>logging_config</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]) – <p>Specify logging configuration.
+<li><strong>logging_config</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]) – <p>(<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[dict]</span></code>) -
+Specify logging configuration.
 Refer to <a class="reference external" href="https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema">https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema</a>
 In default:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;disable_existing_loggers&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>

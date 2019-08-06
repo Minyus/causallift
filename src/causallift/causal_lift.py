@@ -22,36 +22,49 @@ class CausalLift():
             Pandas Data Frame containing samples used for training
         test_df:
             Pandas Data Frame containing samples used for testing
-        cols_features: list of str, optional
+        cols_features:
+            (:obj:`Optional[List[str]]`) -
             List of column names used as features.
-            If None (default), all the columns except for outcome,
+            If :obj:`None` (default), all the columns except for outcome,
             propensity, CATE, and recommendation.
-        col_treatment: str, optional
+        col_treatment:
+            (:obj:`Optional[str]`) -
             Name of treatment column. 'Treatment' in default.
-        col_outcome: str, optional
+        col_outcome:
+            (:obj:`Optional[str]`) -
             Name of outcome column. 'Outcome' in default.
-        col_propensity: str, optional
+        col_propensity:
+            (:obj:`Optional[str]`) -
             Name of propensity column. 'Propensity' in default.
-        col_cate: str, optional
+        col_cate:
+            (:obj:`Optional[str]`) -
             Name of CATE (Conditional Average Treatment Effect) column. 'CATE' in default.
-        col_recommendation: str, optional
+        col_recommendation:
+            (:obj:`Optional[str]`) -
             Name of recommendation column. 'Recommendation' in default.
-        min_propensity: float, optional
+        min_propensity:
+            (:obj:`Optional[float]`) -
             Minimum propensity score. 0.01 in default.
-        max_propensity: float, optional
+        max_propensity:
+            (:obj:`Optional[float]`) -
             Maximum propensity score. 0.99 in defualt.
-        random_state: int, optional
+        random_state:
+            (:obj:`Optional[int]`) -
             The seed used by the random number generator. 0 in default.
-        verbose: int, optional
+        verbose:
+            (:obj:`Optional[int]`) -
             How much info to show. Valid values are:
-            0 to show nothing,
-            1 to show only warning,
-            2 (default) to show useful info,
-            3 to show more info.
-        uplift_model_params: dict, optional
+
+            * :obj:`0` to show nothing,
+            * :obj:`1` to show only warning,
+            * :obj:`2` (default) to show useful info,
+            * :obj:`3` to show more info.
+
+        uplift_model_params:
+            (:obj:`Union[dict, sklearn.base.BaseEstimator]`) -
             Parameters used to fit 2 XGBoost classifier models.
             Refer to https://xgboost.readthedocs.io/en/latest/parameter.html
-            If None (default)::
+            If :obj:`None` (default)::
 
                 {
                 'max_depth':[3],
@@ -75,13 +88,15 @@ class CausalLift():
                 'missing':[None],
                 }
 
-        enable_ipw: boolean, optional
+        enable_ipw:
+            (:obj:`Optional[bool]`) -
             Enable Inverse Probability Weighting based on the estimated propensity score.
             True in default.
-        propensity_model_params: dict, optional
+        propensity_model_params:
+            (:obj:`Optional[dict]`) -
             Parameters used to fit logistic regression model to estimate propensity score.
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
-            If None (default)::
+            If :obj:`None` (default)::
 
                 {
                 'C': [0.1, 1, 10],
@@ -98,24 +113,30 @@ class CausalLift():
                 'warm_start': [False]
                 }
 
-        cv: int, optional
-            Cross-Validation for the Grid Search. 3 in default.
+        cv:
+            (:obj:`Optional[int]`) -
+            Cross-Validation for the Grid Search. :obj:`3` in default.
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
-        index_name: str, optional
-            Index name of the pandas dataframe after resetting the index. 'index' in default.
-            If None, the index will not be reset.
-        partition_name: str, optional
+        index_name:
+            (:obj:`Optional[str]`) -
+            Index name of the pandas data frame after resetting the index. 'index' in default.
+            If :obj:`None`, the index will not be reset.
+        partition_name:
+            (:obj:`Optional[str]`) -
             Additional index name to indicate the partition, train or test. 'partition' in default.
-        runner: str, optional
+        runner:
+            (:obj:`Optional[str]`) -
             If set to 'SequentialRunner' (default) or 'ParallelRunner', the pipeline is run by Kedro
             sequentially or in parallel, respectively.
-            If set to None, the pipeline is run by native Python.
+            If set to :obj:`None` , the pipeline is run by native Python.
             Refer to https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners
-        conditionally_skip: bool, optional
+        conditionally_skip:
+            (:obj:`Optional[bool]`) -
             *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']*
             Skip running the pipeline if the output files already exist.
             True in default.
         dataset_catalog:
+            (:obj:`Optional[dict]`) -
             *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']*
             Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
             To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets
@@ -154,6 +175,7 @@ class CausalLift():
                 )
 
         logging_config:
+            (:obj:`Optional[dict]`) -
             Specify logging configuration.
             Refer to https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema
             In default::
