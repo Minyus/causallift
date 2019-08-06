@@ -531,7 +531,6 @@
 <div class="viewcode-block" id="CausalLift.estimate_cate_by_2_models"><a class="viewcode-back" href="../../causallift.html#causallift.causal_lift.CausalLift.estimate_cate_by_2_models">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_cate_by_2_models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Estimate CATE (Conditional Average Treatment Effect) using 2 XGBoost classifier models.</span>
-<span class="sd">        args:</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -582,16 +581,16 @@
 <span class="sd">        args:</span>
 <span class="sd">            cate_estimated:</span>
 <span class="sd">                Pandas series containing the CATE.</span>
-<span class="sd">                If None (default), use the ones calculated by estimate_cate_by_2_models method.</span>
+<span class="sd">                If :obj:`None` (default), use the ones calculated by estimate_cate_by_2_models method.</span>
 <span class="sd">            treatment_fraction_train:</span>
 <span class="sd">                The fraction of treatment in train dataset.</span>
-<span class="sd">                If None (default), use the ones calculated by estimate_cate_by_2_models method.</span>
+<span class="sd">                If :obj:`None` (default), use the ones calculated by estimate_cate_by_2_models method.</span>
 <span class="sd">            treatment_fraction_test:</span>
 <span class="sd">                The fraction of treatment in test dataset.</span>
-<span class="sd">                If None (default), use the ones calculated by estimate_cate_by_2_models method.</span>
+<span class="sd">                If :obj:`None` (default), use the ones calculated by estimate_cate_by_2_models method.</span>
 <span class="sd">            verbose:</span>
 <span class="sd">                How much info to show.</span>
-<span class="sd">                If None (default), use the value set in the constructor.</span>
+<span class="sd">                If :obj:`None` (default), use the value set in the constructor.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">cate_estimated</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

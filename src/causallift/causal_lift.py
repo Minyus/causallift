@@ -366,7 +366,6 @@ class CausalLift():
     def estimate_cate_by_2_models(self):
         r"""
         Estimate CATE (Conditional Average Treatment Effect) using 2 XGBoost classifier models.
-        args:
 
         """
 
@@ -417,16 +416,16 @@ class CausalLift():
         args:
             cate_estimated:
                 Pandas series containing the CATE.
-                If None (default), use the ones calculated by estimate_cate_by_2_models method.
+                If :obj:`None` (default), use the ones calculated by estimate_cate_by_2_models method.
             treatment_fraction_train:
                 The fraction of treatment in train dataset.
-                If None (default), use the ones calculated by estimate_cate_by_2_models method.
+                If :obj:`None` (default), use the ones calculated by estimate_cate_by_2_models method.
             treatment_fraction_test:
                 The fraction of treatment in test dataset.
-                If None (default), use the ones calculated by estimate_cate_by_2_models method.
+                If :obj:`None` (default), use the ones calculated by estimate_cate_by_2_models method.
             verbose:
                 How much info to show.
-                If None (default), use the value set in the constructor.
+                If :obj:`None` (default), use the value set in the constructor.
         """
 
         if cate_estimated is not None:

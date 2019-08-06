@@ -33,32 +33,43 @@ def generate_data(N=1000,
     distribution with std `error_std`, and creates an outcome y.
 
     Args:
-        N : int, optional
+        N :
+            (:obj:`Optional[int]`) -
             Number of observations.
-        n_features : int, optional
+        n_features :
+            (:obj:`Optional[int]`) -
             Number of features.
-        beta : np.array, optional
+        beta :
+            (:obj:`Optional[List[float]]`) -
             Array of beta coefficients to multiply by X to get y.
-        error_std : float, optional
+        error_std :
+            (:obj:`Optional[float]`) -
             Standard deviation (scale) of distribution from which errors are drawn.
-        tau : np.array or float, optional
+        tau :
+            (:obj:`Union[List[float], float]`) -
             Array of coefficients to multiply by X to get y if treated.
             More/larger negative values will simulate more "sleeping dogs"
             If float scalar is input, effect of features is not considered.
-        tau_std : float, optional
-            When not None, draws tau from a normal distribution centered around tau
+        tau_std :
+            (:obj:`Optional[float]`) -
+            When not :obj:`None`, draws tau from a normal distribution centered around tau
             with standard deviation tau_std rather than just using a constant value
             of tau.
-        discrete_outcome : boolean, optional
+        discrete_outcome :
+            (:obj:`Optional[bool]`) -
             If True, outcomes are 0 or 1; otherwise continuous.
-        seed : int, optional
+        seed :
+             (:obj:`Optional[int]`) -
             Random seed fed to np.random.seed to allow for deterministic behavior.
-        feature_effect : float, optional
+        feature_effect :
+            (:obj:`Optional[float]`) -
             Effect of beta on outcome if treated.
-        propensity_coef : np.array, optional
+        propensity_coef :
+            (:obj:`Optional[List[float]]`) -
             Array of coefficients to multiply by X to get propensity log-odds to be treated.
-        index_name : str, optional
-            Index name in the output DataFrame. If None (default), index name will not be set.
+        index_name :
+            (:obj:`Optional[str]`) -
+            Index name in the output DataFrame. If :obj:`None` (default), index name will not be set.
 
     Returns:
         df : pd.DataFrame

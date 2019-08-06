@@ -448,8 +448,7 @@ In default:</p>
 <dl class="method">
 <dt id="causallift.causal_lift.CausalLift.estimate_cate_by_2_models">
 <code class="descname">estimate_cate_by_2_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift.estimate_cate_by_2_models"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift.estimate_cate_by_2_models" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimate CATE (Conditional Average Treatment Effect) using 2 XGBoost classifier models.
-args:</p>
+<dd><p>Estimate CATE (Conditional Average Treatment Effect) using 2 XGBoost classifier models.</p>
 </dd></dl>
 
 <dl class="method">
@@ -462,13 +461,13 @@ args:</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>cate_estimated</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code>]) – Pandas series containing the CATE.
-If None (default), use the ones calculated by estimate_cate_by_2_models method.</li>
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the ones calculated by estimate_cate_by_2_models method.</li>
 <li><strong>treatment_fraction_train</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The fraction of treatment in train dataset.
-If None (default), use the ones calculated by estimate_cate_by_2_models method.</li>
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the ones calculated by estimate_cate_by_2_models method.</li>
 <li><strong>treatment_fraction_test</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The fraction of treatment in test dataset.
-If None (default), use the ones calculated by estimate_cate_by_2_models method.</li>
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the ones calculated by estimate_cate_by_2_models method.</li>
 <li><strong>verbose</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – How much info to show.
-If None (default), use the value set in the constructor.</li>
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the value set in the constructor.</li>
 </ul>
 </td>
 </tr>
@@ -500,32 +499,32 @@ distribution with std <cite>error_std</cite>, and creates an outcome y.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>N</strong> – int, optional
+<li><strong>N</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
 Number of observations.</li>
-<li><strong>n_features</strong> – int, optional
+<li><strong>n_features</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
 Number of features.</li>
-<li><strong>beta</strong> – np.array, optional
+<li><strong>beta</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[List[float]]</span></code>) -
 Array of beta coefficients to multiply by X to get y.</li>
-<li><strong>error_std</strong> – float, optional
+<li><strong>error_std</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[float]</span></code>) -
 Standard deviation (scale) of distribution from which errors are drawn.</li>
-<li><strong>tau</strong> – np.array or float, optional
+<li><strong>tau</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[List[float],</span> <span class="pre">float]</span></code>) -
 Array of coefficients to multiply by X to get y if treated.
 More/larger negative values will simulate more “sleeping dogs”
 If float scalar is input, effect of features is not considered.</li>
-<li><strong>tau_std</strong> – float, optional
-When not None, draws tau from a normal distribution centered around tau
+<li><strong>tau_std</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[float]</span></code>) -
+When not <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, draws tau from a normal distribution centered around tau
 with standard deviation tau_std rather than just using a constant value
 of tau.</li>
-<li><strong>discrete_outcome</strong> – boolean, optional
+<li><strong>discrete_outcome</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[bool]</span></code>) -
 If True, outcomes are 0 or 1; otherwise continuous.</li>
-<li><strong>seed</strong> – int, optional
+<li><strong>seed</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
 Random seed fed to np.random.seed to allow for deterministic behavior.</li>
-<li><strong>feature_effect</strong> – float, optional
+<li><strong>feature_effect</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[float]</span></code>) -
 Effect of beta on outcome if treated.</li>
-<li><strong>propensity_coef</strong> – np.array, optional
+<li><strong>propensity_coef</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[List[float]]</span></code>) -
 Array of coefficients to multiply by X to get propensity log-odds to be treated.</li>
-<li><strong>index_name</strong> – str, optional
-Index name in the output DataFrame. If None (default), index name will not be set.</li>
+<li><strong>index_name</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
+Index name in the output DataFrame. If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), index name will not be set.</li>
 </ul>
 </td>
 </tr>
