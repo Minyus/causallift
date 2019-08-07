@@ -276,6 +276,16 @@ If <code class="xref py py-obj docutils literal notranslate"><span class="pre">N
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>Alternatively, estimator model object is acceptable.
+The object must have the following methods compatible with
+scikit-learn estimator interface.</p>
+<blockquote>
+<div><ul>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></li>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">predict()</span></code></li>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">predict_proba()</span></code></li>
+</ul>
+</div></blockquote>
 </li>
 <li><strong>enable_ipw</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[bool]</span></code>) -
 Enable Inverse Probability Weighting based on the estimated propensity score.

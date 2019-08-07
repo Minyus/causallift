@@ -50,6 +50,6 @@ def parameters_():
         index_name = 'index',
         partition_name = 'partition',
         runner = 'SequentialRunner', # 'ParallelRunner' # None
-        conditionally_skip = True,
+        conditionally_skip = False,
     )
     return args

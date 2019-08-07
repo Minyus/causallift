@@ -88,6 +88,14 @@ class CausalLift():
                 'missing':[None],
                 }
 
+            Alternatively, estimator model object is acceptable.
+            The object must have the following methods compatible with
+            scikit-learn estimator interface.
+
+                * :func:`fit`
+                * :func:`predict`
+                * :func:`predict_proba`
+
         enable_ipw:
             (:obj:`Optional[bool]`) -
             Enable Inverse Probability Weighting based on the estimated propensity score.
