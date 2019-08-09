@@ -118,7 +118,7 @@ def skippable(catalog: DataCatalog) -> bool:
 
 
 class ProjectContext1(ProjectContext):
-    r"Allow to specify runner by string."
+    r"""Allow to specify runner by string."""
 
     def run(
         self, runner: Union[AbstractRunner, str] = None, **kwargs
@@ -132,7 +132,7 @@ class ProjectContext1(ProjectContext):
 
 
 class ProjectContext2(ProjectContext1):
-    r"Keep the output datasets in the catalog."
+    r"""Keep the output datasets in the catalog."""
 
     def run(self, **kwargs) -> Dict[str, Any]:
         d = super().run(**kwargs)
@@ -141,7 +141,7 @@ class ProjectContext2(ProjectContext1):
 
 
 class ProjectContext3(ProjectContext2):
-    r"Allow to overwrite the default logging config and remove yaml file dependency."
+    r"""Allow to overwrite the default logging config and remove yaml file dependency."""
 
     def __init__(self, logging_config: Dict = None):
         self._project_path = Path().cwd().resolve()  # No longer used.
@@ -151,7 +151,7 @@ class ProjectContext3(ProjectContext2):
 
 
 class FlexibleProjectContext(ProjectContext3):
-    r"Overwrite the default runner and only_missing option for the run."
+    r"""Overwrite the default runner and only_missing option for the run."""
 
     def __init__(self, runner: str = None, only_missing: bool = False, **kwargs):
         super().__init__(**kwargs)
