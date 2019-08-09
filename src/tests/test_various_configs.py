@@ -8,9 +8,6 @@ from causallift import CausalLift, generate_data
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 
-
-
-
 def test_enable_ipw_without_known_propensity():
 
     seed = 0

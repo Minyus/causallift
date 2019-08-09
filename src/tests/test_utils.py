@@ -12,7 +12,6 @@ from causallift import utils
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 
-
 class UtilsTest(unittest.TestCase):
     def setUp(self):
         pass
