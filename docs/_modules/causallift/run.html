@@ -193,29 +193,22 @@
 
 <span class="sd">&quot;&quot;&quot;Application entry point.&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">logging.config</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 
 <span class="kn">from</span> <span class="nn">kedro.cli.utils</span> <span class="k">import</span> <span class="n">KedroCliError</span>
 <span class="kn">from</span> <span class="nn">kedro.config</span> <span class="k">import</span> <span class="n">ConfigLoader</span><span class="p">,</span> <span class="n">MissingConfigException</span>
 <span class="kn">from</span> <span class="nn">kedro.context</span> <span class="k">import</span> <span class="n">KedroContext</span><span class="p">,</span> <span class="n">KedroContextError</span>
 <span class="kn">from</span> <span class="nn">kedro.io</span> <span class="k">import</span> <span class="n">DataCatalog</span>
-
 <span class="kn">from</span> <span class="nn">kedro.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
-<span class="kn">from</span> <span class="nn">kedro.runner</span> <span class="k">import</span> <span class="n">AbstractRunner</span>
-<span class="kn">from</span> <span class="nn">kedro.runner</span> <span class="k">import</span> <span class="n">SequentialRunner</span>
-<span class="kn">from</span> <span class="nn">kedro.runner</span> <span class="k">import</span> <span class="n">ParallelRunner</span>
-
+<span class="kn">from</span> <span class="nn">kedro.runner</span> <span class="k">import</span> <span class="n">AbstractRunner</span><span class="p">,</span> <span class="n">ParallelRunner</span><span class="p">,</span> <span class="n">SequentialRunner</span>
 <span class="kn">from</span> <span class="nn">kedro.utils</span> <span class="k">import</span> <span class="n">load_obj</span>
-<span class="kn">from</span> <span class="nn">kedro.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
 
 <span class="kn">from</span> <span class="nn">causallift.pipeline</span> <span class="k">import</span> <span class="n">create_pipeline</span>
 
-<span class="kn">from</span> <span class="nn">.default.logging</span> <span class="k">import</span> <span class="o">*</span>
-
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
@@ -282,24 +275,28 @@
         <span class="k">return</span> <span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="skippable"><a class="viewcode-back" href="../../causallift.html#causallift.run.skippable">[docs]</a><span class="k">def</span> <span class="nf">skippable</span><span class="p">(</span>
-        <span class="n">catalog</span><span class="p">:</span> <span class="n">DataCatalog</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="skippable"><a class="viewcode-back" href="../../causallift.html#causallift.run.skippable">[docs]</a><span class="k">def</span> <span class="nf">skippable</span><span class="p">(</span><span class="n">catalog</span><span class="p">:</span> <span class="n">DataCatalog</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="n">missing</span> <span class="o">=</span> <span class="p">{</span><span class="n">ds</span> <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">catalog</span><span class="o">.</span><span class="n">list</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">catalog</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ds</span><span class="p">)}</span>
     <span class="k">return</span> <span class="ow">not</span> <span class="n">missing</span></div>
 
 
 <div class="viewcode-block" id="ProjectContext1"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext1">[docs]</a><span class="k">class</span> <span class="nc">ProjectContext1</span><span class="p">(</span><span class="n">ProjectContext</span><span class="p">):</span>
-    <span class="sa">r</span><span class="s2">&quot;Allow to specify runner by string.&quot;</span>
-<div class="viewcode-block" id="ProjectContext1.run"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext1.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runner</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AbstractRunner</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Allow to specify runner by string.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ProjectContext1.run"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext1.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">runner</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AbstractRunner</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">assert</span> <span class="n">runner</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ParallelRunner&quot;</span><span class="p">,</span> <span class="s2">&quot;SequentialRunner&quot;</span><span class="p">}</span>
-            <span class="n">runner</span> <span class="o">=</span> <span class="n">ParallelRunner</span><span class="p">()</span> <span class="k">if</span> <span class="n">runner</span> <span class="o">==</span> <span class="s2">&quot;ParallelRunner&quot;</span> <span class="k">else</span> <span class="n">SequentialRunner</span><span class="p">()</span>
+            <span class="n">runner</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">ParallelRunner</span><span class="p">()</span> <span class="k">if</span> <span class="n">runner</span> <span class="o">==</span> <span class="s2">&quot;ParallelRunner&quot;</span> <span class="k">else</span> <span class="n">SequentialRunner</span><span class="p">()</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">runner</span><span class="o">=</span><span class="n">runner</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="ProjectContext2"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext2">[docs]</a><span class="k">class</span> <span class="nc">ProjectContext2</span><span class="p">(</span><span class="n">ProjectContext1</span><span class="p">):</span>
-    <span class="sa">r</span><span class="s2">&quot;Keep the output datasets in the catalog.&quot;</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Keep the output datasets in the catalog.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="ProjectContext2.run"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext2.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="n">d</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">add_feed_dict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -307,20 +304,23 @@
 
 
 <div class="viewcode-block" id="ProjectContext3"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext3">[docs]</a><span class="k">class</span> <span class="nc">ProjectContext3</span><span class="p">(</span><span class="n">ProjectContext2</span><span class="p">):</span>
-    <span class="sa">r</span><span class="s2">&quot;Allow to overwrite the default logging config and remove yaml file dependency.&quot;</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Allow to overwrite the default logging config and remove yaml file dependency.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="ProjectContext3.__init__"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext3.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logging_config</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_project_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">()</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span> <span class="c1"># No longer used.</span>
-        <span class="n">logging_config</span> <span class="o">=</span> <span class="n">logging_config</span> <span class="ow">or</span> <span class="n">conf_logging_</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_project_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">()</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>  <span class="c1"># No longer used.</span>
+        <span class="n">logging_config</span> <span class="o">=</span> <span class="n">logging_config</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">logging_config</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_catalog</span> <span class="o">=</span> <span class="n">DataCatalog</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="FlexibleProjectContext"><a class="viewcode-back" href="../../causallift.html#causallift.run.FlexibleProjectContext">[docs]</a><span class="k">class</span> <span class="nc">FlexibleProjectContext</span><span class="p">(</span><span class="n">ProjectContext3</span><span class="p">):</span>
-    <span class="sa">r</span><span class="s2">&quot;Overwrite the default runner and only_missing option for the run.&quot;</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Overwrite the default runner and only_missing option for the run.&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="FlexibleProjectContext.__init__"><a class="viewcode-back" href="../../causallift.html#causallift.run.FlexibleProjectContext.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">only_missing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span> <span class="o">=</span> <span class="n">runner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_only_missing</span> <span class="o">=</span> <span class="n">only_missing</span></div>
+
 <div class="viewcode-block" id="FlexibleProjectContext.run"><a class="viewcode-back" href="../../causallift.html#causallift.run.FlexibleProjectContext.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">tags</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -331,18 +331,15 @@
         <span class="n">runner</span> <span class="o">=</span> <span class="n">runner</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span>
         <span class="n">only_missing</span> <span class="o">=</span> <span class="n">only_missing</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_only_missing</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s1">&#39;Run pipeline (&#39;</span> <span class="o">+</span>
-            <span class="p">(</span><span class="s1">&#39;nodes: </span><span class="si">{}</span><span class="s1">, &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node_names</span><span class="p">)</span> <span class="k">if</span> <span class="n">node_names</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span>
-            <span class="p">(</span><span class="s1">&#39;tags: </span><span class="si">{}</span><span class="s1">, &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="k">if</span> <span class="n">tags</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span>
-            <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">, &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">runner</span><span class="p">)</span> <span class="o">+</span>
-            <span class="s1">&#39;only_missing: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">only_missing</span><span class="p">)</span> <span class="o">+</span>
-            <span class="s1">&#39;)&#39;</span>
+            <span class="s2">&quot;Run pipeline (&quot;</span>
+            <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;nodes: </span><span class="si">{}</span><span class="s2">, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node_names</span><span class="p">)</span> <span class="k">if</span> <span class="n">node_names</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;tags: </span><span class="si">{}</span><span class="s2">, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="k">if</span> <span class="n">tags</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">runner</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;only_missing: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">only_missing</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span>
-            <span class="n">runner</span><span class="o">=</span><span class="n">runner</span><span class="p">,</span>
-            <span class="n">node_names</span><span class="o">=</span><span class="n">node_names</span><span class="p">,</span>
-            <span class="n">only_missing</span><span class="o">=</span><span class="n">only_missing</span><span class="p">,</span>
+            <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span> <span class="n">runner</span><span class="o">=</span><span class="n">runner</span><span class="p">,</span> <span class="n">node_names</span><span class="o">=</span><span class="n">node_names</span><span class="p">,</span> <span class="n">only_missing</span><span class="o">=</span><span class="n">only_missing</span>
         <span class="p">)</span></div></div>
 
 
@@ -366,7 +363,7 @@
         <span class="c1"># from a different location.</span>
         <span class="n">env</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span>
 
-    <span class="k">return</span> <span class="n">ProjectContext</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="n">env</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ProjectContext</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="n">env</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../causallift.html#causallift.run.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span>

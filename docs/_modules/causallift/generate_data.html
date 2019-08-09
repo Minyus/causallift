@@ -164,15 +164,20 @@
             
   <h1>Source code for causallift.generate_data</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">The original code is at https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py</span>
+<span class="sd">The original code is at</span>
+<span class="sd">https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py</span>
 <span class="sd">licensed under the BSD 2-Clause &quot;Simplified&quot; License</span>
 <span class="sd">Copyright 2018, Wayfair, Inc.</span>
 
-<span class="sd">This code is an enhanced (backward-compatible) version that can simulate observational dataset including &quot;sleeping dogs.&quot; </span>
+<span class="sd">This code is an enhanced (backward-compatible) version that can simulate</span>
+<span class="sd">observational dataset including &quot;sleeping dogs.&quot;</span>
 
-<span class="sd">&quot;Sleeping dogs&quot; (people who will &quot;buy&quot; if not treated but will not &quot;buy&quot; if treated) can be simulated by negative values in tau parameter.</span>
-<span class="sd">Observational data which includes confounding can be simulated by non-zero values in propensity_coef parameter. </span>
-<span class="sd">A/B Test (RCT) with a 50:50 split can be simulated by all-zeros values in propensity_coef parameter (default).</span>
+<span class="sd">&quot;Sleeping dogs&quot; (people who will &quot;buy&quot; if not treated but will not &quot;buy&quot;</span>
+<span class="sd">if treated) can be simulated by negative values in tau parameter.</span>
+<span class="sd">Observational data which includes confounding can be simulated by non-zero</span>
+<span class="sd">values in propensity_coef parameter.</span>
+<span class="sd">A/B Test (RCT) with a 50:50 split can be simulated by all-zeros values in</span>
+<span class="sd">propensity_coef parameter (default).</span>
 <span class="sd">The first element in each list parameter specifies the intercept.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -180,17 +185,19 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 
-<div class="viewcode-block" id="generate_data"><a class="viewcode-back" href="../../causallift.html#causallift.generate_data.generate_data">[docs]</a><span class="k">def</span> <span class="nf">generate_data</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-                  <span class="n">n_features</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                  <span class="n">beta</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">],</span>
-                  <span class="n">error_std</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                  <span class="n">tau</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                  <span class="n">tau_std</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                  <span class="n">discrete_outcome</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                  <span class="n">seed</span><span class="o">=</span><span class="mi">2701</span><span class="p">,</span>
-                  <span class="n">feature_effect</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                  <span class="n">propensity_coef</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                  <span class="n">index_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="generate_data"><a class="viewcode-back" href="../../causallift.html#causallift.generate_data.generate_data">[docs]</a><span class="k">def</span> <span class="nf">generate_data</span><span class="p">(</span>
+    <span class="n">N</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">n_features</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">beta</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">],</span>
+    <span class="n">error_std</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">tau</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">tau_std</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">discrete_outcome</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">2701</span><span class="p">,</span>
+    <span class="n">feature_effect</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">propensity_coef</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="n">index_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    generate_data(N=1000, n_features=3, beta=[1,-2,3,-0.8], error_std=0.5, tau=3, discrete_outcome=False)</span>
 <span class="sd">    Generates random data with a ground truth data generating process.</span>
@@ -242,15 +249,15 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Check the length of input lists</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">propensity_coef</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;len(propensity_coef) != n_features + 1&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;len(propensity_coef) != n_features + 1&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;len(beta) != n_features + 1&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;len(beta) != n_features + 1&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
         <span class="n">tau_</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">tau_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tau</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">)):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;len(tau) != n_features + 1&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;len(tau) != n_features + 1&quot;</span><span class="p">)</span>
         <span class="n">tau_</span> <span class="o">=</span> <span class="n">tau</span>
 
     <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
@@ -270,8 +277,11 @@
         <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Treatment heterogeneity.</span>
-    <span class="n">tau_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">tau_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="n">tau_std</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> \
-              <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">tau_</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">feature_effect</span>
+    <span class="n">tau_vec</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">tau_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="n">tau_std</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">tau_</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">feature_effect</span>
+    <span class="p">)</span>
 
     <span class="c1"># Calculate outcome.</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">+</span> <span class="n">error</span> <span class="o">+</span> <span class="n">treatment</span> <span class="o">*</span> <span class="n">tau_vec</span>
@@ -279,11 +289,13 @@
     <span class="k">if</span> <span class="n">discrete_outcome</span><span class="p">:</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span>
 
-    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Feature_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_features</span><span class="p">)]</span>
-    <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;Treatment&#39;</span><span class="p">,</span> <span class="s1">&#39;Outcome&#39;</span><span class="p">])</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Feature_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_features</span><span class="p">)]</span>
+    <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;Treatment&quot;</span><span class="p">,</span> <span class="s2">&quot;Outcome&quot;</span><span class="p">])</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span> \
-        <span class="n">X</span><span class="p">,</span> <span class="n">treatment</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">treatment</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">columns</span><span class="o">=</span><span class="n">names</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">index_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">index_name</span>

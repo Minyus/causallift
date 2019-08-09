@@ -163,36 +163,37 @@
            <div itemprop="articleBody">
             
   <h1>Source code for causallift.nodes.estimate_propensity</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="o">*</span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">linear_model</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="o">*</span>  <span class="c1"># NOQA</span>
+
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="k">except</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[Warning] Could not import matplotlib.pyplot. &#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>  <span class="c1"># NOQA</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Warning] Could not import matplotlib.pyplot. &quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="fit_propensity"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.estimate_propensity.fit_propensity">[docs]</a><span class="k">def</span> <span class="nf">fit_propensity</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
 
-    <span class="n">X_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
-    <span class="n">y_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span><span class="p">]</span>
-    <span class="n">X_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
-    <span class="n">y_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span><span class="p">]</span>
+    <span class="n">X_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
+    <span class="n">y_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span><span class="p">]</span>
+    <span class="c1"># X_test = df.xs(&quot;test&quot;)[args.cols_features]</span>
+    <span class="c1"># y_test = df.xs(&quot;test&quot;)[args.col_treatment]</span>
 
-    <span class="c1">## Transfrom by StandardScaler</span>
+    <span class="c1"># &quot;&quot;&quot; Transfrom by StandardScaler &quot;&quot;&quot;</span>
     <span class="c1"># from sklearn import preprocessing</span>
     <span class="c1"># scaler = preprocessing.StandardScaler().fit(X_train)</span>
-    <span class="c1">##X_train = scaler.transform(X_train)</span>
+    <span class="c1"># X_train = scaler.transform(X_train)</span>
     <span class="c1"># X_test = scaler.transform(X_test)</span>
 
-    <span class="c1">## Transform by PCA</span>
+    <span class="c1"># &quot;&quot;&quot; Transform by PCA &quot;&quot;&quot;</span>
     <span class="c1"># from sklearn.decomposition import PCA</span>
     <span class="c1"># pca = PCA(0.99)</span>
     <span class="c1"># pca.fit(X_train)</span>
@@ -200,25 +201,39 @@
     <span class="c1"># X_test = pca.transform(X_test)</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;## Propensity score is estimated by logistic regression.&#39;</span><span class="p">)</span>
-    <span class="n">lr_</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
-                                          <span class="n">verbose</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;## Propensity score is estimated by logistic regression.&quot;</span><span class="p">)</span>
+    <span class="n">lr_</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">verbose</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;## Logistic regression model was initialized.&#39;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;## Logistic regression model was initialized.&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;### Parameters for grid search of Logistic regression:</span><span class="se">\n</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">propensity_model_params</span><span class="p">))</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">lr_</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">propensity_model_params</span><span class="p">,</span>
-                         <span class="n">cv</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">cv</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;### Parameters for grid search of Logistic regression:</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">propensity_model_params</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span>
+        <span class="n">lr_</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">propensity_model_params</span><span class="p">,</span>
+        <span class="n">cv</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">cv</span><span class="p">,</span>
+        <span class="n">return_train_score</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;### Best parameter for logistic regression:</span><span class="se">\n</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">best_params_</span><span class="p">))</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;### Best parameter for logistic regression:</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">## Coefficients of logistic regression:&#39;</span><span class="p">)</span>
-        <span class="n">coef_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">best_estimator_</span><span class="o">.</span><span class="n">coef_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
-                               <span class="n">columns</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">,</span>
-                               <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;coefficient&#39;</span><span class="p">])</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">## Coefficients of logistic regression:&quot;</span><span class="p">)</span>
+        <span class="n">coef_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">best_estimator_</span><span class="o">.</span><span class="n">coef_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">columns</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;coefficient&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
         <span class="n">display</span><span class="p">(</span><span class="n">coef_df</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">model</span></div>
@@ -226,39 +241,41 @@
 
 <div class="viewcode-block" id="estimate_propensity"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.estimate_propensity.estimate_propensity">[docs]</a><span class="k">def</span> <span class="nf">estimate_propensity</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
 
-    <span class="n">X_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
-    <span class="n">y_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span><span class="p">]</span>
-    <span class="n">X_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
-    <span class="n">y_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span><span class="p">]</span>
+    <span class="n">X_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
+    <span class="n">y_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span><span class="p">]</span>
+    <span class="n">X_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
+    <span class="n">y_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span><span class="p">]</span>
 
     <span class="n">proba_train</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">proba_test</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### Histogram of propensity score for train and test data:&#39;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Histogram of propensity score for train and test data:&quot;</span><span class="p">)</span>
         <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">proba_train</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span>
         <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">proba_test</span><span class="p">)</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;[Warning] Could not show the histogram.&#39;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>  <span class="c1"># NOQA</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;[Warning] Could not show the histogram.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Optional evaluation and report of logistic regression</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
         <span class="n">y_pred_train</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
         <span class="n">y_pred_test</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### Score Table for logistic regression to calculate propensity score:&#39;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Score Table for logistic regression to calculate propensity score:&quot;</span>
+        <span class="p">)</span>
         <span class="n">display</span><span class="p">(</span><span class="n">score_df</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_train</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">))</span>
 
-    <span class="c1"># if args.verbose &gt;= 3:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### Confusion Matrix for Train:&#39;</span><span class="p">)</span>
+        <span class="c1"># if args.verbose &gt;= 3:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Confusion Matrix for Train:&quot;</span><span class="p">)</span>
         <span class="n">display</span><span class="p">(</span><span class="n">conf_mat_df</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_pred_train</span><span class="p">))</span>
-    <span class="c1"># if args.verbose &gt;= 3:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### Confusion Matrix for Test:&#39;</span><span class="p">)</span>
+        <span class="c1"># if args.verbose &gt;= 3:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Confusion Matrix for Test:&quot;</span><span class="p">)</span>
         <span class="n">display</span><span class="p">(</span><span class="n">conf_mat_df</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">))</span>
 
-    <span class="n">train_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)</span>
-    <span class="n">test_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+    <span class="n">train_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+    <span class="n">test_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
 
     <span class="n">train_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span><span class="p">]</span> <span class="o">=</span> <span class="n">proba_train</span>
     <span class="n">test_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span><span class="p">]</span> <span class="o">=</span> <span class="n">proba_test</span>
@@ -269,17 +286,22 @@
 
 
 <div class="viewcode-block" id="schedule_propensity_scoring"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.estimate_propensity.schedule_propensity_scoring">[docs]</a><span class="k">def</span> <span class="nf">schedule_propensity_scoring</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
-    <span class="n">args</span><span class="o">.</span><span class="n">need_propensity_scoring</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">enable_ipw</span> <span class="ow">and</span> <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="n">args</span><span class="o">.</span><span class="n">need_propensity_scoring</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">enable_ipw</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">need_propensity_scoring</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">enable_ipw</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Skip estimation of propensity score because &#39;</span>
-                         <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> column found in the data frame. &#39;</span><span class="o">.</span>
-                         <span class="nb">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span><span class="p">))</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Skip estimation of propensity score because &quot;</span>
+                    <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> column found in the data frame. &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span><span class="p">)</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Skip estimation of propensity score because &#39;</span>
-                         <span class="s1">&#39;&quot;enable_ipw&quot; is set to False.&#39;</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Skip estimation of propensity score because &quot;</span>
+                    <span class="s1">&#39;&quot;enable_ipw&quot; is set to False.&#39;</span>
+                <span class="p">)</span>
     <span class="k">return</span> <span class="n">args</span></div>
 </pre></div>
 

@@ -209,7 +209,7 @@
 <span id="causallift-causal-lift-module"></span><h2>causallift.causal_lift module<a class="headerlink" href="#module-causallift.causal_lift" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="causallift.causal_lift.CausalLift">
-<em class="property">class </em><code class="descclassname">causallift.causal_lift.</code><code class="descname">CausalLift</code><span class="sig-paren">(</span><em>train_df=None</em>, <em>test_df=None</em>, <em>dataset_catalog={}</em>, <em>logging_config={}</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">causallift.causal_lift.</code><code class="descname">CausalLift</code><span class="sig-paren">(</span><em>train_df=None, test_df=None, cols_features=None, col_treatment='Treatment', col_outcome='Outcome', col_propensity='Propensity', col_cate='CATE', col_recommendation='Recommendation', min_propensity=0.01, max_propensity=0.99, random_state=0, verbose=2, uplift_model_params={'base_score': [0.5], 'booster': ['gbtree'], 'colsample_bylevel': [1], 'colsample_bytree': [1], 'gamma': [0], 'learning_rate': [0.1], 'max_delta_step': [0], 'max_depth': [3], 'min_child_weight': [1], 'missing': [None], 'n_estimators': [100], 'n_jobs': [-1], 'nthread': [None], 'objective': ['binary:logistic'], 'reg_alpha': [0], 'reg_lambda': [1], 'scale_pos_weight': [1], 'subsample': [1], 'verbose': [0]}, enable_ipw=True, propensity_model_params={'C': [0.1, 1, 10], 'class_weight': [None], 'dual': [False], 'fit_intercept': [True], 'intercept_scaling': [1], 'max_iter': [100], 'multi_class': ['ovr'], 'n_jobs': [1], 'penalty': ['l1', 'l2'], 'solver': ['liblinear'], 'tol': [0.0001], 'warm_start': [False]}, cv=3, index_name='index', partition_name='partition', runner='SequentialRunner', conditionally_skip=False, dataset_catalog={'df_03': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'estimated_effect_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'models_dict': &lt;kedro.io.pickle_local.PickleLocalDataSet object&gt;, 'propensity_model': &lt;kedro.io.pickle_local.PickleLocalDataSet object&gt;, 'treated__sim_eval_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'untreated__sim_eval_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;}, logging_config={'disable_existing_loggers': False, 'formatters': {'json_formatter': {'class': 'pythonjsonlogger.jsonlogger.JsonFormatter', 'format': '[%(asctime)s|%(name)s|%(funcName)s|%(levelname)s] %(message)s'}, 'simple': {'format': '[%(asctime)s|%(name)s|%(levelname)s] %(message)s'}}, 'handlers': {'console': {'class': 'logging.StreamHandler', 'formatter': 'simple', 'level': 'INFO', 'stream': 'ext://sys.stdout'}, 'error_file_handler': {'backupCount': 20, 'class': 'logging.handlers.RotatingFileHandler', 'delay': True, 'encoding': 'utf8', 'filename': './errors.log', 'formatter': 'simple', 'level': 'ERROR', 'maxBytes': 10485760}, 'info_file_handler': {'backupCount': 20, 'class': 'logging.handlers.RotatingFileHandler', 'delay': True, 'encoding': 'utf8', 'filename': './info.log', 'formatter': 'simple', 'level': 'INFO', 'maxBytes': 10485760}}, 'loggers': {'anyconfig': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'WARNING', 'propagate': False}, 'causallift': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}, 'kedro.io': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'WARNING', 'propagate': False}, 'kedro.pipeline': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}, 'kedro.runner': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}}, 'root': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO'}, 'version': 1}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Set up datasets for uplift modeling.
 Optionally, propensity scores are estimated based on logistic regression.</p>
@@ -218,30 +218,20 @@ Optionally, propensity scores are estimated based on logistic regression.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>train_df</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]) – Pandas Data Frame containing samples used for training</li>
-<li><strong>test_df</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]) – Pandas Data Frame containing samples used for testing</li>
-<li><strong>cols_features</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[List[str]]</span></code>) -
-List of column names used as features.
+<li><strong>train_df</strong> – Pandas Data Frame containing samples used for training</li>
+<li><strong>test_df</strong> – Pandas Data Frame containing samples used for testing</li>
+<li><strong>cols_features</strong> – List of column names used as features.
 If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), all the columns except for outcome,
 propensity, CATE, and recommendation.</li>
-<li><strong>col_treatment</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
-Name of treatment column. ‘Treatment’ in default.</li>
-<li><strong>col_outcome</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
-Name of outcome column. ‘Outcome’ in default.</li>
-<li><strong>col_propensity</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
-Name of propensity column. ‘Propensity’ in default.</li>
-<li><strong>col_cate</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
-Name of CATE (Conditional Average Treatment Effect) column. ‘CATE’ in default.</li>
-<li><strong>col_recommendation</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
-Name of recommendation column. ‘Recommendation’ in default.</li>
-<li><strong>min_propensity</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[float]</span></code>) -
-Minimum propensity score. 0.01 in default.</li>
-<li><strong>max_propensity</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[float]</span></code>) -
-Maximum propensity score. 0.99 in defualt.</li>
-<li><strong>random_state</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
-The seed used by the random number generator. 0 in default.</li>
-<li><strong>verbose</strong> – <p>(<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
-How much info to show. Valid values are:</p>
+<li><strong>col_treatment</strong> – Name of treatment column. ‘Treatment’ in default.</li>
+<li><strong>col_outcome</strong> – Name of outcome column. ‘Outcome’ in default.</li>
+<li><strong>col_propensity</strong> – Name of propensity column. ‘Propensity’ in default.</li>
+<li><strong>col_cate</strong> – Name of CATE (Conditional Average Treatment Effect) column. ‘CATE’ in default.</li>
+<li><strong>col_recommendation</strong> – Name of recommendation column. ‘Recommendation’ in default.</li>
+<li><strong>min_propensity</strong> – Minimum propensity score. 0.01 in default.</li>
+<li><strong>max_propensity</strong> – Maximum propensity score. 0.99 in defualt.</li>
+<li><strong>random_state</strong> – The seed used by the random number generator. 0 in default.</li>
+<li><strong>verbose</strong> – <p>How much info to show. Valid values are:</p>
 <ul>
 <li><code class="xref py py-obj docutils literal notranslate"><span class="pre">0</span></code> to show nothing,</li>
 <li><code class="xref py py-obj docutils literal notranslate"><span class="pre">1</span></code> to show only warning,</li>
@@ -249,8 +239,7 @@ How much info to show. Valid values are:</p>
 <li><code class="xref py py-obj docutils literal notranslate"><span class="pre">3</span></code> to show more info.</li>
 </ul>
 </li>
-<li><strong>uplift_model_params</strong> – <p>(<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[dict,</span> <span class="pre">sklearn.base.BaseEstimator]</span></code>) -
-Parameters used to fit 2 XGBoost classifier models.
+<li><strong>uplift_model_params</strong> – <p>Parameters used to fit 2 XGBoost classifier models.
 Refer to <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/parameter.html">https://xgboost.readthedocs.io/en/latest/parameter.html</a>
 If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
@@ -287,11 +276,9 @@ scikit-learn estimator interface.</p>
 </ul>
 </div></blockquote>
 </li>
-<li><strong>enable_ipw</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[bool]</span></code>) -
-Enable Inverse Probability Weighting based on the estimated propensity score.
+<li><strong>enable_ipw</strong> – Enable Inverse Probability Weighting based on the estimated propensity score.
 True in default.</li>
-<li><strong>propensity_model_params</strong> – <p>(<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[dict]</span></code>) -
-Parameters used to fit logistic regression model to estimate propensity score.
+<li><strong>propensity_model_params</strong> – <p>Parameters used to fit logistic regression model to estimate propensity score.
 Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</a>
 If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
@@ -311,25 +298,19 @@ If <code class="xref py py-obj docutils literal notranslate"><span class="pre">N
 </pre></div>
 </div>
 </li>
-<li><strong>cv</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
-Cross-Validation for the Grid Search. <code class="xref py py-obj docutils literal notranslate"><span class="pre">3</span></code> in default.
+<li><strong>cv</strong> – Cross-Validation for the Grid Search. <code class="xref py py-obj docutils literal notranslate"><span class="pre">3</span></code> in default.
 Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</a></li>
-<li><strong>index_name</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
-Index name of the pandas data frame after resetting the index. ‘index’ in default.
+<li><strong>index_name</strong> – Index name of the pandas data frame after resetting the index. ‘index’ in default.
 If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, the index will not be reset.</li>
-<li><strong>partition_name</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
-Additional index name to indicate the partition, train or test. ‘partition’ in default.</li>
-<li><strong>runner</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
-If set to ‘SequentialRunner’ (default) or ‘ParallelRunner’, the pipeline is run by Kedro
+<li><strong>partition_name</strong> – Additional index name to indicate the partition, train or test. ‘partition’ in default.</li>
+<li><strong>runner</strong> – If set to ‘SequentialRunner’ (default) or ‘ParallelRunner’, the pipeline is run by Kedro
 sequentially or in parallel, respectively.
 If set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> , the pipeline is run by native Python.
 Refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners">https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners</a></li>
-<li><strong>conditionally_skip</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[bool]</span></code>) -
-<em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em>
+<li><strong>conditionally_skip</strong> – <em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em>
 Skip running the pipeline if the output files already exist.
 True in default.</li>
-<li><strong>dataset_catalog</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDataSet</span></code>]) – <p>(<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[dict]</span></code>) -
-<em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em>
+<li><strong>dataset_catalog</strong> – <p><em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em>
 Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
 To find available file formats, refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets">https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets</a>
 In default:</p>
@@ -367,8 +348,7 @@ In default:</p>
 </pre></div>
 </div>
 </li>
-<li><strong>logging_config</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]) – <p>(<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[dict]</span></code>) -
-Specify logging configuration.
+<li><strong>logging_config</strong> – <p>Specify logging configuration.
 Refer to <a class="reference external" href="https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema">https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema</a>
 In default:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;disable_existing_loggers&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
@@ -451,7 +431,7 @@ In default:</p>
 </table>
 <dl class="method">
 <dt id="causallift.causal_lift.CausalLift.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>train_df=None</em>, <em>test_df=None</em>, <em>dataset_catalog={}</em>, <em>logging_config={}</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>train_df=None, test_df=None, cols_features=None, col_treatment='Treatment', col_outcome='Outcome', col_propensity='Propensity', col_cate='CATE', col_recommendation='Recommendation', min_propensity=0.01, max_propensity=0.99, random_state=0, verbose=2, uplift_model_params={'base_score': [0.5], 'booster': ['gbtree'], 'colsample_bylevel': [1], 'colsample_bytree': [1], 'gamma': [0], 'learning_rate': [0.1], 'max_delta_step': [0], 'max_depth': [3], 'min_child_weight': [1], 'missing': [None], 'n_estimators': [100], 'n_jobs': [-1], 'nthread': [None], 'objective': ['binary:logistic'], 'reg_alpha': [0], 'reg_lambda': [1], 'scale_pos_weight': [1], 'subsample': [1], 'verbose': [0]}, enable_ipw=True, propensity_model_params={'C': [0.1, 1, 10], 'class_weight': [None], 'dual': [False], 'fit_intercept': [True], 'intercept_scaling': [1], 'max_iter': [100], 'multi_class': ['ovr'], 'n_jobs': [1], 'penalty': ['l1', 'l2'], 'solver': ['liblinear'], 'tol': [0.0001], 'warm_start': [False]}, cv=3, index_name='index', partition_name='partition', runner='SequentialRunner', conditionally_skip=False, dataset_catalog={'df_03': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'estimated_effect_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'models_dict': &lt;kedro.io.pickle_local.PickleLocalDataSet object&gt;, 'propensity_model': &lt;kedro.io.pickle_local.PickleLocalDataSet object&gt;, 'treated__sim_eval_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'untreated__sim_eval_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;}, logging_config={'disable_existing_loggers': False, 'formatters': {'json_formatter': {'class': 'pythonjsonlogger.jsonlogger.JsonFormatter', 'format': '[%(asctime)s|%(name)s|%(funcName)s|%(levelname)s] %(message)s'}, 'simple': {'format': '[%(asctime)s|%(name)s|%(levelname)s] %(message)s'}}, 'handlers': {'console': {'class': 'logging.StreamHandler', 'formatter': 'simple', 'level': 'INFO', 'stream': 'ext://sys.stdout'}, 'error_file_handler': {'backupCount': 20, 'class': 'logging.handlers.RotatingFileHandler', 'delay': True, 'encoding': 'utf8', 'filename': './errors.log', 'formatter': 'simple', 'level': 'ERROR', 'maxBytes': 10485760}, 'info_file_handler': {'backupCount': 20, 'class': 'logging.handlers.RotatingFileHandler', 'delay': True, 'encoding': 'utf8', 'filename': './info.log', 'formatter': 'simple', 'level': 'INFO', 'maxBytes': 10485760}}, 'loggers': {'anyconfig': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'WARNING', 'propagate': False}, 'causallift': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}, 'kedro.io': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'WARNING', 'propagate': False}, 'kedro.pipeline': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}, 'kedro.runner': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}}, 'root': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO'}, 'version': 1}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -470,13 +450,13 @@ In default:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>cate_estimated</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code>]) – Pandas series containing the CATE.
+<li><strong>cate_estimated</strong> – Pandas series containing the CATE.
 If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the ones calculated by estimate_cate_by_2_models method.</li>
-<li><strong>treatment_fraction_train</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The fraction of treatment in train dataset.
+<li><strong>treatment_fraction_train</strong> – The fraction of treatment in train dataset.
 If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the ones calculated by estimate_cate_by_2_models method.</li>
-<li><strong>treatment_fraction_test</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The fraction of treatment in test dataset.
+<li><strong>treatment_fraction_test</strong> – The fraction of treatment in test dataset.
 If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the ones calculated by estimate_cate_by_2_models method.</li>
-<li><strong>verbose</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – How much info to show.
+<li><strong>verbose</strong> – How much info to show.
 If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the value set in the constructor.</li>
 </ul>
 </td>
@@ -490,13 +470,18 @@ If <code class="xref py py-obj docutils literal notranslate"><span class="pre">N
 </div>
 <div class="section" id="module-causallift.generate_data">
 <span id="causallift-generate-data-module"></span><h2>causallift.generate_data module<a class="headerlink" href="#module-causallift.generate_data" title="Permalink to this headline">¶</a></h2>
-<p>The original code is at <a class="reference external" href="https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py">https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py</a>
+<p>The original code is at
+<a class="reference external" href="https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py">https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py</a>
 licensed under the BSD 2-Clause “Simplified” License
 Copyright 2018, Wayfair, Inc.</p>
-<p>This code is an enhanced (backward-compatible) version that can simulate observational dataset including “sleeping dogs.”</p>
-<p>“Sleeping dogs” (people who will “buy” if not treated but will not “buy” if treated) can be simulated by negative values in tau parameter.
-Observational data which includes confounding can be simulated by non-zero values in propensity_coef parameter.
-A/B Test (RCT) with a 50:50 split can be simulated by all-zeros values in propensity_coef parameter (default).
+<p>This code is an enhanced (backward-compatible) version that can simulate
+observational dataset including “sleeping dogs.”</p>
+<p>“Sleeping dogs” (people who will “buy” if not treated but will not “buy”
+if treated) can be simulated by negative values in tau parameter.
+Observational data which includes confounding can be simulated by non-zero
+values in propensity_coef parameter.
+A/B Test (RCT) with a 50:50 split can be simulated by all-zeros values in
+propensity_coef parameter (default).
 The first element in each list parameter specifies the intercept.</p>
 <dl class="function">
 <dt id="causallift.generate_data.generate_data">

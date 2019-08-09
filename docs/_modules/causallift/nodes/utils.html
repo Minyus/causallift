@@ -163,15 +163,29 @@
            <div itemprop="articleBody">
             
   <h1>Source code for causallift.nodes.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">roc_auc_score</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">confusion_matrix</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">easydict</span> <span class="k">import</span> <span class="n">EasyDict</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">accuracy_score</span><span class="p">,</span>
+    <span class="n">confusion_matrix</span><span class="p">,</span>
+    <span class="n">f1_score</span><span class="p">,</span>
+    <span class="n">precision_score</span><span class="p">,</span>
+    <span class="n">recall_score</span><span class="p">,</span>
+    <span class="n">roc_auc_score</span><span class="p">,</span>
+<span class="p">)</span>
 
 
-<div class="viewcode-block" id="get_cols_features"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.get_cols_features">[docs]</a><span class="k">def</span> <span class="nf">get_cols_features</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">non_feature_cols</span><span class="o">=</span><span class="p">[</span>
-        <span class="s1">&#39;Treatment&#39;</span><span class="p">,</span> <span class="s1">&#39;Outcome&#39;</span><span class="p">,</span> <span class="s1">&#39;TransformedOutcome&#39;</span><span class="p">,</span> <span class="s1">&#39;Propensity&#39;</span><span class="p">,</span> <span class="s1">&#39;Recommendation&#39;</span><span class="p">]):</span>
+<div class="viewcode-block" id="get_cols_features"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.get_cols_features">[docs]</a><span class="k">def</span> <span class="nf">get_cols_features</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span>
+    <span class="n">non_feature_cols</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;Treatment&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Outcome&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TransformedOutcome&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Propensity&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Recommendation&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">):</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">column</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">non_feature_cols</span><span class="p">]</span></div>
 
 
@@ -182,7 +196,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
         <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">train</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">test</span><span class="p">)],</span>
-        <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span>
+        <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">],</span>
         <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">partition_name</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">index_name</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">series</span></div>
@@ -195,49 +209,56 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
         <span class="p">[</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">],</span>
-        <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span>
+        <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">],</span>
         <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">partition_name</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">index_name</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span></div>
 
 
-
-<div class="viewcode-block" id="len_t"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.len_t">[docs]</a><span class="k">def</span> <span class="nf">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s1">&#39;Treatment&#39;</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">==</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">treatment</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
-
-
-<div class="viewcode-block" id="len_o"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.len_o">[docs]</a><span class="k">def</span> <span class="nf">len_o</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s1">&#39;Outcome&#39;</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">==</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col_outcome</span><span class="p">,</span> <span class="n">outcome</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+<div class="viewcode-block" id="len_t"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.len_t">[docs]</a><span class="k">def</span> <span class="nf">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s2">&quot;Treatment&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">==</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">treatment</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="len_to"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.len_to">[docs]</a><span class="k">def</span> <span class="nf">len_to</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s1">&#39;Treatment&#39;</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s1">&#39;Outcome&#39;</span><span class="p">):</span>
-    <span class="n">len_</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">==</span><span class="si">{}</span><span class="s1"> &amp; </span><span class="si">{}</span><span class="s1">==</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">treatment</span><span class="p">,</span> <span class="n">col_outcome</span><span class="p">,</span> <span class="n">outcome</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="viewcode-block" id="len_o"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.len_o">[docs]</a><span class="k">def</span> <span class="nf">len_o</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s2">&quot;Outcome&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">==</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col_outcome</span><span class="p">,</span> <span class="n">outcome</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="len_to"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.len_to">[docs]</a><span class="k">def</span> <span class="nf">len_to</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s2">&quot;Treatment&quot;</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s2">&quot;Outcome&quot;</span>
+<span class="p">):</span>
+    <span class="n">len_</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+        <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">==</span><span class="si">{}</span><span class="s2"> &amp; </span><span class="si">{}</span><span class="s2">==</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">treatment</span><span class="p">,</span> <span class="n">col_outcome</span><span class="p">,</span> <span class="n">outcome</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">len_</span></div>
 
 
-<div class="viewcode-block" id="treatment_fraction_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.treatment_fraction_">[docs]</a><span class="k">def</span> <span class="nf">treatment_fraction_</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s1">&#39;Treatment&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="treatment_fraction_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.treatment_fraction_">[docs]</a><span class="k">def</span> <span class="nf">treatment_fraction_</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s2">&quot;Treatment&quot;</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="treatment_fractions_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.treatment_fractions_">[docs]</a><span class="k">def</span> <span class="nf">treatment_fractions_</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
     <span class="n">col_treatment</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span>
     <span class="n">treatment_fractions</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;train&#39;</span><span class="p">:</span> <span class="n">treatment_fraction_</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">),</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">),</span>
-        <span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="n">treatment_fraction_</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">),</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">),</span>
+        <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">treatment_fraction_</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">),</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">),</span>
+        <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">treatment_fraction_</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">),</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">),</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">EasyDict</span><span class="p">(</span><span class="n">treatment_fractions</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="outcome_fraction_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.outcome_fraction_">[docs]</a><span class="k">def</span> <span class="nf">outcome_fraction_</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s1">&#39;Outcome&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="outcome_fraction_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.outcome_fraction_">[docs]</a><span class="k">def</span> <span class="nf">outcome_fraction_</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s2">&quot;Outcome&quot;</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">len_o</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="n">col_outcome</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="overall_uplift_gain_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.overall_uplift_gain_">[docs]</a><span class="k">def</span> <span class="nf">overall_uplift_gain_</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-                         <span class="n">col_treatment</span><span class="o">=</span><span class="s1">&#39;Treatment&#39;</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s1">&#39;Outcome&#39;</span><span class="p">):</span>
-    <span class="n">overall_uplift_gain</span> <span class="o">=</span> \
-        <span class="p">(</span><span class="n">len_to</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="n">col_outcome</span><span class="p">)</span> <span class="o">/</span> <span class="n">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">))</span> \
-        <span class="o">-</span> <span class="p">(</span><span class="n">len_to</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="n">col_outcome</span><span class="p">)</span> <span class="o">/</span> <span class="n">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
-                                                                                      <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">))</span>
+<div class="viewcode-block" id="overall_uplift_gain_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.overall_uplift_gain_">[docs]</a><span class="k">def</span> <span class="nf">overall_uplift_gain_</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s2">&quot;Treatment&quot;</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s2">&quot;Outcome&quot;</span>
+<span class="p">):</span>
+    <span class="n">overall_uplift_gain</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">len_to</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="n">col_outcome</span><span class="p">)</span>
+        <span class="o">/</span> <span class="n">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">)</span>
+    <span class="p">)</span> <span class="o">-</span> <span class="p">(</span>
+        <span class="n">len_to</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="n">col_outcome</span><span class="p">)</span>
+        <span class="o">/</span> <span class="n">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">overall_uplift_gain</span></div>
 
 
@@ -250,43 +271,63 @@
     <span class="n">cgain_base</span> <span class="o">=</span> <span class="n">overall_uplift_gain</span> <span class="o">*</span> <span class="n">treatment_fraction</span>
     <span class="n">cgain_factor</span> <span class="o">=</span> <span class="n">cgain</span> <span class="o">/</span> <span class="n">cgain_base</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">treatment_fraction</span><span class="p">,</span> <span class="n">outcome_fraction</span><span class="p">,</span> <span class="n">overall_uplift_gain</span><span class="p">,</span>
-            <span class="n">cgain</span><span class="p">,</span> <span class="n">cgain_base</span><span class="p">,</span> <span class="n">cgain_factor</span><span class="p">,</span>
-            <span class="n">r_</span><span class="o">.</span><span class="n">Q_cgains</span><span class="p">,</span> <span class="n">r_</span><span class="o">.</span><span class="n">q1_cgains</span><span class="p">,</span> <span class="n">r_</span><span class="o">.</span><span class="n">q2_cgains</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">treatment_fraction</span><span class="p">,</span>
+        <span class="n">outcome_fraction</span><span class="p">,</span>
+        <span class="n">overall_uplift_gain</span><span class="p">,</span>
+        <span class="n">cgain</span><span class="p">,</span>
+        <span class="n">cgain_base</span><span class="p">,</span>
+        <span class="n">cgain_factor</span><span class="p">,</span>
+        <span class="n">r_</span><span class="o">.</span><span class="n">Q_cgains</span><span class="p">,</span>
+        <span class="n">r_</span><span class="o">.</span><span class="n">q1_cgains</span><span class="p">,</span>
+        <span class="n">r_</span><span class="o">.</span><span class="n">q2_cgains</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="score_df"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.score_df">[docs]</a><span class="k">def</span> <span class="nf">score_df</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_train</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="score_df"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.score_df">[docs]</a><span class="k">def</span> <span class="nf">score_df</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_train</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_pred_train</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Lengths of true and predicted for train do not match.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Lengths of true and predicted for train do not match.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_pred_test</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_pred_test</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Lengths of true and predicted for test do not match.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Lengths of true and predicted for test do not match.&quot;</span><span class="p">)</span>
     <span class="n">num_classes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
-    <span class="n">score_2darray</span> <span class="o">=</span> <span class="p">[</span> \
-        <span class="p">[</span> \
+    <span class="n">score_2darray</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span>
             <span class="nb">len</span><span class="p">(</span><span class="n">y_</span><span class="p">),</span>
             <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_</span><span class="p">)</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
             <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">),</span>
             <span class="n">precision_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="n">average</span><span class="p">),</span>
             <span class="n">recall_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="n">average</span><span class="p">),</span>
-            <span class="n">f1_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="n">average</span><span class="p">)</span> \
-            <span class="p">]</span> \
-        <span class="o">+</span> <span class="p">([</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">),</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_pred_</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()]</span> <span class="k">if</span> <span class="n">num_classes</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="p">[])</span> \
-        <span class="k">for</span> <span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_pred_train</span><span class="p">),</span> <span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">)]</span> \
+            <span class="n">f1_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="n">average</span><span class="p">),</span>
         <span class="p">]</span>
-    <span class="n">score_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">score_2darray</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span>
-                            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;# samples&#39;</span><span class="p">,</span> <span class="s1">&#39;# classes&#39;</span><span class="p">,</span> <span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;precision&#39;</span><span class="p">,</span> <span class="s1">&#39;recall&#39;</span><span class="p">,</span> <span class="s1">&#39;f1&#39;</span><span class="p">]</span> \
-                                    <span class="o">+</span> <span class="p">([</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">,</span> <span class="s1">&#39;observed conversion rate&#39;</span><span class="p">,</span>
-                                        <span class="s1">&#39;predicted conversion rate&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">num_classes</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="p">[]))</span>
+        <span class="o">+</span> <span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">),</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_pred_</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="n">num_classes</span> <span class="o">==</span> <span class="mi">2</span>
+            <span class="k">else</span> <span class="p">[]</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_pred_train</span><span class="p">),</span> <span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">)]</span>
+    <span class="p">]</span>
+    <span class="n">score_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">score_2darray</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">],</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;# samples&quot;</span><span class="p">,</span> <span class="s2">&quot;# classes&quot;</span><span class="p">,</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;precision&quot;</span><span class="p">,</span> <span class="s2">&quot;recall&quot;</span><span class="p">,</span> <span class="s2">&quot;f1&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;roc_auc&quot;</span><span class="p">,</span> <span class="s2">&quot;observed conversion rate&quot;</span><span class="p">,</span> <span class="s2">&quot;predicted conversion rate&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">num_classes</span> <span class="o">==</span> <span class="mi">2</span>
+            <span class="k">else</span> <span class="p">[]</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">score_df</span></div>
 
 
 <div class="viewcode-block" id="conf_mat_df"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.conf_mat_df">[docs]</a><span class="k">def</span> <span class="nf">conf_mat_df</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
     <span class="n">conf_mat</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
     <span class="n">num_class</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf_mat</span><span class="p">)</span>
-    <span class="n">true_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;True_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">)]</span>
-    <span class="n">pred_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Pred_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">)]</span>
+    <span class="n">true_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;True_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">)]</span>
+    <span class="n">pred_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Pred_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">)]</span>
     <span class="n">conf_mat_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">conf_mat</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">pred_labels</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">conf_mat_df</span></div>
 
@@ -320,8 +361,9 @@
         <span class="n">args</span><span class="o">.</span><span class="n">col_recommendation</span><span class="p">,</span>
     <span class="p">]</span>
 
-    <span class="n">args</span><span class="o">.</span><span class="n">cols_features</span> <span class="o">=</span> \
-        <span class="n">args</span><span class="o">.</span><span class="n">cols_features</span> <span class="ow">or</span> <span class="n">get_cols_features</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">non_feature_cols</span><span class="o">=</span><span class="n">non_feature_cols</span><span class="p">)</span>
+    <span class="n">args</span><span class="o">.</span><span class="n">cols_features</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">cols_features</span> <span class="ow">or</span> <span class="n">get_cols_features</span><span class="p">(</span>
+        <span class="n">df</span><span class="p">,</span> <span class="n">non_feature_cols</span><span class="o">=</span><span class="n">non_feature_cols</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">args</span></div>
 
 
@@ -339,15 +381,20 @@
     <span class="n">cate_series</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">col_cate</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">recommendation</span><span class="p">(</span><span class="n">cate_series</span><span class="p">,</span> <span class="n">treatment_fraction</span><span class="p">):</span>
-        <span class="n">rank_series</span> <span class="o">=</span> <span class="n">cate_series</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pct</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">rank_series</span> <span class="o">=</span> <span class="n">cate_series</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;first&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pct</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rank_series</span> <span class="o">&lt;=</span> <span class="n">treatment_fraction</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">r</span>
 
-    <span class="n">recommendation_train</span> <span class="o">=</span> <span class="n">recommendation</span><span class="p">(</span><span class="n">cate_series</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">),</span> <span class="n">treatment_fractions</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>
-    <span class="n">recommendation_test</span> <span class="o">=</span> <span class="n">recommendation</span><span class="p">(</span><span class="n">cate_series</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">),</span> <span class="n">treatment_fractions</span><span class="o">.</span><span class="n">test</span><span class="p">)</span>
+    <span class="n">recommendation_train</span> <span class="o">=</span> <span class="n">recommendation</span><span class="p">(</span>
+        <span class="n">cate_series</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">),</span> <span class="n">treatment_fractions</span><span class="o">.</span><span class="n">train</span>
+    <span class="p">)</span>
+    <span class="n">recommendation_test</span> <span class="o">=</span> <span class="n">recommendation</span><span class="p">(</span>
+        <span class="n">cate_series</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">),</span> <span class="n">treatment_fractions</span><span class="o">.</span><span class="n">test</span>
+    <span class="p">)</span>
 
-    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">args</span><span class="o">.</span><span class="n">col_recommendation</span><span class="p">]</span> <span class="o">=</span> \
-        <span class="n">concat_train_test</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">recommendation_train</span><span class="p">,</span> <span class="n">recommendation_test</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">args</span><span class="o">.</span><span class="n">col_recommendation</span><span class="p">]</span> <span class="o">=</span> <span class="n">concat_train_test</span><span class="p">(</span>
+        <span class="n">args</span><span class="p">,</span> <span class="n">recommendation_train</span><span class="p">,</span> <span class="n">recommendation_test</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
 
@@ -355,33 +402,39 @@
 <div class="viewcode-block" id="estimate_effect"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.estimate_effect">[docs]</a><span class="k">def</span> <span class="nf">estimate_effect</span><span class="p">(</span><span class="n">sim_treated_df</span><span class="p">,</span> <span class="n">sim_untreated_df</span><span class="p">):</span>
     <span class="n">estimated_effect_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
 
-    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s1">&#39;# samples&#39;</span><span class="p">]</span> <span class="o">=</span> \
-        <span class="n">sim_treated_df</span><span class="p">[</span><span class="s1">&#39;# samples chosen without uplift model&#39;</span><span class="p">]</span> \
-        <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s1">&#39;# samples chosen without uplift model&#39;</span><span class="p">]</span>
+    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;# samples&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
 
     <span class="c1">## Original (without uplift model)</span>
 
-    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s1">&#39;observed conversion rate without uplift model&#39;</span><span class="p">]</span> <span class="o">=</span> \
-        <span class="p">(</span><span class="n">sim_treated_df</span><span class="p">[</span><span class="s1">&#39;# samples chosen without uplift model&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sim_treated_df</span><span class="p">[</span>
-            <span class="s1">&#39;observed conversion rate without uplift model&#39;</span><span class="p">]</span>
-         <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s1">&#39;# samples chosen without uplift model&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sim_untreated_df</span><span class="p">[</span>
-             <span class="s1">&#39;observed conversion rate without uplift model&#39;</span><span class="p">])</span> \
-        <span class="o">/</span> <span class="p">(</span><span class="n">sim_treated_df</span><span class="p">[</span><span class="s1">&#39;# samples chosen without uplift model&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span>
-            <span class="s1">&#39;# samples chosen without uplift model&#39;</span><span class="p">])</span>
+    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;observed conversion rate without uplift model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;observed conversion rate without uplift model&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;observed conversion rate without uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
 
     <span class="c1">## Recommended (with uplift model)</span>
 
-    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s1">&#39;predicted conversion rate using uplift model&#39;</span><span class="p">]</span> <span class="o">=</span> \
-        <span class="p">(</span><span class="n">sim_treated_df</span><span class="p">[</span><span class="s1">&#39;# samples recommended by uplift model&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sim_treated_df</span><span class="p">[</span>
-            <span class="s1">&#39;predicted conversion rate using uplift model&#39;</span><span class="p">]</span>
-         <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s1">&#39;# samples recommended by uplift model&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">sim_untreated_df</span><span class="p">[</span>
-             <span class="s1">&#39;predicted conversion rate using uplift model&#39;</span><span class="p">])</span> \
-        <span class="o">/</span> <span class="p">(</span><span class="n">sim_treated_df</span><span class="p">[</span><span class="s1">&#39;# samples recommended by uplift model&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span>
-            <span class="s1">&#39;# samples recommended by uplift model&#39;</span><span class="p">])</span>
+    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;predicted conversion rate using uplift model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;# samples recommended by uplift model&quot;</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;predicted conversion rate using uplift model&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;# samples recommended by uplift model&quot;</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;predicted conversion rate using uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;# samples recommended by uplift model&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;# samples recommended by uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
 
-    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s1">&#39;predicted improvement rate&#39;</span><span class="p">]</span> <span class="o">=</span> \
-        <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s1">&#39;predicted conversion rate using uplift model&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">estimated_effect_df</span><span class="p">[</span>
-            <span class="s1">&#39;observed conversion rate without uplift model&#39;</span><span class="p">]</span>
+    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;predicted improvement rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;predicted conversion rate using uplift model&quot;</span><span class="p">]</span>
+        <span class="o">/</span> <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;observed conversion rate without uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">estimated_effect_df</span></div>
 </pre></div>

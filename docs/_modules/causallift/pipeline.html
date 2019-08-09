@@ -193,9 +193,9 @@
 <span class="sd">&quot;&quot;&quot;Pipeline construction.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">kedro.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">node</span>
-<span class="kn">from</span> <span class="nn">.nodes.estimate_propensity</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.nodes.model_for_each</span> <span class="k">import</span> <span class="o">*</span>
 
+<span class="kn">from</span> <span class="nn">.nodes.estimate_propensity</span> <span class="k">import</span> <span class="o">*</span>  <span class="c1"># NOQA</span>
+<span class="kn">from</span> <span class="nn">.nodes.model_for_each</span> <span class="k">import</span> <span class="o">*</span>  <span class="c1"># NOQA</span>
 
 <span class="c1"># Here you can define your data-driven pipeline by importing your functions</span>
 <span class="c1"># and adding them to the pipeline as follows:</span>
@@ -225,120 +225,156 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-        <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">bundle_train_and_test_data</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args_raw&#39;</span><span class="p">,</span> <span class="s1">&#39;train_df&#39;</span><span class="p">,</span> <span class="s1">&#39;test_df&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;df_00&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;011_bundle_train_and_test_data&#39;</span><span class="p">),</span>
-        <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">impute_cols_features</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args_raw&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;args_intermediate&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">schedule_propensity_scoring</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args_intermediate&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;args&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;121_prepare_args&#39;</span><span class="p">),</span>
-        <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">treatment_fractions_</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args_raw&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;treatment_fractions&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;131_treatment_fractions_&#39;</span><span class="p">),</span>
-        <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">initialize_model</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args_raw&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;init_model&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;141_initialize_model&#39;</span><span class="p">),</span>
-
-        <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">fit_propensity</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;propensity_model&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;211_fit_propensity&#39;</span><span class="p">),</span>
-        <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">estimate_propensity</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_00&#39;</span><span class="p">,</span> <span class="s1">&#39;propensity_model&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;df_01&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;221_estimate_propensity&#39;</span><span class="p">),</span>
-
-        <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">model_for_treated_fit</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">,</span> <span class="s1">&#39;init_model&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;treated__model_dict&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">model_for_untreated_fit</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">,</span> <span class="s1">&#39;init_model&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;untreated__model_dict&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;311_fit&#39;</span><span class="p">),</span>
-
-        <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">bundle_treated_and_untreated_models</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;treated__model_dict&#39;</span><span class="p">,</span> <span class="s1">&#39;untreated__model_dict&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;models_dict&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;312_bundle_2_models&#39;</span><span class="p">),</span>
-
-        <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">model_for_treated_predict_proba</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">,</span> <span class="s1">&#39;models_dict&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;treated__proba&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">model_for_untreated_predict_proba</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">,</span> <span class="s1">&#39;models_dict&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;untreated__proba&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;321_predict_proba&#39;</span><span class="p">),</span>
-        <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">compute_cate</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;treated__proba&#39;</span><span class="p">,</span> <span class="s1">&#39;untreated__proba&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;cate_estimated&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-            <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;411_compute_cate&#39;</span><span class="p">),</span>
-        <span class="n">Pipeline</span><span class="p">([</span>
-           <span class="n">node</span><span class="p">(</span><span class="n">add_cate_to_df</span><span class="p">,</span>
-                <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_01&#39;</span><span class="p">,</span> <span class="s1">&#39;cate_estimated&#39;</span><span class="p">,</span> <span class="p">],</span>
-                <span class="s1">&#39;df_02&#39;</span><span class="p">,</span>
-                <span class="p">),</span>
-        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;421_add_cate_to_df&#39;</span><span class="p">),</span>
-
-        <span class="n">Pipeline</span><span class="p">([</span>
-           <span class="n">node</span><span class="p">(</span><span class="n">recommend_by_cate</span><span class="p">,</span>
-                <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_02&#39;</span><span class="p">,</span> <span class="s1">&#39;treatment_fractions&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;df_03&#39;</span><span class="p">,</span>
-                <span class="p">),</span>
-        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;511_recommend_by_cate&#39;</span><span class="p">),</span>
-        <span class="n">Pipeline</span><span class="p">([</span>
-           <span class="n">node</span><span class="p">(</span><span class="n">model_for_treated_simulate_recommendation</span><span class="p">,</span>
-                <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_03&#39;</span><span class="p">,</span> <span class="s1">&#39;models_dict&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;treated__sim_eval_df&#39;</span><span class="p">,</span>
-                <span class="p">),</span>
-            <span class="n">node</span><span class="p">(</span><span class="n">model_for_untreated_simulate_recommendation</span><span class="p">,</span>
-                 <span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">,</span> <span class="s1">&#39;df_03&#39;</span><span class="p">,</span> <span class="s1">&#39;models_dict&#39;</span><span class="p">],</span>
-                 <span class="s1">&#39;untreated__sim_eval_df&#39;</span><span class="p">,</span>
-                 <span class="p">),</span>
-        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;521_simulate_recommendation&#39;</span><span class="p">),</span>
-        <span class="n">Pipeline</span><span class="p">([</span>
-           <span class="n">node</span><span class="p">(</span><span class="n">estimate_effect</span><span class="p">,</span>
-                <span class="p">[</span><span class="s1">&#39;treated__sim_eval_df&#39;</span><span class="p">,</span> <span class="s1">&#39;untreated__sim_eval_df&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;estimated_effect_df&#39;</span><span class="p">,</span>
-                <span class="p">),</span>
-        <span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;531_estimate_effect&#39;</span><span class="p">),</span>
-        <span class="c1"># Pipeline([</span>
-        <span class="c1">#    node(FUNC,</span>
-        <span class="c1">#         [&#39;IN&#39;],</span>
-        <span class="c1">#         [&#39;OUT&#39;],</span>
-        <span class="c1">#         ),</span>
-        <span class="c1"># ], name=&#39;PIPELINE&#39;),</span>
-
-        <span class="p">])</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">bundle_train_and_test_data</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;args_raw&quot;</span><span class="p">,</span> <span class="s2">&quot;train_df&quot;</span><span class="p">,</span> <span class="s2">&quot;test_df&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;df_00&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;011_bundle_train_and_test_data&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">impute_cols_features</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;args_raw&quot;</span><span class="p">,</span> <span class="s2">&quot;df_00&quot;</span><span class="p">],</span> <span class="s2">&quot;args_intermediate&quot;</span>
+                    <span class="p">),</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">schedule_propensity_scoring</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;args_intermediate&quot;</span><span class="p">,</span> <span class="s2">&quot;df_00&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;args&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;121_prepare_args&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">treatment_fractions_</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;args_raw&quot;</span><span class="p">,</span> <span class="s2">&quot;df_00&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;treatment_fractions&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;131_treatment_fractions_&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">node</span><span class="p">(</span><span class="n">initialize_model</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;args_raw&quot;</span><span class="p">],</span> <span class="s2">&quot;init_model&quot;</span><span class="p">)],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;141_initialize_model&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">node</span><span class="p">(</span><span class="n">fit_propensity</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_00&quot;</span><span class="p">],</span> <span class="s2">&quot;propensity_model&quot;</span><span class="p">)],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;211_fit_propensity&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">estimate_propensity</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_00&quot;</span><span class="p">,</span> <span class="s2">&quot;propensity_model&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;df_01&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;221_estimate_propensity&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">model_for_treated_fit</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">,</span> <span class="s2">&quot;init_model&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;treated__model_dict&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">model_for_untreated_fit</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">,</span> <span class="s2">&quot;init_model&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;untreated__model_dict&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;311_fit&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">bundle_treated_and_untreated_models</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;treated__model_dict&quot;</span><span class="p">,</span> <span class="s2">&quot;untreated__model_dict&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;models_dict&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;312_bundle_2_models&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">model_for_treated_predict_proba</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">,</span> <span class="s2">&quot;models_dict&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;treated__proba&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">model_for_untreated_predict_proba</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">,</span> <span class="s2">&quot;models_dict&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;untreated__proba&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;321_predict_proba&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">compute_cate</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;treated__proba&quot;</span><span class="p">,</span> <span class="s2">&quot;untreated__proba&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;cate_estimated&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;411_compute_cate&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">node</span><span class="p">(</span><span class="n">add_cate_to_df</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">,</span> <span class="s2">&quot;cate_estimated&quot;</span><span class="p">],</span> <span class="s2">&quot;df_02&quot;</span><span class="p">)],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;421_add_cate_to_df&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">recommend_by_cate</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_02&quot;</span><span class="p">,</span> <span class="s2">&quot;treatment_fractions&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;df_03&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;511_recommend_by_cate&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">model_for_treated_simulate_recommendation</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_03&quot;</span><span class="p">,</span> <span class="s2">&quot;models_dict&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;treated__sim_eval_df&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">model_for_untreated_simulate_recommendation</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_03&quot;</span><span class="p">,</span> <span class="s2">&quot;models_dict&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;untreated__sim_eval_df&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;521_simulate_recommendation&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">Pipeline</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">node</span><span class="p">(</span>
+                        <span class="n">estimate_effect</span><span class="p">,</span>
+                        <span class="p">[</span><span class="s2">&quot;treated__sim_eval_df&quot;</span><span class="p">,</span> <span class="s2">&quot;untreated__sim_eval_df&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;estimated_effect_df&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;531_estimate_effect&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="c1"># Pipeline([</span>
+            <span class="c1">#    node(FUNC,</span>
+            <span class="c1">#         [&#39;IN&#39;],</span>
+            <span class="c1">#         [&#39;OUT&#39;],</span>
+            <span class="c1">#         ),</span>
+            <span class="c1"># ], name=&#39;PIPELINE&#39;),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pipeline</span></div>
 </pre></div>

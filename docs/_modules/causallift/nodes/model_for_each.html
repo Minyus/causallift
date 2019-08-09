@@ -163,91 +163,113 @@
            <div itemprop="articleBody">
             
   <h1>Source code for causallift.nodes.model_for_each</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span>
-
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="o">*</span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">xgboost</span> <span class="k">import</span> <span class="n">XGBClassifier</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
+<span class="kn">from</span> <span class="nn">xgboost</span> <span class="k">import</span> <span class="n">XGBClassifier</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="o">*</span>  <span class="c1"># NOQA</span>
+
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ModelForTreatedOrUntreated"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated">[docs]</a><span class="k">class</span> <span class="nc">ModelForTreatedOrUntreated</span><span class="p">():</span>
+<div class="viewcode-block" id="ModelForTreatedOrUntreated"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated">[docs]</a><span class="k">class</span> <span class="nc">ModelForTreatedOrUntreated</span><span class="p">:</span>
 <div class="viewcode-block" id="ModelForTreatedOrUntreated.__init__"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">treatment_val</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">treatment_val</span> <span class="ow">in</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">treatment_val</span> <span class="o">=</span> <span class="n">treatment_val</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">treatment_label</span> <span class="o">=</span> <span class="s1">&#39;treated&#39;</span> <span class="k">if</span> <span class="n">treatment_val</span> <span class="k">else</span> <span class="s1">&#39;untreated&#39;</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treatment_label</span> <span class="o">=</span> <span class="s2">&quot;treated&quot;</span> <span class="k">if</span> <span class="n">treatment_val</span> <span class="k">else</span> <span class="s2">&quot;untreated&quot;</span></div>
+
 <div class="viewcode-block" id="ModelForTreatedOrUntreated.fit"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">df_</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
 
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df_</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
         <span class="n">treatment_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">treatment_val</span>
 
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">## Model for Treatment = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">treatment_val</span><span class="p">))</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">## Model for Treatment = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">treatment_val</span><span class="p">))</span>
 
-        <span class="n">df</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">==</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">treatment_val</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">==</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">treatment_val</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-        <span class="n">X_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
-        <span class="n">y_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_outcome</span><span class="p">]</span>
-        <span class="n">X_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
-        <span class="n">y_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_outcome</span><span class="p">]</span>
+        <span class="n">X_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
+        <span class="n">y_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_outcome</span><span class="p">]</span>
+        <span class="n">X_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
+        <span class="n">y_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_outcome</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">enable_ipw</span> <span class="ow">and</span> <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
-            <span class="n">propensity</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">enable_ipw</span> <span class="ow">and</span> <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+            <span class="n">propensity</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span><span class="p">]</span>
 
             <span class="c1"># avoid propensity near 0 or 1 which will result in too large weight</span>
             <span class="k">if</span> <span class="n">propensity</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">args</span><span class="o">.</span><span class="n">min_propensity</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;[Warning] Propensity scores below </span><span class="si">{}</span><span class="s1"> were clipped.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">min_propensity</span><span class="p">))</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;[Warning] Propensity scores below </span><span class="si">{}</span><span class="s2"> were clipped.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">args</span><span class="o">.</span><span class="n">min_propensity</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
             <span class="k">if</span> <span class="n">propensity</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">args</span><span class="o">.</span><span class="n">max_propensity</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;[Warning] Propensity scores above </span><span class="si">{}</span><span class="s1"> were clipped.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">max_propensity</span><span class="p">))</span>
-            <span class="n">propensity</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">min_propensity</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">max_propensity</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;[Warning] Propensity scores above </span><span class="si">{}</span><span class="s2"> were clipped.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">args</span><span class="o">.</span><span class="n">max_propensity</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="n">propensity</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>
+                <span class="n">lower</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">min_propensity</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">max_propensity</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
 
-            <span class="n">sample_weight</span> <span class="o">=</span> \
+            <span class="n">sample_weight</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">propensity</span><span class="p">)</span> <span class="k">if</span> <span class="n">treatment_val</span> <span class="o">==</span> <span class="mf">1.0</span> <span class="k">else</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">propensity</span><span class="p">))</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># do not use sample weight</span>
             <span class="n">sample_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
         <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">sample_weight</span><span class="o">=</span><span class="n">sample_weight</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;### Best parameters of the model trained using samples &#39;</span>
-                     <span class="s1">&#39;with observational Treatment: </span><span class="si">{}</span><span class="s1"> </span><span class="se">\n</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span>
-                     <span class="nb">format</span><span class="p">(</span><span class="n">treatment_val</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">best_params_</span><span class="p">))</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;### Best parameters of the model trained using samples &quot;</span>
+                <span class="s2">&quot;with observational Treatment: </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">treatment_val</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">best_params_</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">,</span> <span class="s1">&#39;feature_importances_&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">,</span> <span class="s2">&quot;feature_importances_&quot;</span><span class="p">):</span>
                 <span class="n">fi_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
                     <span class="n">model</span><span class="o">.</span><span class="n">best_estimator_</span><span class="o">.</span><span class="n">feature_importances_</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
-                    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feature importance&#39;</span><span class="p">])</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### Feature importances of the model trained using samples &#39;</span>
-                         <span class="s1">&#39;with observational Treatment: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">treatment_val</span><span class="p">))</span>
+                    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;feature importance&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Feature importances of the model trained using samples &quot;</span>
+                    <span class="s2">&quot;with observational Treatment: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">treatment_val</span><span class="p">)</span>
+                <span class="p">)</span>
                 <span class="n">display</span><span class="p">(</span><span class="n">fi_df</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;## Feature importances not available.&#39;</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;## Feature importances not available.&quot;</span><span class="p">)</span>
 
         <span class="n">y_pred_train</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
         <span class="n">y_pred_test</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-        <span class="n">score_original_treatment_df</span> <span class="o">=</span> <span class="n">score_df</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_train</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+        <span class="n">score_original_treatment_df</span> <span class="o">=</span> <span class="n">score_df</span><span class="p">(</span>
+            <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_train</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### Outcome estimated by the model trained using samples &#39;</span>
-                     <span class="s1">&#39;with observational Treatment: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">treatment_val</span><span class="p">))</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Outcome estimated by the model trained using samples &quot;</span>
+                <span class="s2">&quot;with observational Treatment: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">treatment_val</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="n">display</span><span class="p">(</span><span class="n">score_original_treatment_df</span><span class="p">)</span>
 
         <span class="n">model_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">eval_df</span><span class="o">=</span><span class="n">score_original_treatment_df</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">model_dict</span></div>
 
 <div class="viewcode-block" id="ModelForTreatedOrUntreated.predict_proba"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.predict_proba">[docs]</a>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">df_</span><span class="p">,</span> <span class="n">models_dict</span><span class="p">):</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">models_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">treatment_label</span><span class="p">][</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">models_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">treatment_label</span><span class="p">][</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
 
         <span class="n">cols_features</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">cols_features</span>
 
-        <span class="n">X_train</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)[</span><span class="n">cols_features</span><span class="p">]</span>
-        <span class="n">X_test</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)[</span><span class="n">cols_features</span><span class="p">]</span>
+        <span class="n">X_train</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)[</span><span class="n">cols_features</span><span class="p">]</span>
+        <span class="n">X_test</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)[</span><span class="n">cols_features</span><span class="p">]</span>
 
         <span class="n">y_pred_train</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">y_pred_test</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
@@ -258,43 +280,53 @@
         <span class="c1"># y_pred = model.predict_proba(X)[:, 1]</span>
         <span class="c1"># return y_pred</span>
 
-
 <div class="viewcode-block" id="ModelForTreatedOrUntreated.simulate_recommendation"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.simulate_recommendation">[docs]</a>    <span class="k">def</span> <span class="nf">simulate_recommendation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">df_</span><span class="p">,</span> <span class="n">models_dict</span><span class="p">):</span>
 
-        <span class="n">model</span> <span class="o">=</span> <span class="n">models_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">treatment_label</span><span class="p">][</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
-        <span class="n">score_original_treatment_df</span> <span class="o">=</span> <span class="n">models_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">treatment_label</span><span class="p">][</span><span class="s1">&#39;eval_df&#39;</span><span class="p">]</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">models_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">treatment_label</span><span class="p">][</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
+        <span class="n">score_original_treatment_df</span> <span class="o">=</span> <span class="n">models_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">treatment_label</span><span class="p">][</span><span class="s2">&quot;eval_df&quot;</span><span class="p">]</span>
 
         <span class="n">treatment_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">treatment_val</span>
         <span class="n">verbose</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span>
 
-        <span class="n">df</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">==</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">col_recommendation</span><span class="p">,</span> <span class="n">treatment_val</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">==</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">col_recommendation</span><span class="p">,</span> <span class="n">treatment_val</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-        <span class="n">X_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
-        <span class="n">y_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_outcome</span><span class="p">]</span>
-        <span class="n">X_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
-        <span class="n">y_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_outcome</span><span class="p">]</span>
+        <span class="n">X_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
+        <span class="n">y_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_outcome</span><span class="p">]</span>
+        <span class="n">X_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">cols_features</span><span class="p">]</span>
+        <span class="n">y_test</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)[</span><span class="n">args</span><span class="o">.</span><span class="n">col_outcome</span><span class="p">]</span>
 
         <span class="n">y_pred_train</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
         <span class="n">y_pred_test</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-        <span class="n">score_recommended_treatment_df</span> <span class="o">=</span> <span class="n">score_df</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span>
-                                                  <span class="n">y_pred_train</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+        <span class="n">score_recommended_treatment_df</span> <span class="o">=</span> <span class="n">score_df</span><span class="p">(</span>
+            <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_train</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### Simulated outcome of samples recommended to be treatment: </span><span class="si">{}</span><span class="s1"> by the uplift model:&#39;</span><span class="o">.</span>
-                  <span class="nb">format</span><span class="p">(</span><span class="n">treatment_val</span><span class="p">))</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Simulated outcome of samples recommended to be treatment: </span><span class="si">{}</span><span class="s2"> by the uplift model:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">treatment_val</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
             <span class="n">display</span><span class="p">(</span><span class="n">score_recommended_treatment_df</span><span class="p">)</span>
 
-        <span class="n">out_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">])</span>
-        <span class="n">out_df</span><span class="p">[</span><span class="s1">&#39;# samples chosen without uplift model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">score_original_treatment_df</span><span class="p">[[</span><span class="s1">&#39;# samples&#39;</span><span class="p">]]</span>
-        <span class="n">out_df</span><span class="p">[</span><span class="s1">&#39;observed conversion rate without uplift model&#39;</span><span class="p">]</span> <span class="o">=</span> \
-            <span class="n">score_original_treatment_df</span><span class="p">[[</span><span class="s1">&#39;observed conversion rate&#39;</span><span class="p">]]</span>
-        <span class="n">out_df</span><span class="p">[</span><span class="s1">&#39;# samples recommended by uplift model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">score_recommended_treatment_df</span><span class="p">[[</span><span class="s1">&#39;# samples&#39;</span><span class="p">]]</span>
-        <span class="n">out_df</span><span class="p">[</span><span class="s1">&#39;predicted conversion rate using uplift model&#39;</span><span class="p">]</span> <span class="o">=</span> \
-            <span class="n">score_recommended_treatment_df</span><span class="p">[[</span><span class="s1">&#39;predicted conversion rate&#39;</span><span class="p">]]</span>
+        <span class="n">out_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">])</span>
+        <span class="n">out_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">score_original_treatment_df</span><span class="p">[</span>
+            <span class="p">[</span><span class="s2">&quot;# samples&quot;</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="n">out_df</span><span class="p">[</span>
+            <span class="s2">&quot;observed conversion rate without uplift model&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">score_original_treatment_df</span><span class="p">[[</span><span class="s2">&quot;observed conversion rate&quot;</span><span class="p">]]</span>
+        <span class="n">out_df</span><span class="p">[</span>
+            <span class="s2">&quot;# samples recommended by uplift model&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">score_recommended_treatment_df</span><span class="p">[[</span><span class="s2">&quot;# samples&quot;</span><span class="p">]]</span>
+        <span class="n">out_df</span><span class="p">[</span>
+            <span class="s2">&quot;predicted conversion rate using uplift model&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">score_recommended_treatment_df</span><span class="p">[[</span><span class="s2">&quot;predicted conversion rate&quot;</span><span class="p">]]</span>
 
-        <span class="n">out_df</span><span class="p">[</span><span class="s1">&#39;predicted improvement rate&#39;</span><span class="p">]</span> <span class="o">=</span> \
-            <span class="n">out_df</span><span class="p">[</span><span class="s1">&#39;predicted conversion rate using uplift model&#39;</span><span class="p">]</span> \
-            <span class="o">/</span> <span class="n">out_df</span><span class="p">[</span><span class="s1">&#39;observed conversion rate without uplift model&#39;</span><span class="p">]</span>
+        <span class="n">out_df</span><span class="p">[</span><span class="s2">&quot;predicted improvement rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">out_df</span><span class="p">[</span><span class="s2">&quot;predicted conversion rate using uplift model&quot;</span><span class="p">]</span>
+            <span class="o">/</span> <span class="n">out_df</span><span class="p">[</span><span class="s2">&quot;observed conversion rate without uplift model&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">out_df</span></div></div>
 
@@ -314,8 +346,10 @@
 <div class="viewcode-block" id="model_for_treated_fit"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.model_for_treated_fit">[docs]</a><span class="k">def</span> <span class="nf">model_for_treated_fit</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">ModelForTreated</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
+
 <div class="viewcode-block" id="model_for_treated_predict_proba"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.model_for_treated_predict_proba">[docs]</a><span class="k">def</span> <span class="nf">model_for_treated_predict_proba</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">ModelForTreated</span><span class="p">()</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="model_for_treated_simulate_recommendation"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.model_for_treated_simulate_recommendation">[docs]</a><span class="k">def</span> <span class="nf">model_for_treated_simulate_recommendation</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">ModelForTreated</span><span class="p">()</span><span class="o">.</span><span class="n">simulate_recommendation</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
@@ -324,8 +358,10 @@
 <div class="viewcode-block" id="model_for_untreated_fit"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.model_for_untreated_fit">[docs]</a><span class="k">def</span> <span class="nf">model_for_untreated_fit</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">ModelForUntreated</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
+
 <div class="viewcode-block" id="model_for_untreated_predict_proba"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.model_for_untreated_predict_proba">[docs]</a><span class="k">def</span> <span class="nf">model_for_untreated_predict_proba</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">ModelForUntreated</span><span class="p">()</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="model_for_untreated_simulate_recommendation"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.model_for_untreated_simulate_recommendation">[docs]</a><span class="k">def</span> <span class="nf">model_for_untreated_simulate_recommendation</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">ModelForUntreated</span><span class="p">()</span><span class="o">.</span><span class="n">simulate_recommendation</span><span class="p">(</span><span class="o">*</span><span class="n">posargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
@@ -338,12 +374,17 @@
 
 <div class="viewcode-block" id="initialize_model"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.initialize_model">[docs]</a><span class="k">def</span> <span class="nf">initialize_model</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
 
-    <span class="n">model</span> <span class="o">=</span> \
-        <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">XGBClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">random_state</span><span class="p">),</span>
-                         <span class="n">args</span><span class="o">.</span><span class="n">uplift_model_params</span><span class="p">,</span>
-                         <span class="n">cv</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">cv</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> \
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">uplift_model_params</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> \
-        <span class="n">args</span><span class="o">.</span><span class="n">uplift_model_params</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">GridSearchCV</span><span class="p">(</span>
+            <span class="n">XGBClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">random_state</span><span class="p">),</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">uplift_model_params</span><span class="p">,</span>
+            <span class="n">cv</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">cv</span><span class="p">,</span>
+            <span class="n">return_train_score</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">uplift_model_params</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+        <span class="k">else</span> <span class="n">args</span><span class="o">.</span><span class="n">uplift_model_params</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">model</span></div>
 </pre></div>

@@ -1,7 +1,8 @@
 import logging  # NOQA
-from typing import Any, Dict  # NOQA
+from typing import Any, Dict, List, Optional, Union  # NOQA
 
 import pandas as pd  # NOQA
+import sklearn  # NOQA
 from easydict import EasyDict  # NOQA
 from IPython.core.display import display  # NOQA
 from kedro.io import AbstractDataSet, CSVLocalDataSet, MemoryDataSet, PickleLocalDataSet
@@ -24,36 +25,26 @@ class CausalLift:
         test_df:
             Pandas Data Frame containing samples used for testing
         cols_features:
-            (:obj:`Optional[List[str]]`) -
             List of column names used as features.
             If :obj:`None` (default), all the columns except for outcome,
             propensity, CATE, and recommendation.
         col_treatment:
-            (:obj:`Optional[str]`) -
             Name of treatment column. 'Treatment' in default.
         col_outcome:
-            (:obj:`Optional[str]`) -
             Name of outcome column. 'Outcome' in default.
         col_propensity:
-            (:obj:`Optional[str]`) -
             Name of propensity column. 'Propensity' in default.
         col_cate:
-            (:obj:`Optional[str]`) -
             Name of CATE (Conditional Average Treatment Effect) column. 'CATE' in default.
         col_recommendation:
-            (:obj:`Optional[str]`) -
             Name of recommendation column. 'Recommendation' in default.
         min_propensity:
-            (:obj:`Optional[float]`) -
             Minimum propensity score. 0.01 in default.
         max_propensity:
-            (:obj:`Optional[float]`) -
             Maximum propensity score. 0.99 in defualt.
         random_state:
-            (:obj:`Optional[int]`) -
             The seed used by the random number generator. 0 in default.
         verbose:
-            (:obj:`Optional[int]`) -
             How much info to show. Valid values are:
 
             * :obj:`0` to show nothing,
@@ -62,7 +53,6 @@ class CausalLift:
             * :obj:`3` to show more info.
 
         uplift_model_params:
-            (:obj:`Union[dict, sklearn.base.BaseEstimator]`) -
             Parameters used to fit 2 XGBoost classifier models.
             Refer to https://xgboost.readthedocs.io/en/latest/parameter.html
             If :obj:`None` (default)::
@@ -98,11 +88,9 @@ class CausalLift:
                 * :func:`predict_proba`
 
         enable_ipw:
-            (:obj:`Optional[bool]`) -
             Enable Inverse Probability Weighting based on the estimated propensity score.
             True in default.
         propensity_model_params:
-            (:obj:`Optional[dict]`) -
             Parameters used to fit logistic regression model to estimate propensity score.
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
             If :obj:`None` (default)::
@@ -123,29 +111,23 @@ class CausalLift:
                 }
 
         cv:
-            (:obj:`Optional[int]`) -
             Cross-Validation for the Grid Search. :obj:`3` in default.
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
         index_name:
-            (:obj:`Optional[str]`) -
             Index name of the pandas data frame after resetting the index. 'index' in default.
             If :obj:`None`, the index will not be reset.
         partition_name:
-            (:obj:`Optional[str]`) -
             Additional index name to indicate the partition, train or test. 'partition' in default.
         runner:
-            (:obj:`Optional[str]`) -
             If set to 'SequentialRunner' (default) or 'ParallelRunner', the pipeline is run by Kedro
             sequentially or in parallel, respectively.
             If set to :obj:`None` , the pipeline is run by native Python.
             Refer to https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners
         conditionally_skip:
-            (:obj:`Optional[bool]`) -
             *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']*
             Skip running the pipeline if the output files already exist.
             True in default.
         dataset_catalog:
-            (:obj:`Optional[dict]`) -
             *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']*
             Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
             To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets
@@ -184,7 +166,6 @@ class CausalLift:
                 )
 
         logging_config:
-            (:obj:`Optional[dict]`) -
             Specify logging configuration.
             Refer to https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema
             In default::
@@ -264,18 +245,18 @@ class CausalLift:
 
     def __init__(
         self,
-        train_df: pd.DataFrame = None,
-        test_df: pd.DataFrame = None,
-        cols_features=None,
-        col_treatment="Treatment",
-        col_outcome="Outcome",
-        col_propensity="Propensity",
-        col_cate="CATE",
-        col_recommendation="Recommendation",
-        min_propensity=0.01,
-        max_propensity=0.99,
-        random_state=0,
-        verbose=2,
+        train_df=None,  # type: Optional[pd.DataFrame]
+        test_df=None,  # type: Optional[pd.DataFrame]
+        cols_features=None,  # type: Optional[List[str]]
+        col_treatment="Treatment",  # type: str
+        col_outcome="Outcome",  # type: str
+        col_propensity="Propensity",  # type: str
+        col_cate="CATE",  # type: str
+        col_recommendation="Recommendation",  # type: str
+        min_propensity=0.01,  # type: float
+        max_propensity=0.99,  # type: float
+        random_state=0,  # type: int
+        verbose=2,  # type: int
         uplift_model_params={
             "max_depth": [3],
             "learning_rate": [0.1],
@@ -296,8 +277,8 @@ class CausalLift:
             "scale_pos_weight": [1],
             "base_score": [0.5],
             "missing": [None],
-        },
-        enable_ipw=True,
+        },  # type: Union[Dict[str, List[Any]], sklearn.base.BaseEstimator]
+        enable_ipw=True,  # type: bool
         propensity_model_params={
             "C": [0.1, 1, 10],
             "class_weight": [None],
@@ -311,13 +292,13 @@ class CausalLift:
             "solver": ["liblinear"],
             "tol": [0.0001],
             "warm_start": [False],
-        },
-        cv=3,
-        index_name="index",
-        partition_name="partition",
-        runner="SequentialRunner",  # 'ParallelRunner' # None
-        conditionally_skip=False,
-        dataset_catalog: Dict[str, AbstractDataSet] = dict(
+        },  # type: Dict[str, List[Any]]
+        cv=3,  # type: int
+        index_name="index",  # type: str
+        partition_name="partition",  # type: str
+        runner="SequentialRunner",  # type: str
+        conditionally_skip=False,  # type: bool
+        dataset_catalog=dict(
             # args_raw = CSVLocalDataSet(filepath='../data/01_raw/args_raw.csv', version=None),
             # train_df = CSVLocalDataSet(filepath='../data/01_raw/train_df.csv', version=None),
             # test_df = CSVLocalDataSet(filepath='../data/01_raw/test_df.csv', version=None),
@@ -344,8 +325,8 @@ class CausalLift:
             estimated_effect_df=CSVLocalDataSet(
                 filepath="../data/08_reporting/estimated_effect_df.csv", version=None
             ),
-        ),
-        logging_config: Dict[str, Any] = {
+        ),  # type: Dict[str, AbstractDataSet]
+        logging_config={
             "disable_existing_loggers": False,
             "formatters": {
                 "json_formatter": {
@@ -416,7 +397,7 @@ class CausalLift:
                 "level": "INFO",
             },
             "version": 1,
-        },
+        },  # type: Dict[str, Any]
     ):
 
         self.runner = None
@@ -595,10 +576,10 @@ class CausalLift:
 
     def estimate_recommendation_impact(
         self,
-        cate_estimated: pd.Series = None,
-        treatment_fraction_train: float = None,
-        treatment_fraction_test: float = None,
-        verbose: int = None,
+        cate_estimated=None,  # type: Optional[pd.Series]
+        treatment_fraction_train=None,  # type: Optional[float]
+        treatment_fraction_test=None,  # type: Optional[float]
+        verbose=None,  # type: Optional[int]
     ):
         r"""
         Estimate the impact of recommendation based on uplift modeling.
