@@ -44,12 +44,12 @@ from kedro.cli import main as kedro_main
 from kedro.cli.utils import (
     KedroCliError,
     call,
+    export_nodes,
     forward_command,
     python_call,
-    export_nodes,
 )
-from kedro.utils import load_obj
 from kedro.runner import SequentialRunner
+from kedro.utils import load_obj
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 

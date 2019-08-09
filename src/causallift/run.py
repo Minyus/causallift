@@ -28,29 +28,23 @@
 
 """Application entry point."""
 
+import logging
 import logging.config
 from pathlib import Path
-from typing import Iterable, Type, Union, Dict, Any
+from typing import Any, Dict, Iterable, Type, Union
 from warnings import warn
 
 from kedro.cli.utils import KedroCliError
 from kedro.config import ConfigLoader, MissingConfigException
 from kedro.context import KedroContext, KedroContextError
 from kedro.io import DataCatalog
-
 from kedro.pipeline import Pipeline
-from kedro.runner import AbstractRunner
-from kedro.runner import SequentialRunner
-from kedro.runner import ParallelRunner
-
+from kedro.runner import AbstractRunner, ParallelRunner, SequentialRunner
 from kedro.utils import load_obj
-from kedro.pipeline import Pipeline
 
 from causallift.pipeline import create_pipeline
 
 from .default.logging import *
-
-import logging
 
 log = logging.getLogger(__name__)
 

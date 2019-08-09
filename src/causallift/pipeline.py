@@ -28,9 +28,9 @@
 """Pipeline construction."""
 
 from kedro.pipeline import Pipeline, node
+
 from .nodes.estimate_propensity import *
 from .nodes.model_for_each import *
-
 
 # Here you can define your data-driven pipeline by importing your functions
 # and adding them to the pipeline as follows:

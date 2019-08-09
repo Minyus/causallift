@@ -1,13 +1,12 @@
-from IPython.display import display
-
-from .utils import *
+import logging
 
 import numpy as np
 import pandas as pd
-from xgboost import XGBClassifier
+from IPython.display import display
 from sklearn.model_selection import GridSearchCV
+from xgboost import XGBClassifier
 
-import logging
+from .utils import *
 
 log = logging.getLogger(__name__)
 

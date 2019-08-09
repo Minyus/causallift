@@ -1,11 +1,11 @@
-from IPython.display import display
-from .utils import *
+import logging
 
 import pandas as pd
-from sklearn.model_selection import GridSearchCV
+from IPython.display import display
 from sklearn import linear_model
+from sklearn.model_selection import GridSearchCV
 
-import logging
+from .utils import *
 
 log = logging.getLogger(__name__)
 

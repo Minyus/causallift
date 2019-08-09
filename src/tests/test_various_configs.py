@@ -1,13 +1,14 @@
-from pathlib import Path
 import sys
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-
-from causallift import CausalLift
+from pathlib import Path
 
 from sklearn.model_selection import train_test_split
 
-from causallift import generate_data
+from causallift import CausalLift, generate_data
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+
+
 
 
 def test_enable_ipw_without_known_propensity():

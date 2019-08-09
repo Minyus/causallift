@@ -1,4 +1,4 @@
-from kedro.io import PickleLocalDataSet, CSVLocalDataSet, JSONLocalDataSet
+from kedro.io import CSVLocalDataSet, JSONLocalDataSet, PickleLocalDataSet
 
 
 def datasets_():

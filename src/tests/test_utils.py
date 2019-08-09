@@ -1,14 +1,16 @@
+import random
 import sys
+import unittest
 from pathlib import Path
+
+import numpy as np
+import pandas as pd
+from easydict import EasyDict
+
+from causallift import utils
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-import unittest
-from causallift import utils
-import pandas as pd
-import numpy as np
-import random
-from easydict import EasyDict
 
 
 class UtilsTest(unittest.TestCase):

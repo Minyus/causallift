@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 
 from IPython.core.magic import register_line_magic
-
 from kedro.context import load_context
 
 
