@@ -200,7 +200,7 @@ def __kedro_context__(env: str = None, **kwargs) -> KedroContext:
         # from a different location.
         env = "local"
 
-    return ProjectContext(Path.cwd(), env, **kwargs)
+    return ProjectContext(Path.cwd(), env)
 
 
 def main(
