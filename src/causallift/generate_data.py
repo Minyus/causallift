@@ -1,13 +1,18 @@
 """
-The original code is at https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py
+The original code is at
+https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py
 licensed under the BSD 2-Clause "Simplified" License
 Copyright 2018, Wayfair, Inc.
 
-This code is an enhanced (backward-compatible) version that can simulate observational dataset including "sleeping dogs." 
+This code is an enhanced (backward-compatible) version that can simulate
+observational dataset including "sleeping dogs."
 
-"Sleeping dogs" (people who will "buy" if not treated but will not "buy" if treated) can be simulated by negative values in tau parameter.
-Observational data which includes confounding can be simulated by non-zero values in propensity_coef parameter. 
-A/B Test (RCT) with a 50:50 split can be simulated by all-zeros values in propensity_coef parameter (default).
+"Sleeping dogs" (people who will "buy" if not treated but will not "buy"
+if treated) can be simulated by negative values in tau parameter.
+Observational data which includes confounding can be simulated by non-zero
+values in propensity_coef parameter.
+A/B Test (RCT) with a 50:50 split can be simulated by all-zeros values in
+propensity_coef parameter (default).
 The first element in each list parameter specifies the intercept.
 """
 

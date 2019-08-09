@@ -29,8 +29,8 @@
 
 from kedro.pipeline import Pipeline, node
 
-from .nodes.estimate_propensity import *
-from .nodes.model_for_each import *
+from .nodes.estimate_propensity import *  # NOQA
+from .nodes.model_for_each import *  # NOQA
 
 # Here you can define your data-driven pipeline by importing your functions
 # and adding them to the pipeline as follows:

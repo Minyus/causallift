@@ -44,7 +44,7 @@ from kedro.utils import load_obj
 
 from causallift.pipeline import create_pipeline
 
-from .default.logging import *
+from .default.logging import *  # NOQA
 
 log = logging.getLogger(__name__)
 

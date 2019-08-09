@@ -6,7 +6,7 @@ from IPython.display import display
 from sklearn.model_selection import GridSearchCV
 from xgboost import XGBClassifier
 
-from .utils import *
+from .utils import *  # NOQA
 
 log = logging.getLogger(__name__)
 

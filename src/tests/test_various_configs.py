@@ -4,6 +4,7 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 
 from causallift import CausalLift, generate_data
+import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -38,6 +39,9 @@ def test_enable_ipw_without_known_propensity():
     cl = CausalLift(train_df, test_df, enable_ipw=True, random_state=0, verbose=3)
     train_df, test_df = cl.estimate_cate_by_2_models()
     estimated_effect_df = cl.estimate_recommendation_impact()
+    assert isinstance(train_df, pd.DataFrame)
+    assert isinstance(test_df, pd.DataFrame)
+    assert isinstance(estimated_effect_df, pd.DataFrame)
 
 
 def test_enable_ipw_without_known_propensity_conditionally_skip():
@@ -77,6 +81,9 @@ def test_enable_ipw_without_known_propensity_conditionally_skip():
     )
     train_df, test_df = cl.estimate_cate_by_2_models()
     estimated_effect_df = cl.estimate_recommendation_impact()
+    assert isinstance(train_df, pd.DataFrame)
+    assert isinstance(test_df, pd.DataFrame)
+    assert isinstance(estimated_effect_df, pd.DataFrame)
 
 
 def test_disable_ipw():
@@ -109,6 +116,9 @@ def test_disable_ipw():
     cl = CausalLift(train_df, test_df, enable_ipw=False, random_state=0, verbose=3)
     train_df, test_df = cl.estimate_cate_by_2_models()
     estimated_effect_df = cl.estimate_recommendation_impact()
+    assert isinstance(train_df, pd.DataFrame)
+    assert isinstance(test_df, pd.DataFrame)
+    assert isinstance(estimated_effect_df, pd.DataFrame)
 
 
 def test_enable_ipw_with_known_propensity():
@@ -156,6 +166,9 @@ def test_enable_ipw_with_known_propensity():
     cl = CausalLift(train_df, test_df, enable_ipw=True, random_state=0, verbose=3)
     train_df, test_df = cl.estimate_cate_by_2_models()
     estimated_effect_df = cl.estimate_recommendation_impact()
+    assert isinstance(train_df, pd.DataFrame)
+    assert isinstance(test_df, pd.DataFrame)
+    assert isinstance(estimated_effect_df, pd.DataFrame)
 
 
 def test_enable_ipw_without_known_propensity_no_runner():
@@ -190,6 +203,9 @@ def test_enable_ipw_without_known_propensity_no_runner():
     )
     train_df, test_df = cl.estimate_cate_by_2_models()
     estimated_effect_df = cl.estimate_recommendation_impact()
+    assert isinstance(train_df, pd.DataFrame)
+    assert isinstance(test_df, pd.DataFrame)
+    assert isinstance(estimated_effect_df, pd.DataFrame)
 
 
 # def test_enable_ipw_without_known_propensity_parallel_runner():
@@ -214,3 +230,6 @@ def test_enable_ipw_without_known_propensity_no_runner():
 #     cl = CausalLift(train_df, test_df, enable_ipw=True, random_state=0, verbose=3, runner='ParallelRunner')
 #     train_df, test_df = cl.estimate_cate_by_2_models()
 #     estimated_effect_df = cl.estimate_recommendation_impact()
+#     assert isinstance(train_df, pd.DataFrame)
+#     assert isinstance(test_df, pd.DataFrame)
+#     assert isinstance(estimated_effect_df, pd.DataFrame)

@@ -5,13 +5,13 @@ from IPython.display import display
 from sklearn import linear_model
 from sklearn.model_selection import GridSearchCV
 
-from .utils import *
+from .utils import *  # NOQA
 
 log = logging.getLogger(__name__)
 
 try:
     import matplotlib.pyplot as plt
-except:
+except:  # NOQA
     print("[Warning] Could not import matplotlib.pyplot. ")
 
 
@@ -19,16 +19,16 @@ def fit_propensity(args, df):
 
     X_train = df.xs("train")[args.cols_features]
     y_train = df.xs("train")[args.col_treatment]
-    X_test = df.xs("test")[args.cols_features]
-    y_test = df.xs("test")[args.col_treatment]
+    # X_test = df.xs("test")[args.cols_features]
+    # y_test = df.xs("test")[args.col_treatment]
 
-    ## Transfrom by StandardScaler
+    # """ Transfrom by StandardScaler """
     # from sklearn import preprocessing
     # scaler = preprocessing.StandardScaler().fit(X_train)
-    ##X_train = scaler.transform(X_train)
+    # X_train = scaler.transform(X_train)
     # X_test = scaler.transform(X_test)
 
-    ## Transform by PCA
+    # """ Transform by PCA """
     # from sklearn.decomposition import PCA
     # pca = PCA(0.99)
     # pca.fit(X_train)
@@ -90,7 +90,7 @@ def estimate_propensity(args, df, model):
         pd.Series(proba_test).hist()
         try:
             plt.show()
-        except:
+        except:  # NOQA
             log.info("[Warning] Could not show the histogram.")
 
     # Optional evaluation and report of logistic regression
