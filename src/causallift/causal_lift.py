@@ -4,10 +4,8 @@ from typing import Any, Dict  # NOQA
 import pandas as pd  # NOQA
 from easydict import EasyDict  # NOQA
 from IPython.core.display import display  # NOQA
-from kedro.io import AbstractDataSet, MemoryDataSet
+from kedro.io import AbstractDataSet, CSVLocalDataSet, MemoryDataSet, PickleLocalDataSet
 
-from .default.catalog import *  # NOQA
-from .default.parameters import *  # NOQA
 from .nodes.estimate_propensity import *  # NOQA
 from .nodes.model_for_each import *  # NOQA
 from .run import *  # NOQA
@@ -268,9 +266,157 @@ class CausalLift:
         self,
         train_df: pd.DataFrame = None,
         test_df: pd.DataFrame = None,
-        dataset_catalog: Dict[str, AbstractDataSet] = {},
-        logging_config: Dict[str, Any] = {},
-        **kwargs
+        cols_features=None,
+        col_treatment="Treatment",
+        col_outcome="Outcome",
+        col_propensity="Propensity",
+        col_cate="CATE",
+        col_recommendation="Recommendation",
+        min_propensity=0.01,
+        max_propensity=0.99,
+        random_state=0,
+        verbose=2,
+        uplift_model_params={
+            "max_depth": [3],
+            "learning_rate": [0.1],
+            "n_estimators": [100],
+            "verbose": [0],
+            "objective": ["binary:logistic"],
+            "booster": ["gbtree"],
+            "n_jobs": [-1],
+            "nthread": [None],
+            "gamma": [0],
+            "min_child_weight": [1],
+            "max_delta_step": [0],
+            "subsample": [1],
+            "colsample_bytree": [1],
+            "colsample_bylevel": [1],
+            "reg_alpha": [0],
+            "reg_lambda": [1],
+            "scale_pos_weight": [1],
+            "base_score": [0.5],
+            "missing": [None],
+        },
+        enable_ipw=True,
+        propensity_model_params={
+            "C": [0.1, 1, 10],
+            "class_weight": [None],
+            "dual": [False],
+            "fit_intercept": [True],
+            "intercept_scaling": [1],
+            "max_iter": [100],
+            "multi_class": ["ovr"],
+            "n_jobs": [1],
+            "penalty": ["l1", "l2"],
+            "solver": ["liblinear"],
+            "tol": [0.0001],
+            "warm_start": [False],
+        },
+        cv=3,
+        index_name="index",
+        partition_name="partition",
+        runner="SequentialRunner",  # 'ParallelRunner' # None
+        conditionally_skip=False,
+        dataset_catalog: Dict[str, AbstractDataSet] = dict(
+            # args_raw = CSVLocalDataSet(filepath='../data/01_raw/args_raw.csv', version=None),
+            # train_df = CSVLocalDataSet(filepath='../data/01_raw/train_df.csv', version=None),
+            # test_df = CSVLocalDataSet(filepath='../data/01_raw/test_df.csv', version=None),
+            propensity_model=PickleLocalDataSet(
+                filepath="../data/06_models/propensity_model.pickle", version=None
+            ),
+            models_dict=PickleLocalDataSet(
+                filepath="../data/06_models/models_dict.pickle", version=None
+            ),
+            df_03=CSVLocalDataSet(
+                filepath="../data/07_model_output/df.csv",
+                load_args=dict(
+                    index_col=["partition", "index"], float_precision="high"
+                ),
+                save_args=dict(index=True, float_format="%.16e"),
+                version=None,
+            ),
+            treated__sim_eval_df=CSVLocalDataSet(
+                filepath="../data/08_reporting/treated__sim_eval_df.csv", version=None
+            ),
+            untreated__sim_eval_df=CSVLocalDataSet(
+                filepath="../data/08_reporting/untreated__sim_eval_df.csv", version=None
+            ),
+            estimated_effect_df=CSVLocalDataSet(
+                filepath="../data/08_reporting/estimated_effect_df.csv", version=None
+            ),
+        ),
+        logging_config: Dict[str, Any] = {
+            "disable_existing_loggers": False,
+            "formatters": {
+                "json_formatter": {
+                    "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
+                    "format": "[%(asctime)s|%(name)s|%(funcName)s|%(levelname)s] %(message)s",
+                },
+                "simple": {
+                    "format": "[%(asctime)s|%(name)s|%(levelname)s] %(message)s"
+                },
+            },
+            "handlers": {
+                "console": {
+                    "class": "logging.StreamHandler",
+                    "formatter": "simple",
+                    "level": "INFO",
+                    "stream": "ext://sys.stdout",
+                },
+                "info_file_handler": {
+                    "class": "logging.handlers.RotatingFileHandler",
+                    "level": "INFO",
+                    "formatter": "simple",
+                    "filename": "./info.log",
+                    "maxBytes": 10485760,  # 10MB
+                    "backupCount": 20,
+                    "encoding": "utf8",
+                    "delay": True,
+                },
+                "error_file_handler": {
+                    "class": "logging.handlers.RotatingFileHandler",
+                    "level": "ERROR",
+                    "formatter": "simple",
+                    "filename": "./errors.log",
+                    "maxBytes": 10485760,  # 10MB
+                    "backupCount": 20,
+                    "encoding": "utf8",
+                    "delay": True,
+                },
+            },
+            "loggers": {
+                "anyconfig": {
+                    "handlers": ["console", "info_file_handler", "error_file_handler"],
+                    "level": "WARNING",
+                    "propagate": False,
+                },
+                "kedro.io": {
+                    "handlers": ["console", "info_file_handler", "error_file_handler"],
+                    "level": "WARNING",
+                    "propagate": False,
+                },
+                "kedro.pipeline": {
+                    "handlers": ["console", "info_file_handler", "error_file_handler"],
+                    "level": "INFO",
+                    "propagate": False,
+                },
+                "kedro.runner": {
+                    "handlers": ["console", "info_file_handler", "error_file_handler"],
+                    "level": "INFO",
+                    "propagate": False,
+                },
+                "causallift": {
+                    "handlers": ["console", "info_file_handler", "error_file_handler"],
+                    "level": "INFO",
+                    "propagate": False,
+                },
+            },
+            "root": {
+                "handlers": ["console", "info_file_handler", "error_file_handler"],
+                "level": "INFO",
+            },
+            "version": 1,
+        },
     ):
 
         self.runner = None
@@ -296,8 +442,28 @@ class CausalLift:
 
         # Instance attributes were defined above.
 
-        args_raw = EasyDict(parameters_())
-        args_raw.update(kwargs)
+        args_raw = dict(
+            cols_features=cols_features,
+            col_treatment=col_treatment,
+            col_outcome=col_outcome,
+            col_propensity=col_propensity,
+            col_cate=col_cate,
+            col_recommendation=col_recommendation,
+            min_propensity=min_propensity,
+            max_propensity=max_propensity,
+            random_state=random_state,
+            verbose=verbose,
+            uplift_model_params=uplift_model_params,
+            enable_ipw=enable_ipw,
+            propensity_model_params=propensity_model_params,
+            cv=cv,
+            index_name=index_name,
+            partition_name=partition_name,
+            runner=runner,
+            conditionally_skip=conditionally_skip,
+        )
+
+        args_raw = EasyDict(args_raw)
         args_raw.update(dataset_catalog.get("args_raw", MemoryDataSet({}).load()))
 
         assert args_raw.runner in {"SequentialRunner", "ParallelRunner", None}
@@ -333,7 +499,6 @@ class CausalLift:
                 },
                 replace=True,
             )
-            self.kedro_context.catalog.add_feed_dict(datasets_(), replace=True)
             self.kedro_context.catalog.add_feed_dict(dataset_catalog, replace=True)
 
             self.kedro_context.run(tags=["011_bundle_train_and_test_data"])

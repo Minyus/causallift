@@ -44,8 +44,6 @@ from kedro.utils import load_obj
 
 from causallift.pipeline import create_pipeline
 
-from .default.logging import *  # NOQA
-
 log = logging.getLogger(__name__)
 
 
@@ -145,7 +143,7 @@ class ProjectContext3(ProjectContext2):
 
     def __init__(self, logging_config: Dict = None):
         self._project_path = Path().cwd().resolve()  # No longer used.
-        logging_config = logging_config or conf_logging_()
+        logging_config = logging_config
         logging.config.dictConfig(logging_config)
         self._catalog = DataCatalog()
 

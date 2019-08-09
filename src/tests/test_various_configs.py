@@ -1,10 +1,10 @@
 import sys
 from pathlib import Path
 
+import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from causallift import CausalLift, generate_data
-import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 

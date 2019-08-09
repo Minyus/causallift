@@ -31,9 +31,6 @@
 __version__ = "1.0.0"
 
 from .causal_lift import *  # NOQA
-from .default.catalog import *  # NOQA
-from .default.logging import *  # NOQA
-from .default.parameters import *  # NOQA
 from .generate_data import *  # NOQA
 from .nodes import utils  # NOQA
 from .nodes.estimate_propensity import *  # NOQA
