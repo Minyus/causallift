@@ -60,119 +60,155 @@ def create_pipeline(**kwargs):
 
     """
 
-    pipeline = Pipeline([
-        Pipeline([
-            node(bundle_train_and_test_data,
-                 ['args_raw', 'train_df', 'test_df'],
-                 'df_00',
-                 ),
-            ], name='011_bundle_train_and_test_data'),
-        Pipeline([
-            node(impute_cols_features,
-                 ['args_raw', 'df_00'],
-                 'args_intermediate',
-                 ),
-            node(schedule_propensity_scoring,
-                 ['args_intermediate', 'df_00'],
-                 'args',
-                 ),
-            ], name='121_prepare_args'),
-        Pipeline([
-            node(treatment_fractions_,
-                 ['args_raw', 'df_00'],
-                 'treatment_fractions',
-                 ),
-            ], name='131_treatment_fractions_'),
-        Pipeline([
-            node(initialize_model,
-                 ['args_raw'],
-                 'init_model',
-                 ),
-        ], name='141_initialize_model'),
-
-        Pipeline([
-            node(fit_propensity,
-                 ['args', 'df_00'],
-                 'propensity_model',
-                 ),
-        ], name='211_fit_propensity'),
-        Pipeline([
-            node(estimate_propensity,
-                 ['args', 'df_00', 'propensity_model'],
-                 'df_01',
-                 ),
-            ], name='221_estimate_propensity'),
-
-        Pipeline([
-            node(model_for_treated_fit,
-                 ['args', 'df_01', 'init_model'],
-                 'treated__model_dict',
-                 ),
-            node(model_for_untreated_fit,
-                 ['args', 'df_01', 'init_model'],
-                 'untreated__model_dict',
-                 ),
-            ], name='311_fit'),
-
-        Pipeline([
-            node(bundle_treated_and_untreated_models,
-                 ['treated__model_dict', 'untreated__model_dict'],
-                 'models_dict',
-                 ),
-        ], name='312_bundle_2_models'),
-
-        Pipeline([
-            node(model_for_treated_predict_proba,
-                 ['args', 'df_01', 'models_dict'],
-                 'treated__proba',
-                 ),
-            node(model_for_untreated_predict_proba,
-                 ['args', 'df_01', 'models_dict'],
-                 'untreated__proba',
-                 ),
-            ], name='321_predict_proba'),
-        Pipeline([
-            node(compute_cate,
-                 ['treated__proba', 'untreated__proba'],
-                 'cate_estimated',
-                 ),
-            ], name='411_compute_cate'),
-        Pipeline([
-           node(add_cate_to_df,
-                ['args', 'df_01', 'cate_estimated', ],
-                'df_02',
-                ),
-        ], name='421_add_cate_to_df'),
-
-        Pipeline([
-           node(recommend_by_cate,
-                ['args', 'df_02', 'treatment_fractions'],
-                'df_03',
-                ),
-        ], name='511_recommend_by_cate'),
-        Pipeline([
-           node(model_for_treated_simulate_recommendation,
-                ['args', 'df_03', 'models_dict'],
-                'treated__sim_eval_df',
-                ),
-            node(model_for_untreated_simulate_recommendation,
-                 ['args', 'df_03', 'models_dict'],
-                 'untreated__sim_eval_df',
-                 ),
-        ], name='521_simulate_recommendation'),
-        Pipeline([
-           node(estimate_effect,
-                ['treated__sim_eval_df', 'untreated__sim_eval_df'],
-                'estimated_effect_df',
-                ),
-        ], name='531_estimate_effect'),
-        # Pipeline([
-        #    node(FUNC,
-        #         ['IN'],
-        #         ['OUT'],
-        #         ),
-        # ], name='PIPELINE'),
-
-        ])
+    pipeline = Pipeline(
+        [
+            Pipeline(
+                [
+                    node(
+                        bundle_train_and_test_data,
+                        ["args_raw", "train_df", "test_df"],
+                        "df_00",
+                    )
+                ],
+                name="011_bundle_train_and_test_data",
+            ),
+            Pipeline(
+                [
+                    node(
+                        impute_cols_features, ["args_raw", "df_00"], "args_intermediate"
+                    ),
+                    node(
+                        schedule_propensity_scoring,
+                        ["args_intermediate", "df_00"],
+                        "args",
+                    ),
+                ],
+                name="121_prepare_args",
+            ),
+            Pipeline(
+                [
+                    node(
+                        treatment_fractions_,
+                        ["args_raw", "df_00"],
+                        "treatment_fractions",
+                    )
+                ],
+                name="131_treatment_fractions_",
+            ),
+            Pipeline(
+                [node(initialize_model, ["args_raw"], "init_model")],
+                name="141_initialize_model",
+            ),
+            Pipeline(
+                [node(fit_propensity, ["args", "df_00"], "propensity_model")],
+                name="211_fit_propensity",
+            ),
+            Pipeline(
+                [
+                    node(
+                        estimate_propensity,
+                        ["args", "df_00", "propensity_model"],
+                        "df_01",
+                    )
+                ],
+                name="221_estimate_propensity",
+            ),
+            Pipeline(
+                [
+                    node(
+                        model_for_treated_fit,
+                        ["args", "df_01", "init_model"],
+                        "treated__model_dict",
+                    ),
+                    node(
+                        model_for_untreated_fit,
+                        ["args", "df_01", "init_model"],
+                        "untreated__model_dict",
+                    ),
+                ],
+                name="311_fit",
+            ),
+            Pipeline(
+                [
+                    node(
+                        bundle_treated_and_untreated_models,
+                        ["treated__model_dict", "untreated__model_dict"],
+                        "models_dict",
+                    )
+                ],
+                name="312_bundle_2_models",
+            ),
+            Pipeline(
+                [
+                    node(
+                        model_for_treated_predict_proba,
+                        ["args", "df_01", "models_dict"],
+                        "treated__proba",
+                    ),
+                    node(
+                        model_for_untreated_predict_proba,
+                        ["args", "df_01", "models_dict"],
+                        "untreated__proba",
+                    ),
+                ],
+                name="321_predict_proba",
+            ),
+            Pipeline(
+                [
+                    node(
+                        compute_cate,
+                        ["treated__proba", "untreated__proba"],
+                        "cate_estimated",
+                    )
+                ],
+                name="411_compute_cate",
+            ),
+            Pipeline(
+                [node(add_cate_to_df, ["args", "df_01", "cate_estimated"], "df_02")],
+                name="421_add_cate_to_df",
+            ),
+            Pipeline(
+                [
+                    node(
+                        recommend_by_cate,
+                        ["args", "df_02", "treatment_fractions"],
+                        "df_03",
+                    )
+                ],
+                name="511_recommend_by_cate",
+            ),
+            Pipeline(
+                [
+                    node(
+                        model_for_treated_simulate_recommendation,
+                        ["args", "df_03", "models_dict"],
+                        "treated__sim_eval_df",
+                    ),
+                    node(
+                        model_for_untreated_simulate_recommendation,
+                        ["args", "df_03", "models_dict"],
+                        "untreated__sim_eval_df",
+                    ),
+                ],
+                name="521_simulate_recommendation",
+            ),
+            Pipeline(
+                [
+                    node(
+                        estimate_effect,
+                        ["treated__sim_eval_df", "untreated__sim_eval_df"],
+                        "estimated_effect_df",
+                    )
+                ],
+                name="531_estimate_effect",
+            ),
+            # Pipeline([
+            #    node(FUNC,
+            #         ['IN'],
+            #         ['OUT'],
+            #         ),
+            # ], name='PIPELINE'),
+        ]
+    )
 
     return pipeline

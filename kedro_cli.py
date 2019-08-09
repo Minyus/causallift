@@ -41,7 +41,13 @@ from typing import Union
 import click
 from click import secho, style
 from kedro.cli import main as kedro_main
-from kedro.cli.utils import KedroCliError, call, forward_command, python_call, export_nodes
+from kedro.cli.utils import (
+    KedroCliError,
+    call,
+    forward_command,
+    python_call,
+    export_nodes,
+)
 from kedro.utils import load_obj
 from kedro.runner import SequentialRunner
 
@@ -90,6 +96,7 @@ overwrite its contents."""
 def __get_kedro_context__(**kwargs):
     """Used to provide this project's context to plugins."""
     from causallift.run import __kedro_context__
+
     return __kedro_context__(**kwargs)
 
 
@@ -108,6 +115,7 @@ def cli():
 def run(tag, env, parallel, runner):
     """Run the pipeline."""
     from causallift.run import main
+
     if parallel and runner:
         raise KedroCliError(
             "Both --parallel and --runner options cannot be used together. "
@@ -161,30 +169,23 @@ def build_docs():
     # )
     if Path("docs/build").exists():
         shutil.rmtree("docs/build")
-    call(
-        [
-            "sphinx-apidoc",
-            "--module-first",
-            "-o",
-            "docs/source",
-            "src/causallift",
-        ]
-    )
+    call(["sphinx-apidoc", "--module-first", "-o", "docs/source", "src/causallift"])
     call(["sphinx-build", "-M", "html", "docs/source", "docs/build", "-a"])
 
     """ Prepare to publish the Sphinx document on the GitHub Pages """
     from distutils.dir_util import copy_tree
+
     copy_tree("docs/build/html", "docs")
 
     def replace(pattern: str, repl: str, path: str):
         p = Path(path)
         p.write_text(p.read_text().replace(pattern, repl))
+
     replace(
         r"<head>",
-        r'<head>'
-        '\n'
-        r'  <base href="{{site.github.url}}" charset="utf-8"/>',
-        "docs/index.html")
+        r"<head>" "\n" r'  <base href="{{site.github.url}}" charset="utf-8"/>',
+        "docs/index.html",
+    )
 
     Path("docs/.nojekyll").touch()
     Path("docs/_config.yml").touch()

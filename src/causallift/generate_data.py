@@ -15,17 +15,19 @@ import numpy as np
 import pandas as pd
 
 
-def generate_data(N=1000,
-                  n_features=3,
-                  beta=[-3, -8, 13, -8],
-                  error_std=0.5,
-                  tau=3,
-                  tau_std=1,
-                  discrete_outcome=False,
-                  seed=2701,
-                  feature_effect=0.5,
-                  propensity_coef=[0, 0, 0, 0],
-                  index_name=None):
+def generate_data(
+    N=1000,
+    n_features=3,
+    beta=[-3, -8, 13, -8],
+    error_std=0.5,
+    tau=3,
+    tau_std=1,
+    discrete_outcome=False,
+    seed=2701,
+    feature_effect=0.5,
+    propensity_coef=[0, 0, 0, 0],
+    index_name=None,
+):
     r"""
     generate_data(N=1000, n_features=3, beta=[1,-2,3,-0.8], error_std=0.5, tau=3, discrete_outcome=False)
     Generates random data with a ground truth data generating process.
@@ -77,15 +79,15 @@ def generate_data(N=1000,
     """
     # Check the length of input lists
     if len(propensity_coef) != n_features + 1:
-        raise Exception('len(propensity_coef) != n_features + 1')
+        raise Exception("len(propensity_coef) != n_features + 1")
     if len(beta) != n_features + 1:
-        raise Exception('len(beta) != n_features + 1')
+        raise Exception("len(beta) != n_features + 1")
     if isinstance(tau, (float, int)):
         tau_ = [0] * (n_features + 1)
         tau_[0] = tau
     if isinstance(tau, (list)):
         if len(tau) != n_features + 1:
-            raise Exception('len(tau) != n_features + 1')
+            raise Exception("len(tau) != n_features + 1")
         tau_ = tau
 
     np.random.seed(seed=seed)
@@ -105,8 +107,11 @@ def generate_data(N=1000,
         beta = np.random.random(n_features + 1)
 
     # Treatment heterogeneity.
-    tau_vec = np.random.normal(loc=tau_[0], scale=tau_std, size=N) + \
-              np.dot(X, tau_[1:]) + np.dot(X, beta[1:]) * feature_effect
+    tau_vec = (
+        np.random.normal(loc=tau_[0], scale=tau_std, size=N)
+        + np.dot(X, tau_[1:])
+        + np.dot(X, beta[1:]) * feature_effect
+    )
 
     # Calculate outcome.
     y = beta[0] + np.dot(X, beta[1:]) + error + treatment * tau_vec
@@ -114,11 +119,13 @@ def generate_data(N=1000,
     if discrete_outcome:
         y = y > 0
 
-    names = ['Feature_{}'.format(i) for i in range(n_features)]
-    names.extend(['Treatment', 'Outcome'])
+    names = ["Feature_{}".format(i) for i in range(n_features)]
+    names.extend(["Treatment", "Outcome"])
 
-    df = pd.DataFrame(np.concatenate(( \
-        X, treatment.reshape(-1, 1), y.reshape(-1, 1)), axis=1), columns=names)
+    df = pd.DataFrame(
+        np.concatenate((X, treatment.reshape(-1, 1), y.reshape(-1, 1)), axis=1),
+        columns=names,
+    )
 
     if index_name is not None:
         df.index.name = index_name

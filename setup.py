@@ -28,9 +28,7 @@
 
 from setuptools import find_packages, setup
 
-entry_point = (
-    "causallift = causallift.run:main"
-)
+entry_point = "causallift = causallift.run:main"
 
 # get the dependencies and installs
 with open("requirements.txt", "r", encoding="utf-8") as f:
@@ -38,13 +36,13 @@ with open("requirements.txt", "r", encoding="utf-8") as f:
 
 setup(
     name="causallift",
-    version="1.0.0", # Align with __version__ in __init__.py
+    version="1.0.0",  # Align with __version__ in __init__.py
     packages=find_packages(where="src", exclude=["tests"]),
     package_dir={"": "src"},
     entry_points={"console_scripts": [entry_point]},
     install_requires=requires,
-    license='BSD 2-Clause',
-    author='Yusuke Minami',
+    license="BSD 2-Clause",
+    author="Yusuke Minami",
     author_email="me@minyus.github.com",
     url="https://github.com/Minyus/causallift",
     description="CausalLift: Python package for Uplift Modeling for A/B testing and observational data.",

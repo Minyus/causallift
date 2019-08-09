@@ -51,6 +51,7 @@ from causallift.pipeline import create_pipeline
 from .default.logging import *
 
 import logging
+
 log = logging.getLogger(__name__)
 
 
@@ -117,24 +118,28 @@ class ProjectContext(KedroContext):
         return runner.run(pipeline, self.catalog)
 
 
-def skippable(
-        catalog: DataCatalog
-    ) -> bool:
+def skippable(catalog: DataCatalog) -> bool:
     missing = {ds for ds in catalog.list() if not catalog.exists(ds)}
     return not missing
 
 
 class ProjectContext1(ProjectContext):
     r"Allow to specify runner by string."
-    def run(self, runner: Union[AbstractRunner, str] = None, **kwargs) -> Dict[str, Any]:
+
+    def run(
+        self, runner: Union[AbstractRunner, str] = None, **kwargs
+    ) -> Dict[str, Any]:
         if isinstance(runner, str):
             assert runner in {"ParallelRunner", "SequentialRunner"}
-            runner = ParallelRunner() if runner == "ParallelRunner" else SequentialRunner()
+            runner = (
+                ParallelRunner() if runner == "ParallelRunner" else SequentialRunner()
+            )
         return super().run(runner=runner, **kwargs)
 
 
 class ProjectContext2(ProjectContext1):
     r"Keep the output datasets in the catalog."
+
     def run(self, **kwargs) -> Dict[str, Any]:
         d = super().run(**kwargs)
         self.catalog.add_feed_dict(d, replace=True)
@@ -143,8 +148,9 @@ class ProjectContext2(ProjectContext1):
 
 class ProjectContext3(ProjectContext2):
     r"Allow to overwrite the default logging config and remove yaml file dependency."
+
     def __init__(self, logging_config: Dict = None):
-        self._project_path = Path().cwd().resolve() # No longer used.
+        self._project_path = Path().cwd().resolve()  # No longer used.
         logging_config = logging_config or conf_logging_()
         logging.config.dictConfig(logging_config)
         self._catalog = DataCatalog()
@@ -152,10 +158,12 @@ class ProjectContext3(ProjectContext2):
 
 class FlexibleProjectContext(ProjectContext3):
     r"Overwrite the default runner and only_missing option for the run."
+
     def __init__(self, runner: str = None, only_missing: bool = False, **kwargs):
         super().__init__(**kwargs)
         self._runner = runner
         self._only_missing = only_missing
+
     def run(
         self,
         tags: Iterable[str] = None,
@@ -166,18 +174,15 @@ class FlexibleProjectContext(ProjectContext3):
         runner = runner or self._runner
         only_missing = only_missing or self._only_missing
         log.info(
-            'Run pipeline (' +
-            ('nodes: {}, '.format(node_names) if node_names else '') +
-            ('tags: {}, '.format(tags) if tags else '') +
-            '{}, '.format(runner) +
-            'only_missing: {}'.format(only_missing) +
-            ')'
+            "Run pipeline ("
+            + ("nodes: {}, ".format(node_names) if node_names else "")
+            + ("tags: {}, ".format(tags) if tags else "")
+            + "{}, ".format(runner)
+            + "only_missing: {}".format(only_missing)
+            + ")"
         )
         return super().run(
-            tags=tags,
-            runner=runner,
-            node_names=node_names,
-            only_missing=only_missing,
+            tags=tags, runner=runner, node_names=node_names, only_missing=only_missing
         )
 
 
