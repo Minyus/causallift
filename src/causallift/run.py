@@ -36,13 +36,13 @@ from warnings import warn
 
 from kedro.cli.utils import KedroCliError
 from kedro.config import ConfigLoader, MissingConfigException
-from kedro.context import KedroContext, KedroContextError
 from kedro.io import DataCatalog
 from kedro.pipeline import Pipeline
 from kedro.runner import AbstractRunner, ParallelRunner, SequentialRunner
 from kedro.utils import load_obj
 
 from causallift.pipeline import create_pipeline
+from causallift.simple_context import KedroContext, KedroContextError
 
 log = logging.getLogger(__name__)
 
@@ -142,8 +142,8 @@ class ProjectContext3(ProjectContext2):
     r"""Allow to overwrite the default logging config and remove yaml file dependency."""
 
     def __init__(self, logging_config: Dict = None):
-        self._project_path = Path().cwd().resolve()  # No longer used.
-        logging_config = logging_config
+        self._project_path = Path().cwd().resolve()  # Not Used.
+        self.env = "CausalLift"  # Not Used.
         logging.config.dictConfig(logging_config)
         self._catalog = DataCatalog()
 

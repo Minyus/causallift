@@ -233,3 +233,11 @@ def test_enable_ipw_without_known_propensity_no_runner():
 #     assert isinstance(train_df, pd.DataFrame)
 #     assert isinstance(test_df, pd.DataFrame)
 #     assert isinstance(estimated_effect_df, pd.DataFrame)
+
+
+if __name__ == "__main__":
+    test_enable_ipw_without_known_propensity()
+    test_enable_ipw_without_known_propensity_conditionally_skip()
+    test_disable_ipw()
+    test_enable_ipw_with_known_propensity()
+    test_enable_ipw_without_known_propensity_no_runner()
