@@ -42,17 +42,11 @@ from kedro.io import DataCatalog
 from kedro.pipeline import Pipeline
 from kedro.runner import AbstractRunner, SequentialRunner
 
-_LOADED_PATH = None
-
 
 class KedroContext(abc.ABC):
     """``KedroContext`` is the base class which holds the configuration and
     Kedro's main functionality. Project-specific context class should extend
     this abstract class and implement the all abstract methods.
-
-    Attributes:
-       CONF_ROOT: Name of root directory containing project configuration.
-       Default name is "conf".
 
     Example:
     ::
@@ -67,51 +61,9 @@ class KedroContext(abc.ABC):
 
     """
 
-    CONF_ROOT = "conf"
-
-    def __init__(self, project_path: Union[Path, str], env: str = "local"):
-        """Create a context object by providing the root of a Kedro project and
-        the environment configuration subfolders (see ``kedro.config.ConfigLoader``)
-
-        Args:
-            project_path: Project path to define the context for.
-            env: Optional argument for configuration default environment to be used
-            for running the pipeline. Default environment is 'local'.
-
-        """
-        self._project_path = Path(project_path).expanduser().resolve()
-        self.env = env
-        self._config_loader = self._create_config()
-        self._setup_logging()
-        self._catalog = self._create_catalog()
-
-    @property
-    @abc.abstractmethod
-    def project_name(self) -> str:
-        """Abstract property for Kedro project name.
-
-        Returns:
-            Name of Kedro project.
-
-        """
-        raise NotImplementedError(
-            "`{}` is a subclass of KedroContext and it must implement "
-            "the `project_name` property".format(self.__class__.__name__)
-        )
-
-    @property
-    @abc.abstractmethod
-    def project_version(self) -> str:
-        """Abstract property for Kedro version.
-
-        Returns:
-            Kedro version.
-
-        """
-        raise NotImplementedError(
-            "`{}` is a subclass of KedroContext and it must implement "
-            "the `project_version` property".format(self.__class__.__name__)
-        )
+    def __init__(self, logging_config: Dict = None):
+        logging.config.dictConfig(logging_config)
+        self._catalog = DataCatalog()
 
     @property
     @abc.abstractmethod
@@ -126,16 +78,6 @@ class KedroContext(abc.ABC):
             "`{}` is a subclass of KedroContext and it must implement "
             "the `pipeline` property".format(self.__class__.__name__)
         )
-
-    @property
-    def project_path(self) -> Path:
-        """Read-only property containing Kedro's root project directory.
-
-        Returns:
-            Project directory.
-
-        """
-        return self._project_path
 
     @property
     def catalog(self) -> DataCatalog:
@@ -158,74 +100,6 @@ class KedroContext(abc.ABC):
         """
         # pylint: disable=invalid-name
         return self._catalog
-
-    @property
-    def config_loader(self) -> ConfigLoader:
-        """Read-only property referring to Kedro's ``ConfigLoader`` for this
-        context.
-
-        Returns:
-            Instance of `ConfigLoader` created by `_create_config()`.
-
-        """
-        return self._config_loader
-
-    def _create_config(self) -> ConfigLoader:
-        """Load Kedro's configuration at the root of the project.
-
-        Returns:
-            ConfigLoader which can be queried to access the project config.
-
-        """
-        conf_paths = [
-            str(self.project_path / self.CONF_ROOT / "base"),
-            str(self.project_path / self.CONF_ROOT / self.env),
-        ]
-        return ConfigLoader(conf_paths)
-
-    def _setup_logging(self) -> None:
-        """Register logging specified in logging directory."""
-        conf_logging = self._config_loader.get("logging*", "logging*/**")
-        logging.config.dictConfig(conf_logging)
-
-    def _get_feed_dict(self) -> Dict[str, Any]:
-        """Get parameters and return the feed dictionary."""
-        try:
-            params = self._config_loader.get("parameters*", "parameters*/**")
-        except MissingConfigException as exc:
-            warn(
-                "Parameters not found in your Kedro project config.\n{}".format(
-                    str(exc)
-                )
-            )
-            params = {}
-        return {"parameters": params}
-
-    def _get_config_credentials(self) -> Dict[str, Any]:
-        """Getter for credentials specified in credentials directory."""
-        try:
-            conf_creds = self._config_loader.get("credentials*", "credentials*/**")
-        except MissingConfigException as exc:
-            warn(
-                "Credentials not found in your Kedro project config.\n{}".format(
-                    str(exc)
-                )
-            )
-            conf_creds = {}
-        return conf_creds
-
-    def _create_catalog(self) -> DataCatalog:
-        """Load Kedro's ``DataCatalog`` specified in catalog directory.
-
-        Returns:
-            DataCatalog defined in `catalog.yml`.
-
-        """
-        conf_catalog = self._config_loader.get("catalog*", "catalog*/**")
-        conf_creds = self._get_config_credentials()
-        catalog = DataCatalog.from_config(conf_catalog, conf_creds)
-        catalog.add_feed_dict(self._get_feed_dict())
-        return catalog
 
     def run(  # pylint: disable=too-many-arguments
         self,
@@ -282,73 +156,6 @@ class KedroContext(abc.ABC):
         # Run the runner
         runner = runner or SequentialRunner()
         return runner.run(pipeline, self.catalog)
-
-
-def load_context(project_path: Union[str, Path], **kwargs) -> KedroContext:
-    """Loads KedroContext object defined in `kedro_cli.__kedro_context__`.
-    This function will change the current working directory to the project path.
-
-    Args:
-        project_path: Path to the Kedro project.
-        kwargs: Optional custom arguments defined by users, which will be passed to
-        __kedro_context__() in `flexible_context.py`.
-
-    Returns:
-        Instance of KedroContext class defined in Kedro project.
-
-    Raises:
-        KedroContextError: If another project context has already been loaded.
-
-    """
-    # global due to importlib caching import_module("kedro_cli") call
-    global _LOADED_PATH  # pylint: disable=global-statement
-
-    project_path = Path(project_path).expanduser().resolve()
-
-    if _LOADED_PATH and project_path != _LOADED_PATH:
-        raise KedroContextError(
-            "Cannot load context for `{}`, since another project `{}` has "
-            "already been loaded".format(project_path, _LOADED_PATH)
-        )
-    if str(project_path) not in sys.path:
-        sys.path.append(str(project_path))
-
-    kedro_cli = importlib.import_module("kedro_cli")
-
-    context = kedro_cli.__get_kedro_context__(**kwargs)  # type: ignore
-    check_context_version(context)
-
-    if os.getcwd() != str(project_path):
-        warn("Changing the current working directory to {}".format(str(project_path)))
-        os.chdir(str(project_path))  # Move to project root
-    _LOADED_PATH = project_path
-    return context
-
-
-def check_context_version(context: Union[Dict, KedroContext]) -> None:
-    """ Check if the Kedro package version and Kedro template version match.
-    Args:
-        context: Instance of KedroContext from Kedro template.
-
-    Raises:
-        KedroContextError: If there is a mismatch
-            between Kedro project version and package version.
-
-    """
-
-    def _error_message(context_version):
-        return (
-            "Your Kedro project version {} does not match Kedro package "
-            "version {} you are running. Make sure to update your project template. "
-            "See https://github.com/quantumblacklabs/kedro/blob/master/RELEASE.md for how to "
-            "migrate your Kedro project."
-        ).format(context_version, __version__)
-
-    if not isinstance(context, KedroContext):
-        raise KedroContextError(_error_message(context["project_version"]))
-    # check the match for major and minor version (skip patch version)
-    if context.project_version.split(".")[:2] != __version__.split(".")[:2]:
-        raise KedroContextError(_error_message(context.project_version))
 
 
 class KedroContextError(Exception):

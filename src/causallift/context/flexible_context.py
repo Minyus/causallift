@@ -101,12 +101,12 @@ class ProjectContext(KedroContext):
 
         # Run the runner
         runner = runner or SequentialRunner()
-        if only_missing and skippable(self.catalog):
+        if only_missing and _skippable(self.catalog):
             return runner.run_only_missing(pipeline, self.catalog)
         return runner.run(pipeline, self.catalog)
 
 
-def skippable(catalog: DataCatalog) -> bool:
+def _skippable(catalog: DataCatalog) -> bool:
     missing = {ds for ds in catalog.list() if not catalog.exists(ds)}
     return not missing
 
@@ -172,50 +172,3 @@ class FlexibleProjectContext(ProjectContext3):
         return super().run(
             tags=tags, runner=runner, node_names=node_names, only_missing=only_missing
         )
-
-
-def __kedro_context__(env: str = None, **kwargs) -> KedroContext:
-    """Provide this project's context to ``kedro`` CLI and plugins.
-    Please do not rename or remove, as this will break the CLI tool.
-
-    Plugins may request additional objects from this method.
-
-    Args:
-        env: An optional parameter specifying the environment in which
-        the ``Pipeline`` should be run. If not specified defaults to "local".
-        kwargs: Optional custom arguments defined by users.
-    Returns:
-        Instance of ProjectContext class defined in Kedro project.
-
-    """
-    if env is None:
-        # Default configuration environment to be used for running the pipeline.
-        # Change this constant value if you want to load configuration
-        # from a different location.
-        env = "local"
-
-    return ProjectContext(Path.cwd(), env)
-
-
-def main(
-    tags: Iterable[str] = None, env: str = None, runner: Type[AbstractRunner] = None
-):
-    """Application main entry point.
-
-    Args:
-        tags: An optional list of node tags which should be used to
-            filter the nodes of the ``Pipeline``. If specified, only the nodes
-            containing *any* of these tags will be added to the ``Pipeline``.
-        env: An optional parameter specifying the environment in which
-            the ``Pipeline`` should be run. If not specified defaults to "local".
-        runner: An optional parameter specifying the runner that you want to run
-            the pipeline with.
-
-    """
-
-    context = __kedro_context__(env)
-    context.run(tags, runner)
-
-
-if __name__ == "__main__":
-    main()
