@@ -245,8 +245,12 @@ def activate_nbstripout():
 
 
 def _build_jupyter_command(
-    base: str, ip: str, all_kernels: bool, args: Iterable[str]
-) -> List[str]:
+    base,  # type: str
+    ip,  # type: str
+    all_kernels,  # type: bool
+    args,  # type: Iterable[str]
+):
+    # type: (...) -> List[str]
     cmd = [base, "--ip=" + ip]
 
     if not all_kernels:

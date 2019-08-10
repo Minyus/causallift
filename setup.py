@@ -31,7 +31,7 @@ from setuptools import find_packages, setup
 entry_point = "causallift = causallift.run:main"
 
 # get the dependencies and installs
-with open("requirements.txt", "r", encoding="utf-8") as f:
+with open("requirements.txt", "r") as f:
     requires = [x.strip() for x in f if x.strip()]
 
 setup(

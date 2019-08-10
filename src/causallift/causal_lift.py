@@ -1,5 +1,6 @@
-from typing import List, Optional, Tuple  # NOQA
+from typing import List, Optional, Tuple, Type  # NOQA
 
+import numpy as np
 import sklearn  # NOQA
 from kedro.io import AbstractDataSet, CSVLocalDataSet, MemoryDataSet, PickleLocalDataSet
 
@@ -282,7 +283,7 @@ class CausalLift:
             "scale_pos_weight": [1],
             "base_score": [0.5],
             "missing": [None],
-        },  # type: Union[Dict[str, List[Any]], sklearn.base.BaseEstimator]
+        },  # type: Union[Dict[str, List[Any]], Type[sklearn.base.BaseEstimator]]
         enable_ipw=True,  # type: bool
         propensity_model_params={
             "C": [0.1, 1, 10],
@@ -406,26 +407,26 @@ class CausalLift:
     ):
         # type: (...) -> None
 
-        self.runner = None
-        self.kedro_context = None
-        self.args = None
-        self.train_df = None
-        self.test_df = None
-        self.df = None
-        self.propensity_model = None
-        self.init_model = None
-        self.models_dict = None
-        self.treatment_fractions = None
-        self.treatment_fraction_train = None
-        self.treatment_fraction_test = None
+        self.runner = None  # type: Optional[str]
+        self.kedro_context = None  # type: Optional[Type[FlexibleKedroContext]]
+        self.args = None  # type: Optional[Type[EasyDict]]
+        self.train_df = None  # type: Optional[Type[pd.DataFrame]]
+        self.test_df = None  # type: Optional[Type[pd.DataFrame]]
+        self.df = None  # type: Optional[Type[pd.DataFrame]]
+        self.propensity_model = None  # type: Optional[Type[sklearn.base.BaseEstimator]]
+        self.init_model = None  # type: Optional[Type[sklearn.base.BaseEstimator]]
+        self.models_dict = None  # type: Optional[Type[EasyDict]]
+        self.treatment_fractions = None  # type: Optional[Type[EasyDict]]
+        self.treatment_fraction_train = None  # type: Optional[float]
+        self.treatment_fraction_test = None  # type: Optional[float]
 
-        self.treated__proba = None
-        self.untreated__proba = None
-        self.cate_estimated = None
+        self.treated__proba = None  # type: Optional[Type[np.array]]
+        self.untreated__proba = None  # type: Optional[Type[np.array]]
+        self.cate_estimated = None  # type: Optional[Type[pd.Series]]
 
-        self.treated__sim_eval_df = None
-        self.untreated__sim_eval_df = None
-        self.estimated_effect_df = None
+        self.treated__sim_eval_df = None  # type: Optional[Type[pd.DataFrame]]
+        self.untreated__sim_eval_df = None  # type: Optional[Type[pd.DataFrame]]
+        self.estimated_effect_df = None  # type: Optional[Type[pd.DataFrame]]
 
         # Instance attributes were defined above.
         if logging_config:
@@ -461,7 +462,7 @@ class CausalLift:
                 "[Warning] conditionally_skip option is ignored since runner is None"
             )
 
-        self.kedro_context = FlexibleProjectContext(
+        self.kedro_context = FlexibleKedroContext(
             runner=args_raw.runner, only_missing=args_raw.conditionally_skip
         )
 
@@ -585,12 +586,12 @@ class CausalLift:
 
     def estimate_recommendation_impact(
         self,
-        cate_estimated=None,  # type: Optional[pd.Series]
+        cate_estimated=None,  # type: Optional[Type[pd.Series]]
         treatment_fraction_train=None,  # type: Optional[float]
         treatment_fraction_test=None,  # type: Optional[float]
         verbose=None,  # type: Optional[int]
     ):
-        # type: (...) -> pd.DataFrame
+        # type: (...) -> Type[pd.DataFrame]
         r"""
         Estimate the impact of recommendation based on uplift modeling.
 

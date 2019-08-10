@@ -1,3 +1,5 @@
+from typing import Any, Dict  # NOQA
+
 import numpy as np
 import pandas as pd
 from easydict import EasyDict
@@ -71,7 +73,11 @@ def treatment_fraction_(df, col_treatment="Treatment"):
     return len_t(df, col_treatment=col_treatment) / len(df)
 
 
-def treatment_fractions_(args, df):
+def treatment_fractions_(
+    args,  # type: Dict[str, Any]
+    df,  # type: Type[pd.DataFrame]
+):
+    # type: (...) -> Type[EasyDict]
     col_treatment = args.col_treatment
     treatment_fractions = {
         "train": treatment_fraction_(df.xs("train"), col_treatment=col_treatment),

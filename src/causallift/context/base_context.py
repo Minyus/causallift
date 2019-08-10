@@ -28,14 +28,14 @@
 """This module provides context for Kedro project."""
 
 import abc
-from typing import Any, Dict, Iterable, Union
+from typing import Any, Dict, Iterable, Optional, Union
 
 from kedro.io import DataCatalog
 from kedro.pipeline import Pipeline
 from kedro.runner import AbstractRunner, SequentialRunner
 
 
-class KedroContext(abc.ABC):
+class BaseKedroContext(abc.ABC):
     """``KedroContext`` is the base class which holds the configuration and
     Kedro's main functionality. Project-specific context class should extend
     this abstract class and implement the all abstract methods.
@@ -54,11 +54,13 @@ class KedroContext(abc.ABC):
     """
 
     def __init__(self):
+        # type: (...) -> None
         self._catalog = DataCatalog()
 
     @property
     @abc.abstractmethod
-    def pipeline(self) -> Pipeline:
+    def pipeline(self):
+        # type: (...) -> Pipeline
         """Abstract property for Pipeline getter.
 
         Returns:
@@ -71,7 +73,8 @@ class KedroContext(abc.ABC):
         )
 
     @property
-    def catalog(self) -> DataCatalog:
+    def catalog(self):
+        # type: (...) -> DataCatalog
         """Read-only property referring to Kedro's ``DataCatalog`` for this context.
 
         Returns:
@@ -81,7 +84,8 @@ class KedroContext(abc.ABC):
         return self._catalog
 
     @property
-    def io(self) -> DataCatalog:
+    def io(self):
+        # type: (...) -> DataCatalog
         """Read-only alias property referring to Kedro's ``DataCatalog`` for this
         context.
 
@@ -94,12 +98,13 @@ class KedroContext(abc.ABC):
 
     def run(  # pylint: disable=too-many-arguments
         self,
-        tags: Iterable[str] = None,
-        runner: AbstractRunner = None,
-        node_names: Iterable[str] = None,
-        from_nodes: Iterable[str] = None,
-        to_nodes: Iterable[str] = None,
-    ) -> Dict[str, Any]:
+        tags=None,  # type: Optional[Iterable[str] ]
+        runner=None,  # type: Optional[AbstractRunner]
+        node_names=None,  # type: Optional[Iterable[str]]
+        from_nodes=None,  # type: Optional[Iterable[str]]
+        to_nodes=None,  # type: Optional[Iterable[str]]
+    ):
+        # type: (...) -> Dict[str, Any]
         """Runs the pipeline with a specified runner.
 
         Args:

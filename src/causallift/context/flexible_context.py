@@ -31,19 +31,19 @@
 import logging
 import logging.config
 from pathlib import Path
-from typing import Any, Dict, Iterable, Type, Union
+from typing import Any, Dict, Iterable, Optional, Union  # NOQA
 
 from kedro.io import DataCatalog
 from kedro.pipeline import Pipeline
 from kedro.runner import AbstractRunner, ParallelRunner, SequentialRunner
 
-from causallift.context.simple_context import KedroContext, KedroContextError
+from causallift.context.base_context import BaseKedroContext, KedroContextError
 from causallift.pipeline import create_pipeline
 
 log = logging.getLogger(__name__)
 
 
-class ProjectContext(KedroContext):
+class ProjectContext(BaseKedroContext):
     """Users can override the remaining methods from the parent class here, or create new ones
     (e.g. as required by plugins)
 
@@ -53,16 +53,18 @@ class ProjectContext(KedroContext):
     project_version = "0.15.0"
 
     @property
-    def pipeline(self) -> Pipeline:
+    def pipeline(self):
+        # type: (...) -> Pipeline
         return create_pipeline()
 
     def run(
         self,
-        tags: Iterable[str] = None,
-        runner: AbstractRunner = None,
-        node_names: Iterable[str] = None,
-        only_missing: bool = False,
-    ) -> Dict[str, Any]:
+        tags=None,  # type: Iterable[str]
+        runner=None,  # type: AbstractRunner
+        node_names=None,  # type: Iterable[str]
+        only_missing=False,  # type: bool
+    ):
+        # type: (...) -> Dict[str, Any]
         """Runs the pipeline wi th a specified runner.
 
         Args:
@@ -104,7 +106,10 @@ class ProjectContext(KedroContext):
         return runner.run(pipeline, self.catalog)
 
 
-def _skippable(catalog: DataCatalog) -> bool:
+def _skippable(
+    catalog,  # type: DataCatalog
+):
+    # type: (...) -> bool
     missing = {ds for ds in catalog.list() if not catalog.exists(ds)}
     return not missing
 
@@ -113,8 +118,11 @@ class ProjectContext1(ProjectContext):
     r"""Allow to specify runner by string."""
 
     def run(
-        self, runner: Union[AbstractRunner, str] = None, **kwargs
-    ) -> Dict[str, Any]:
+        self,
+        runner=None,  # type: Union[AbstractRunner, str]
+        **kwargs  # type: Any
+    ):
+        # type: (...) -> Dict[str, Any]
         if isinstance(runner, str):
             assert runner in {"ParallelRunner", "SequentialRunner"}
             runner = (
@@ -126,27 +134,37 @@ class ProjectContext1(ProjectContext):
 class ProjectContext2(ProjectContext1):
     r"""Keep the output datasets in the catalog."""
 
-    def run(self, **kwargs) -> Dict[str, Any]:
+    def run(
+        self, **kwargs  # type: Any
+    ):
+        # type: (...) -> Dict[str, Any]
         d = super().run(**kwargs)
         self.catalog.add_feed_dict(d, replace=True)
         return d
 
 
-class FlexibleProjectContext(ProjectContext2):
+class FlexibleKedroContext(ProjectContext2):
     r"""Overwrite the default runner and only_missing option for the run."""
 
-    def __init__(self, runner: str = None, only_missing: bool = False, **kwargs):
+    def __init__(
+        self,
+        runner=None,  # type: Optional[str]
+        only_missing=False,  # type: bool
+        **kwargs  # type: Any
+    ):
+        # type: (...) -> None
         super().__init__(**kwargs)
         self._runner = runner
         self._only_missing = only_missing
 
     def run(
         self,
-        tags: Iterable[str] = None,
-        runner: AbstractRunner = None,
-        node_names: Iterable[str] = None,
-        only_missing: bool = False,
-    ) -> Dict[str, Any]:
+        tags=None,  # type: Optional[Iterable[str] ]
+        runner=None,  # type: Optional[AbstractRunner]
+        node_names=None,  # type: Optional[Iterable[str]]
+        only_missing=False,  # type: bool
+    ):
+        # type: (...) -> Dict[str, Any]
         runner = runner or self._runner
         only_missing = only_missing or self._only_missing
         log.info(

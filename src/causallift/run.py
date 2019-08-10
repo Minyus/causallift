@@ -29,7 +29,7 @@
 """Application entry point."""
 
 from pathlib import Path
-from typing import Iterable, Type
+from typing import Iterable, Optional, Type
 
 from kedro.context import KedroContext
 from kedro.pipeline import Pipeline
@@ -48,17 +48,18 @@ class ProjectContext(KedroContext):
     project_version = "0.14.3"
 
     @property
-    def pipeline(self) -> Pipeline:
+    def pipeline(self):
+        # type: (...) -> Pipeline
         return create_pipeline()
 
 
 def main(
-    tags: Iterable[str] = None,
-    env: str = None,
-    runner: Type[AbstractRunner] = None,
-    node_names: Iterable[str] = None,
-    from_nodes: Iterable[str] = None,
-    to_nodes: Iterable[str] = None,
+    tags=None,  # type: Optional[Iterable[str]]
+    env=None,  # type: Optional[str]
+    runner=None,  # type: Optional[Type[AbstractRunner]]
+    node_names=None,  # type: Optional[Iterable[str]]
+    from_nodes=None,  # type: Optional[Iterable[str]]
+    to_nodes=None,  # type: Optional[Iterable[str]]
 ):
     """Application main entry point.
 
