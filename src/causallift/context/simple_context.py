@@ -28,16 +28,9 @@
 """This module provides context for Kedro project."""
 
 import abc
-import importlib
 import logging.config
-import os
-import sys
-from pathlib import Path
 from typing import Any, Dict, Iterable, Union
-from warnings import warn
 
-from kedro import __version__
-from kedro.config import ConfigLoader, MissingConfigException
 from kedro.io import DataCatalog
 from kedro.pipeline import Pipeline
 from kedro.runner import AbstractRunner, SequentialRunner
