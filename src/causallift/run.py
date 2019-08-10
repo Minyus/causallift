@@ -28,23 +28,14 @@
 
 """Application entry point."""
 
-import logging
-import logging.config
 from pathlib import Path
-from typing import Any, Dict, Iterable, Type, Union
-from warnings import warn
+from typing import Iterable, Type
 
-from kedro.cli.utils import KedroCliError
-from kedro.config import ConfigLoader, MissingConfigException
-from kedro.io import DataCatalog
+from kedro.context import KedroContext
 from kedro.pipeline import Pipeline
-from kedro.runner import AbstractRunner, ParallelRunner, SequentialRunner
-from kedro.utils import load_obj
+from kedro.runner import AbstractRunner
 
 from causallift.pipeline import create_pipeline
-from causallift.simple_context import KedroContext, KedroContextError
-
-log = logging.getLogger(__name__)
 
 
 class ProjectContext(KedroContext):
@@ -54,171 +45,42 @@ class ProjectContext(KedroContext):
     """
 
     project_name = "CausalLift"
-    project_version = "0.15.0"
+    project_version = "0.14.3"
 
     @property
     def pipeline(self) -> Pipeline:
         return create_pipeline()
 
-    def run(
-        self,
-        tags: Iterable[str] = None,
-        runner: AbstractRunner = None,
-        node_names: Iterable[str] = None,
-        only_missing: bool = False,
-    ) -> Dict[str, Any]:
-        """Runs the pipeline wi th a specified runner.
-
-        Args:
-            tags: An optional list of node tags which should be used to
-                filter the nodes of the ``Pipeline``. If specified, only the nodes
-                containing *any* of these tags will be run.
-            runner: An optional parameter specifying the runner that you want to run
-                the pipeline with.
-            node_names: An optional list of node names which should be used to
-                filter the nodes of the ``Pipeline``. If specified, only the nodes
-                with these names will be run.
-            only_missing: An option to run only missing nodes.
-        Raises:
-            KedroContextError: If the resulting ``Pipeline`` is empty
-                or incorrect tags are provided.
-        Returns:
-            Any node outputs that cannot be processed by the ``DataCatalog``.
-            These are returned in a dictionary, where the keys are defined
-            by the node outputs.
-        """
-        # Report project name
-        # logging.info("** Kedro project {}".format(self.project_path.name))
-
-        # Load the pipeline
-        pipeline = self.pipeline
-        if node_names:
-            pipeline = pipeline.only_nodes(*node_names)
-        if tags:
-            pipeline = pipeline.only_nodes_with_tags(*tags)
-
-        if not pipeline.nodes:
-            msg = "Pipeline contains no nodes"
-            if tags:
-                msg += " with tags: {}".format(str(tags))
-            raise KedroContextError(msg)
-
-        # Run the runner
-        runner = runner or SequentialRunner()
-        if only_missing and skippable(self.catalog):
-            return runner.run_only_missing(pipeline, self.catalog)
-        return runner.run(pipeline, self.catalog)
-
-
-def skippable(catalog: DataCatalog) -> bool:
-    missing = {ds for ds in catalog.list() if not catalog.exists(ds)}
-    return not missing
-
-
-class ProjectContext1(ProjectContext):
-    r"""Allow to specify runner by string."""
-
-    def run(
-        self, runner: Union[AbstractRunner, str] = None, **kwargs
-    ) -> Dict[str, Any]:
-        if isinstance(runner, str):
-            assert runner in {"ParallelRunner", "SequentialRunner"}
-            runner = (
-                ParallelRunner() if runner == "ParallelRunner" else SequentialRunner()
-            )
-        return super().run(runner=runner, **kwargs)
-
-
-class ProjectContext2(ProjectContext1):
-    r"""Keep the output datasets in the catalog."""
-
-    def run(self, **kwargs) -> Dict[str, Any]:
-        d = super().run(**kwargs)
-        self.catalog.add_feed_dict(d, replace=True)
-        return d
-
-
-class ProjectContext3(ProjectContext2):
-    r"""Allow to overwrite the default logging config and remove yaml file dependency."""
-
-    def __init__(self, logging_config: Dict = None):
-        self._project_path = Path().cwd().resolve()  # Not Used.
-        self.env = "CausalLift"  # Not Used.
-        logging.config.dictConfig(logging_config)
-        self._catalog = DataCatalog()
-
-
-class FlexibleProjectContext(ProjectContext3):
-    r"""Overwrite the default runner and only_missing option for the run."""
-
-    def __init__(self, runner: str = None, only_missing: bool = False, **kwargs):
-        super().__init__(**kwargs)
-        self._runner = runner
-        self._only_missing = only_missing
-
-    def run(
-        self,
-        tags: Iterable[str] = None,
-        runner: AbstractRunner = None,
-        node_names: Iterable[str] = None,
-        only_missing: bool = False,
-    ) -> Dict[str, Any]:
-        runner = runner or self._runner
-        only_missing = only_missing or self._only_missing
-        log.info(
-            "Run pipeline ("
-            + ("nodes: {}, ".format(node_names) if node_names else "")
-            + ("tags: {}, ".format(tags) if tags else "")
-            + "{}, ".format(runner)
-            + "only_missing: {}".format(only_missing)
-            + ")"
-        )
-        return super().run(
-            tags=tags, runner=runner, node_names=node_names, only_missing=only_missing
-        )
-
-
-def __kedro_context__(env: str = None, **kwargs) -> KedroContext:
-    """Provide this project's context to ``kedro`` CLI and plugins.
-    Please do not rename or remove, as this will break the CLI tool.
-
-    Plugins may request additional objects from this method.
-
-    Args:
-        env: An optional parameter specifying the environment in which
-        the ``Pipeline`` should be run. If not specified defaults to "local".
-        kwargs: Optional custom arguments defined by users.
-    Returns:
-        Instance of ProjectContext class defined in Kedro project.
-
-    """
-    if env is None:
-        # Default configuration environment to be used for running the pipeline.
-        # Change this constant value if you want to load configuration
-        # from a different location.
-        env = "local"
-
-    return ProjectContext(Path.cwd(), env)
-
 
 def main(
-    tags: Iterable[str] = None, env: str = None, runner: Type[AbstractRunner] = None
+    tags: Iterable[str] = None,
+    env: str = None,
+    runner: Type[AbstractRunner] = None,
+    node_names: Iterable[str] = None,
+    from_nodes: Iterable[str] = None,
+    to_nodes: Iterable[str] = None,
 ):
     """Application main entry point.
 
     Args:
         tags: An optional list of node tags which should be used to
             filter the nodes of the ``Pipeline``. If specified, only the nodes
-            containing *any* of these tags will be added to the ``Pipeline``.
+            containing *any* of these tags will be run.
         env: An optional parameter specifying the environment in which
-            the ``Pipeline`` should be run. If not specified defaults to "local".
+            the ``Pipeline`` should be run.
         runner: An optional parameter specifying the runner that you want to run
             the pipeline with.
+        node_names: An optional list of node names which should be used to filter
+            the nodes of the ``Pipeline``. If specified, only the nodes with these
+            names will be run.
+        from_nodes: An optional list of node names which should be used as a
+            starting point of the new ``Pipeline``.
+        to_nodes: An optional list of node names which should be used as an
+            end point of the new ``Pipeline``.
 
     """
-
-    context = __kedro_context__(env)
-    context.run(tags, runner)
+    context = ProjectContext(Path.cwd(), env)
+    context.run(tags, runner, node_names, from_nodes, to_nodes)
 
 
 if __name__ == "__main__":
