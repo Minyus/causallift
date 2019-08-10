@@ -90,6 +90,7 @@
 <li class="toctree-l2"><a class="reference internal" href="causallift.html">causallift package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="causallift.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="causallift.nodes.html">causallift.nodes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="causallift.context.html">causallift.context package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="causallift.html#submodules">Submodules</a></li>
@@ -175,6 +176,7 @@
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#O"><strong>O</strong></a>
@@ -190,15 +192,15 @@
       <li><a href="causallift.html#causallift.causal_lift.CausalLift.__init__">__init__() (causallift.causal_lift.CausalLift method)</a>
 
       <ul>
+        <li><a href="causallift.context.html#causallift.context.base_context.BaseKedroContext.__init__">(causallift.context.base_context.BaseKedroContext method)</a>
+</li>
+        <li><a href="causallift.context.html#causallift.context.flexible_context.FlexibleKedroContext.__init__">(causallift.context.flexible_context.FlexibleKedroContext method)</a>
+</li>
         <li><a href="causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreated.__init__">(causallift.nodes.model_for_each.ModelForTreated method)</a>
 </li>
         <li><a href="causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.__init__">(causallift.nodes.model_for_each.ModelForTreatedOrUntreated method)</a>
 </li>
         <li><a href="causallift.nodes.html#causallift.nodes.model_for_each.ModelForUntreated.__init__">(causallift.nodes.model_for_each.ModelForUntreated method)</a>
-</li>
-        <li><a href="causallift.html#causallift.run.FlexibleProjectContext.__init__">(causallift.run.FlexibleProjectContext method)</a>
-</li>
-        <li><a href="causallift.html#causallift.run.ProjectContext3.__init__">(causallift.run.ProjectContext3 method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -215,10 +217,12 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="causallift.nodes.html#causallift.nodes.utils.bundle_train_and_test_data">bundle_train_and_test_data() (in module causallift.nodes.utils)</a>
+      <li><a href="causallift.context.html#causallift.context.base_context.BaseKedroContext">BaseKedroContext (class in causallift.context.base_context)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="causallift.nodes.html#causallift.nodes.utils.bundle_train_and_test_data">bundle_train_and_test_data() (in module causallift.nodes.utils)</a>
+</li>
       <li><a href="causallift.nodes.html#causallift.nodes.model_for_each.bundle_treated_and_untreated_models">bundle_treated_and_untreated_models() (in module causallift.nodes.model_for_each)</a>
 </li>
   </ul></td>
@@ -227,22 +231,30 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="causallift.context.html#causallift.context.base_context.BaseKedroContext.catalog">catalog() (causallift.context.base_context.BaseKedroContext property)</a>
+</li>
       <li><a href="causallift.html#causallift.causal_lift.CausalLift">CausalLift (class in causallift.causal_lift)</a>
 </li>
       <li><a href="causallift.html#module-causallift">causallift (module)</a>
 </li>
       <li><a href="causallift.html#module-causallift.causal_lift">causallift.causal_lift (module)</a>
 </li>
+      <li><a href="causallift.context.html#module-causallift.context">causallift.context (module)</a>
+</li>
+      <li><a href="causallift.context.html#module-causallift.context.base_context">causallift.context.base_context (module)</a>
+</li>
+      <li><a href="causallift.context.html#module-causallift.context.flexible_context">causallift.context.flexible_context (module)</a>
+</li>
       <li><a href="causallift.html#module-causallift.generate_data">causallift.generate_data (module)</a>
 </li>
       <li><a href="causallift.nodes.html#module-causallift.nodes">causallift.nodes (module)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="causallift.nodes.html#module-causallift.nodes.estimate_propensity">causallift.nodes.estimate_propensity (module)</a>
 </li>
       <li><a href="causallift.nodes.html#module-causallift.nodes.model_for_each">causallift.nodes.model_for_each (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="causallift.nodes.html#module-causallift.nodes.utils">causallift.nodes.utils (module)</a>
 </li>
       <li><a href="causallift.html#module-causallift.pipeline">causallift.pipeline (module)</a>
@@ -287,7 +299,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="causallift.nodes.html#causallift.nodes.estimate_propensity.fit_propensity">fit_propensity() (in module causallift.nodes.estimate_propensity)</a>
 </li>
-      <li><a href="causallift.html#causallift.run.FlexibleProjectContext">FlexibleProjectContext (class in causallift.run)</a>
+      <li><a href="causallift.context.html#causallift.context.flexible_context.FlexibleKedroContext">FlexibleKedroContext (class in causallift.context.flexible_context)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -314,6 +326,16 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="causallift.nodes.html#causallift.nodes.model_for_each.initialize_model">initialize_model() (in module causallift.nodes.model_for_each)</a>
+</li>
+      <li><a href="causallift.context.html#causallift.context.base_context.BaseKedroContext.io">io() (causallift.context.base_context.BaseKedroContext property)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="causallift.context.html#causallift.context.base_context.KedroContextError">KedroContextError</a>
 </li>
   </ul></td>
 </tr></table>
@@ -375,23 +397,39 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="causallift.html#causallift.run.ProjectContext.pipeline">pipeline() (causallift.run.ProjectContext property)</a>
+      <li><a href="causallift.context.html#causallift.context.base_context.BaseKedroContext.pipeline">pipeline() (causallift.context.base_context.BaseKedroContext property)</a>
+
+      <ul>
+        <li><a href="causallift.context.html#causallift.context.flexible_context.ProjectContext.pipeline">(causallift.context.flexible_context.ProjectContext property)</a>
 </li>
+        <li><a href="causallift.html#causallift.run.ProjectContext.pipeline">(causallift.run.ProjectContext property)</a>
+</li>
+      </ul></li>
       <li><a href="causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.predict_proba">predict_proba() (causallift.nodes.model_for_each.ModelForTreatedOrUntreated method)</a>
 </li>
-      <li><a href="causallift.html#causallift.run.ProjectContext.project_name">project_name (causallift.run.ProjectContext attribute)</a>
+      <li><a href="causallift.context.html#causallift.context.flexible_context.ProjectContext.project_name">project_name (causallift.context.flexible_context.ProjectContext attribute)</a>
+
+      <ul>
+        <li><a href="causallift.html#causallift.run.ProjectContext.project_name">(causallift.run.ProjectContext attribute)</a>
 </li>
-      <li><a href="causallift.html#causallift.run.ProjectContext.project_version">project_version (causallift.run.ProjectContext attribute)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="causallift.html#causallift.run.ProjectContext">ProjectContext (class in causallift.run)</a>
+      <li><a href="causallift.context.html#causallift.context.flexible_context.ProjectContext.project_version">project_version (causallift.context.flexible_context.ProjectContext attribute)</a>
+
+      <ul>
+        <li><a href="causallift.html#causallift.run.ProjectContext.project_version">(causallift.run.ProjectContext attribute)</a>
 </li>
-      <li><a href="causallift.html#causallift.run.ProjectContext1">ProjectContext1 (class in causallift.run)</a>
+      </ul></li>
+      <li><a href="causallift.context.html#causallift.context.flexible_context.ProjectContext">ProjectContext (class in causallift.context.flexible_context)</a>
+
+      <ul>
+        <li><a href="causallift.html#causallift.run.ProjectContext">(class in causallift.run)</a>
 </li>
-      <li><a href="causallift.html#causallift.run.ProjectContext2">ProjectContext2 (class in causallift.run)</a>
+      </ul></li>
+      <li><a href="causallift.context.html#causallift.context.flexible_context.ProjectContext1">ProjectContext1 (class in causallift.context.flexible_context)</a>
 </li>
-      <li><a href="causallift.html#causallift.run.ProjectContext3">ProjectContext3 (class in causallift.run)</a>
+      <li><a href="causallift.context.html#causallift.context.flexible_context.ProjectContext2">ProjectContext2 (class in causallift.context.flexible_context)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -401,14 +439,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="causallift.nodes.html#causallift.nodes.utils.recommend_by_cate">recommend_by_cate() (in module causallift.nodes.utils)</a>
 </li>
-      <li><a href="causallift.html#causallift.run.FlexibleProjectContext.run">run() (causallift.run.FlexibleProjectContext method)</a>
+      <li><a href="causallift.context.html#causallift.context.base_context.BaseKedroContext.run">run() (causallift.context.base_context.BaseKedroContext method)</a>
 
       <ul>
-        <li><a href="causallift.html#causallift.run.ProjectContext.run">(causallift.run.ProjectContext method)</a>
+        <li><a href="causallift.context.html#causallift.context.flexible_context.FlexibleKedroContext.run">(causallift.context.flexible_context.FlexibleKedroContext method)</a>
 </li>
-        <li><a href="causallift.html#causallift.run.ProjectContext1.run">(causallift.run.ProjectContext1 method)</a>
+        <li><a href="causallift.context.html#causallift.context.flexible_context.ProjectContext.run">(causallift.context.flexible_context.ProjectContext method)</a>
 </li>
-        <li><a href="causallift.html#causallift.run.ProjectContext2.run">(causallift.run.ProjectContext2 method)</a>
+        <li><a href="causallift.context.html#causallift.context.flexible_context.ProjectContext1.run">(causallift.context.flexible_context.ProjectContext1 method)</a>
+</li>
+        <li><a href="causallift.context.html#causallift.context.flexible_context.ProjectContext2.run">(causallift.context.flexible_context.ProjectContext2 method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -419,13 +459,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="causallift.nodes.html#causallift.nodes.estimate_propensity.schedule_propensity_scoring">schedule_propensity_scoring() (in module causallift.nodes.estimate_propensity)</a>
 </li>
-      <li><a href="causallift.nodes.html#causallift.nodes.utils.score_df">score_df() (in module causallift.nodes.utils)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.simulate_recommendation">simulate_recommendation() (causallift.nodes.model_for_each.ModelForTreatedOrUntreated method)</a>
+      <li><a href="causallift.nodes.html#causallift.nodes.utils.score_df">score_df() (in module causallift.nodes.utils)</a>
 </li>
-      <li><a href="causallift.html#causallift.run.skippable">skippable() (in module causallift.run)</a>
+      <li><a href="causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.simulate_recommendation">simulate_recommendation() (causallift.nodes.model_for_each.ModelForTreatedOrUntreated method)</a>
 </li>
   </ul></td>
 </tr></table>

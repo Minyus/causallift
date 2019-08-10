@@ -89,6 +89,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../causallift.html">causallift package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../causallift.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../causallift.nodes.html">causallift.nodes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../causallift.context.html">causallift.context package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../causallift.html#submodules">Submodules</a></li>
@@ -193,23 +194,14 @@
 
 <span class="sd">&quot;&quot;&quot;Application entry point.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">logging.config</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span>
 
-<span class="kn">from</span> <span class="nn">kedro.cli.utils</span> <span class="k">import</span> <span class="n">KedroCliError</span>
-<span class="kn">from</span> <span class="nn">kedro.config</span> <span class="k">import</span> <span class="n">ConfigLoader</span><span class="p">,</span> <span class="n">MissingConfigException</span>
-<span class="kn">from</span> <span class="nn">kedro.context</span> <span class="k">import</span> <span class="n">KedroContext</span><span class="p">,</span> <span class="n">KedroContextError</span>
-<span class="kn">from</span> <span class="nn">kedro.io</span> <span class="k">import</span> <span class="n">DataCatalog</span>
+<span class="kn">from</span> <span class="nn">kedro.context</span> <span class="k">import</span> <span class="n">KedroContext</span>
 <span class="kn">from</span> <span class="nn">kedro.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
-<span class="kn">from</span> <span class="nn">kedro.runner</span> <span class="k">import</span> <span class="n">AbstractRunner</span><span class="p">,</span> <span class="n">ParallelRunner</span><span class="p">,</span> <span class="n">SequentialRunner</span>
-<span class="kn">from</span> <span class="nn">kedro.utils</span> <span class="k">import</span> <span class="n">load_obj</span>
+<span class="kn">from</span> <span class="nn">kedro.runner</span> <span class="k">import</span> <span class="n">AbstractRunner</span>
 
 <span class="kn">from</span> <span class="nn">causallift.pipeline</span> <span class="k">import</span> <span class="n">create_pipeline</span>
-
-<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ProjectContext"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext">[docs]</a><span class="k">class</span> <span class="nc">ProjectContext</span><span class="p">(</span><span class="n">KedroContext</span><span class="p">):</span>
@@ -219,171 +211,43 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">project_name</span> <span class="o">=</span> <span class="s2">&quot;CausalLift&quot;</span>
-    <span class="n">project_version</span> <span class="o">=</span> <span class="s2">&quot;0.15.0&quot;</span>
+    <span class="n">project_version</span> <span class="o">=</span> <span class="s2">&quot;0.14.3&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pipeline</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">create_pipeline</span><span class="p">()</span>
-
-<div class="viewcode-block" id="ProjectContext.run"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">tags</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">runner</span><span class="p">:</span> <span class="n">AbstractRunner</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">node_names</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">only_missing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Runs the pipeline wi th a specified runner.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            tags: An optional list of node tags which should be used to</span>
-<span class="sd">                filter the nodes of the ``Pipeline``. If specified, only the nodes</span>
-<span class="sd">                containing *any* of these tags will be run.</span>
-<span class="sd">            runner: An optional parameter specifying the runner that you want to run</span>
-<span class="sd">                the pipeline with.</span>
-<span class="sd">            node_names: An optional list of node names which should be used to</span>
-<span class="sd">                filter the nodes of the ``Pipeline``. If specified, only the nodes</span>
-<span class="sd">                with these names will be run.</span>
-<span class="sd">            only_missing: An option to run only missing nodes.</span>
-<span class="sd">        Raises:</span>
-<span class="sd">            KedroContextError: If the resulting ``Pipeline`` is empty</span>
-<span class="sd">                or incorrect tags are provided.</span>
-<span class="sd">        Returns:</span>
-<span class="sd">            Any node outputs that cannot be processed by the ``DataCatalog``.</span>
-<span class="sd">            These are returned in a dictionary, where the keys are defined</span>
-<span class="sd">            by the node outputs.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Report project name</span>
-        <span class="c1"># logging.info(&quot;** Kedro project {}&quot;.format(self.project_path.name))</span>
-
-        <span class="c1"># Load the pipeline</span>
-        <span class="n">pipeline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipeline</span>
-        <span class="k">if</span> <span class="n">node_names</span><span class="p">:</span>
-            <span class="n">pipeline</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">only_nodes</span><span class="p">(</span><span class="o">*</span><span class="n">node_names</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">tags</span><span class="p">:</span>
-            <span class="n">pipeline</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">only_nodes_with_tags</span><span class="p">(</span><span class="o">*</span><span class="n">tags</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Pipeline contains no nodes&quot;</span>
-            <span class="k">if</span> <span class="n">tags</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; with tags: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tags</span><span class="p">))</span>
-            <span class="k">raise</span> <span class="n">KedroContextError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
-        <span class="c1"># Run the runner</span>
-        <span class="n">runner</span> <span class="o">=</span> <span class="n">runner</span> <span class="ow">or</span> <span class="n">SequentialRunner</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">only_missing</span> <span class="ow">and</span> <span class="n">skippable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_only_missing</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="p">)</span></div></div>
-
-
-<div class="viewcode-block" id="skippable"><a class="viewcode-back" href="../../causallift.html#causallift.run.skippable">[docs]</a><span class="k">def</span> <span class="nf">skippable</span><span class="p">(</span><span class="n">catalog</span><span class="p">:</span> <span class="n">DataCatalog</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="n">missing</span> <span class="o">=</span> <span class="p">{</span><span class="n">ds</span> <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">catalog</span><span class="o">.</span><span class="n">list</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">catalog</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ds</span><span class="p">)}</span>
-    <span class="k">return</span> <span class="ow">not</span> <span class="n">missing</span></div>
-
-
-<div class="viewcode-block" id="ProjectContext1"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext1">[docs]</a><span class="k">class</span> <span class="nc">ProjectContext1</span><span class="p">(</span><span class="n">ProjectContext</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Allow to specify runner by string.&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="ProjectContext1.run"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext1.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">runner</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AbstractRunner</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">assert</span> <span class="n">runner</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ParallelRunner&quot;</span><span class="p">,</span> <span class="s2">&quot;SequentialRunner&quot;</span><span class="p">}</span>
-            <span class="n">runner</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">ParallelRunner</span><span class="p">()</span> <span class="k">if</span> <span class="n">runner</span> <span class="o">==</span> <span class="s2">&quot;ParallelRunner&quot;</span> <span class="k">else</span> <span class="n">SequentialRunner</span><span class="p">()</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">runner</span><span class="o">=</span><span class="n">runner</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
-
-
-<div class="viewcode-block" id="ProjectContext2"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext2">[docs]</a><span class="k">class</span> <span class="nc">ProjectContext2</span><span class="p">(</span><span class="n">ProjectContext1</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Keep the output datasets in the catalog.&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="ProjectContext2.run"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext2.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">add_feed_dict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">d</span></div></div>
-
-
-<div class="viewcode-block" id="ProjectContext3"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext3">[docs]</a><span class="k">class</span> <span class="nc">ProjectContext3</span><span class="p">(</span><span class="n">ProjectContext2</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Allow to overwrite the default logging config and remove yaml file dependency.&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="ProjectContext3.__init__"><a class="viewcode-back" href="../../causallift.html#causallift.run.ProjectContext3.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logging_config</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_project_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">()</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>  <span class="c1"># No longer used.</span>
-        <span class="n">logging_config</span> <span class="o">=</span> <span class="n">logging_config</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">logging_config</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_catalog</span> <span class="o">=</span> <span class="n">DataCatalog</span><span class="p">()</span></div></div>
-
-
-<div class="viewcode-block" id="FlexibleProjectContext"><a class="viewcode-back" href="../../causallift.html#causallift.run.FlexibleProjectContext">[docs]</a><span class="k">class</span> <span class="nc">FlexibleProjectContext</span><span class="p">(</span><span class="n">ProjectContext3</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Overwrite the default runner and only_missing option for the run.&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="FlexibleProjectContext.__init__"><a class="viewcode-back" href="../../causallift.html#causallift.run.FlexibleProjectContext.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">only_missing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span> <span class="o">=</span> <span class="n">runner</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_only_missing</span> <span class="o">=</span> <span class="n">only_missing</span></div>
-
-<div class="viewcode-block" id="FlexibleProjectContext.run"><a class="viewcode-back" href="../../causallift.html#causallift.run.FlexibleProjectContext.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">tags</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">runner</span><span class="p">:</span> <span class="n">AbstractRunner</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">node_names</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">only_missing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="n">runner</span> <span class="o">=</span> <span class="n">runner</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span>
-        <span class="n">only_missing</span> <span class="o">=</span> <span class="n">only_missing</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_only_missing</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s2">&quot;Run pipeline (&quot;</span>
-            <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;nodes: </span><span class="si">{}</span><span class="s2">, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node_names</span><span class="p">)</span> <span class="k">if</span> <span class="n">node_names</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;tags: </span><span class="si">{}</span><span class="s2">, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="k">if</span> <span class="n">tags</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">runner</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;only_missing: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">only_missing</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span> <span class="n">runner</span><span class="o">=</span><span class="n">runner</span><span class="p">,</span> <span class="n">node_names</span><span class="o">=</span><span class="n">node_names</span><span class="p">,</span> <span class="n">only_missing</span><span class="o">=</span><span class="n">only_missing</span>
-        <span class="p">)</span></div></div>
-
-
-<span class="k">def</span> <span class="nf">__kedro_context__</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KedroContext</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Provide this project&#39;s context to ``kedro`` CLI and plugins.</span>
-<span class="sd">    Please do not rename or remove, as this will break the CLI tool.</span>
-
-<span class="sd">    Plugins may request additional objects from this method.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        env: An optional parameter specifying the environment in which</span>
-<span class="sd">        the ``Pipeline`` should be run. If not specified defaults to &quot;local&quot;.</span>
-<span class="sd">        kwargs: Optional custom arguments defined by users.</span>
-<span class="sd">    Returns:</span>
-<span class="sd">        Instance of ProjectContext class defined in Kedro project.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># Default configuration environment to be used for running the pipeline.</span>
-        <span class="c1"># Change this constant value if you want to load configuration</span>
-        <span class="c1"># from a different location.</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span>
-
-    <span class="k">return</span> <span class="n">ProjectContext</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="n">env</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># type: (...) -&gt; Pipeline</span>
+        <span class="k">return</span> <span class="n">create_pipeline</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../causallift.html#causallift.run.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span>
-    <span class="n">tags</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">runner</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">AbstractRunner</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">tags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[Iterable[str]]</span>
+    <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[str]</span>
+    <span class="n">runner</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[Type[AbstractRunner]]</span>
+    <span class="n">node_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[Iterable[str]]</span>
+    <span class="n">from_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[Iterable[str]]</span>
+    <span class="n">to_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[Iterable[str]]</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Application main entry point.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        tags: An optional list of node tags which should be used to</span>
 <span class="sd">            filter the nodes of the ``Pipeline``. If specified, only the nodes</span>
-<span class="sd">            containing *any* of these tags will be added to the ``Pipeline``.</span>
+<span class="sd">            containing *any* of these tags will be run.</span>
 <span class="sd">        env: An optional parameter specifying the environment in which</span>
-<span class="sd">            the ``Pipeline`` should be run. If not specified defaults to &quot;local&quot;.</span>
+<span class="sd">            the ``Pipeline`` should be run.</span>
 <span class="sd">        runner: An optional parameter specifying the runner that you want to run</span>
 <span class="sd">            the pipeline with.</span>
+<span class="sd">        node_names: An optional list of node names which should be used to filter</span>
+<span class="sd">            the nodes of the ``Pipeline``. If specified, only the nodes with these</span>
+<span class="sd">            names will be run.</span>
+<span class="sd">        from_nodes: An optional list of node names which should be used as a</span>
+<span class="sd">            starting point of the new ``Pipeline``.</span>
+<span class="sd">        to_nodes: An optional list of node names which should be used as an</span>
+<span class="sd">            end point of the new ``Pipeline``.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">context</span> <span class="o">=</span> <span class="n">__kedro_context__</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-    <span class="n">context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">runner</span><span class="p">)</span></div>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">ProjectContext</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="n">env</span><span class="p">)</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">runner</span><span class="p">,</span> <span class="n">node_names</span><span class="p">,</span> <span class="n">from_nodes</span><span class="p">,</span> <span class="n">to_nodes</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>

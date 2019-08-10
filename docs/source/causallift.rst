@@ -12,6 +12,7 @@ Subpackages
 .. toctree::
 
     causallift.nodes
+    causallift.context
 
 Submodules
 ----------

@@ -187,13 +187,36 @@ def package():
 @cli.command("build-docs")
 def build_docs():
     """Build the project documentation."""
-    python_call("pip", ["install", "src/[docs]"])
-    python_call("pip", ["install", "-r", "src/requirements.txt"])
-    python_call("ipykernel", ["install", "--user", "--name=causallift"])
+    # python_call("pip", ["install", "src/[docs]"])
+    # python_call("pip", ["install", "-r", "src/requirements.txt"])
+    # python_call("ipykernel", ["install", "--user", "--name=causallift"])
     if Path("docs/build").exists():
         shutil.rmtree("docs/build")
     call(["sphinx-apidoc", "--module-first", "-o", "docs/source", "src/causallift"])
     call(["sphinx-build", "-M", "html", "docs/source", "docs/build", "-a"])
+
+    """ Prepare to publish the Sphinx document on the GitHub Pages """
+    from distutils.dir_util import copy_tree
+
+    copy_tree("docs/build/html", "docs")
+
+    def replace(
+        pattern,  # type: str
+        repl,  # type: str
+        path,  # type: str
+    ):
+        # type: (...) -> None
+        p = Path(path)
+        p.write_text(p.read_text().replace(pattern, repl))
+
+    replace(
+        r"<head>",
+        r"<head>" "\n" r'  <base href="{{site.github.url}}" charset="utf-8"/>',
+        "docs/index.html",
+    )
+
+    Path("docs/.nojekyll").touch()
+    Path("docs/_config.yml").touch()
 
 
 @cli.command("build-reqs")

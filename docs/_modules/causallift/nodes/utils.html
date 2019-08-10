@@ -89,6 +89,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../causallift.html">causallift package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../causallift.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../causallift.nodes.html">causallift.nodes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../causallift.context.html">causallift.context package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../causallift.html#submodules">Submodules</a></li>
@@ -163,7 +164,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for causallift.nodes.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Type</span>  <span class="c1"># NOQA</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">easydict</span> <span class="k">import</span> <span class="n">EasyDict</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="p">(</span>
@@ -236,7 +239,11 @@
     <span class="k">return</span> <span class="n">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="treatment_fractions_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.treatment_fractions_">[docs]</a><span class="k">def</span> <span class="nf">treatment_fractions_</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<div class="viewcode-block" id="treatment_fractions_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.treatment_fractions_">[docs]</a><span class="k">def</span> <span class="nf">treatment_fractions_</span><span class="p">(</span>
+    <span class="n">args</span><span class="p">,</span>  <span class="c1"># type: Dict[str, Any]</span>
+    <span class="n">df</span><span class="p">,</span>  <span class="c1"># type: Type[pd.DataFrame]</span>
+<span class="p">):</span>
+    <span class="c1"># type: (...) -&gt; Type[EasyDict]</span>
     <span class="n">col_treatment</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span>
     <span class="n">treatment_fractions</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">treatment_fraction_</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">),</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">),</span>
