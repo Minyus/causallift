@@ -28,7 +28,6 @@
 """This module provides context for Kedro project."""
 
 import abc
-import logging.config
 from typing import Any, Dict, Iterable, Union
 
 from kedro.io import DataCatalog
@@ -54,8 +53,7 @@ class KedroContext(abc.ABC):
 
     """
 
-    def __init__(self, logging_config: Dict = None):
-        logging.config.dictConfig(logging_config)
+    def __init__(self):
         self._catalog = DataCatalog()
 
     @property
@@ -125,8 +123,6 @@ class KedroContext(abc.ABC):
             These are returned in a dictionary, where the keys are defined
             by the node outputs.
         """
-        # Report project name
-        logging.info("** Kedro project {}".format(self.project_path.name))
 
         # Load the pipeline as the intersection of all conditions
         pipeline = self.pipeline

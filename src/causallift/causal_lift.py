@@ -402,7 +402,7 @@ class CausalLift:
                 "level": "INFO",
             },
             "version": 1,
-        },  # type: Dict[str, Any]
+        },  # type: Optional[Dict[str, Any]]
     ):
         # type: (...) -> None
 
@@ -428,6 +428,8 @@ class CausalLift:
         self.estimated_effect_df = None
 
         # Instance attributes were defined above.
+        if logging_config:
+            logging.config.dictConfig(logging_config)
 
         args_raw = dict(
             cols_features=cols_features,
@@ -460,9 +462,7 @@ class CausalLift:
             )
 
         self.kedro_context = FlexibleProjectContext(
-            logging_config=logging_config,
-            runner=args_raw.runner,
-            only_missing=args_raw.conditionally_skip,
+            runner=args_raw.runner, only_missing=args_raw.conditionally_skip
         )
 
         self.runner = args_raw.runner

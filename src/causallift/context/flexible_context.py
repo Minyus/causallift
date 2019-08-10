@@ -83,8 +83,6 @@ class ProjectContext(KedroContext):
             These are returned in a dictionary, where the keys are defined
             by the node outputs.
         """
-        # Report project name
-        # logging.info("** Kedro project {}".format(self.project_path.name))
 
         # Load the pipeline
         pipeline = self.pipeline
@@ -134,17 +132,7 @@ class ProjectContext2(ProjectContext1):
         return d
 
 
-class ProjectContext3(ProjectContext2):
-    r"""Allow to overwrite the default logging config and remove yaml file dependency."""
-
-    def __init__(self, logging_config: Dict = None):
-        self._project_path = Path().cwd().resolve()  # Not Used.
-        self.env = "CausalLift"  # Not Used.
-        logging.config.dictConfig(logging_config)
-        self._catalog = DataCatalog()
-
-
-class FlexibleProjectContext(ProjectContext3):
+class FlexibleProjectContext(ProjectContext2):
     r"""Overwrite the default runner and only_missing option for the run."""
 
     def __init__(self, runner: str = None, only_missing: bool = False, **kwargs):
