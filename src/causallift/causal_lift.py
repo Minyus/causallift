@@ -1,5 +1,5 @@
 import logging  # NOQA
-from typing import Any, Dict, List, Optional, Union  # NOQA
+from typing import Any, Dict, List, Optional, Tuple, Union  # NOQA
 
 import pandas as pd  # NOQA
 import sklearn  # NOQA
@@ -399,6 +399,7 @@ class CausalLift:
             "version": 1,
         },  # type: Dict[str, Any]
     ):
+        # type: (...) -> None
 
         self.runner = None
         self.kedro_context = None
@@ -528,11 +529,14 @@ class CausalLift:
         self._separate_train_test()
 
     def _separate_train_test(self):
+        # type: (...) -> Tuple[pd.DataFrame, pd.DataFrame]
+
         self.train_df = self.df.xs("train")
         self.test_df = self.df.xs("test")
         return self.train_df, self.test_df
 
     def estimate_cate_by_2_models(self):
+        # type: (...) -> Tuple[pd.DataFrame, pd.DataFrame]
         r"""
         Estimate CATE (Conditional Average Treatment Effect) using 2 XGBoost classifier models.
 
@@ -581,6 +585,7 @@ class CausalLift:
         treatment_fraction_test=None,  # type: Optional[float]
         verbose=None,  # type: Optional[int]
     ):
+        # type: (...) -> pd.DataFrame
         r"""
         Estimate the impact of recommendation based on uplift modeling.
 
