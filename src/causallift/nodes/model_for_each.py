@@ -3,8 +3,6 @@ import logging
 import numpy as np
 import pandas as pd
 from IPython.display import display
-from sklearn.model_selection import GridSearchCV
-from xgboost import XGBClassifier
 
 from .utils import *  # NOQA
 
@@ -208,17 +206,24 @@ def bundle_treated_and_untreated_models(treated_model, untreated_model):
 
 
 def initialize_model(args):
+    model = args.uplift_model_params
 
-    model = (
-        GridSearchCV(
-            XGBClassifier(random_state=args.random_state),
-            args.uplift_model_params,
-            cv=args.cv,
-            return_train_score=False,
-            n_jobs=-1,
+    if isinstance(args.uplift_model_params, dict):
+
+        from sklearn.model_selection import GridSearchCV
+        from xgboost import XGBClassifier
+
+        estimator = XGBClassifier(random_state=args.random_state)
+
+        model = (
+            GridSearchCV(
+                estimator=estimator,
+                param_grid=args.uplift_model_params,
+                scoring=None,
+                cv=args.cv,
+                return_train_score=False,
+                n_jobs=-1,
+            )
         )
-        if isinstance(args.uplift_model_params, dict)
-        else args.uplift_model_params
-    )
 
     return model
