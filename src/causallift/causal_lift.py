@@ -60,7 +60,13 @@ class CausalLift:
 
         uplift_model_params:
             Parameters used to fit 2 XGBoost classifier models.
+            Use `search_cv` key to specify the Search CV class name such as
+            `sklearn.model_selection.GridSearchCV`
+            Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+            Use `estimator` key to specify the estimator class name such as
+            `xgboost.XGBClassifier`
             Refer to https://xgboost.readthedocs.io/en/latest/parameter.html
+
             If :obj:`None` (default)::
 
                 dict(
@@ -106,6 +112,11 @@ class CausalLift:
             True in default.
         propensity_model_params:
             Parameters used to fit logistic regression model to estimate propensity score.
+            Use `search_cv` key to specify the Search CV class name such as
+            `sklearn.model_selection.GridSearchCV`
+            Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+            Use `estimator` key to specify the estimator class name such as
+            `sklearn.linear_model.LogisticRegression`
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
             If :obj:`None` (default)::
 
@@ -132,9 +143,6 @@ class CausalLift:
                     ),
                 )
 
-        cv:
-            Cross-Validation for the Grid Search. :obj:`3` in default.
-            Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
         index_name:
             Index name of the pandas data frame after resetting the index. 'index' in default.
             If :obj:`None`, the index will not be reset.
@@ -478,7 +486,6 @@ class CausalLift:
             uplift_model_params=uplift_model_params,
             enable_ipw=enable_ipw,
             propensity_model_params=propensity_model_params,
-            cv=cv,
             index_name=index_name,
             partition_name=partition_name,
             runner=runner,
