@@ -454,7 +454,6 @@ class CausalLift:
         self.test_df = None  # type: Optional[Type[pd.DataFrame]]
         self.df = None  # type: Optional[Type[pd.DataFrame]]
         self.propensity_model = None  # type: Optional[Type[sklearn.base.BaseEstimator]]
-        self.init_model = None  # type: Optional[Type[sklearn.base.BaseEstimator]]
         self.models_dict = None  # type: Optional[Type[EasyDict]]
         self.treatment_fractions = None  # type: Optional[Type[EasyDict]]
         self.treatment_fraction_train = None  # type: Optional[float]
@@ -515,7 +514,6 @@ class CausalLift:
             if self.args.need_propensity_scoring:
                 self.propensity_model = fit_propensity(self.args, self.df)
                 self.df = estimate_propensity(self.args, self.df, self.propensity_model)
-            self.init_model = initialize_model(self.args)
 
         if self.runner:
             self.kedro_context.catalog.add_feed_dict(
@@ -542,7 +540,6 @@ class CausalLift:
             self.treatment_fractions = self.kedro_context.catalog.load(
                 "treatment_fractions"
             )
-            self.init_model = self.kedro_context.catalog.load(("init_model"))
 
             if self.args.need_propensity_scoring:
                 self.kedro_context.run(tags=["211_fit_propensity"])
@@ -588,12 +585,8 @@ class CausalLift:
         """
 
         if self.runner is None:
-            treated__model_dict = model_for_treated_fit(
-                self.args, self.df, self.init_model
-            )
-            untreated__model_dict = model_for_untreated_fit(
-                self.args, self.df, self.init_model
-            )
+            treated__model_dict = model_for_treated_fit(self.args, self.df)
+            untreated__model_dict = model_for_untreated_fit(self.args, self.df)
             self.models_dict = bundle_treated_and_untreated_models(
                 treated__model_dict, untreated__model_dict
             )

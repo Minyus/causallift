@@ -15,7 +15,7 @@ class ModelForTreatedOrUntreated:
         self.treatment_val = treatment_val
         self.treatment_label = "treated" if treatment_val else "untreated"
 
-    def fit(self, args, df_, model):
+    def fit(self, args, df_):
 
         assert isinstance(df_, pd.DataFrame)
         treatment_val = self.treatment_val
@@ -57,6 +57,7 @@ class ModelForTreatedOrUntreated:
             # do not use sample weight
             sample_weight = np.ones_like(y_train, dtype=float)
 
+        model = initialize_model(args, model_key="uplift_model_params")
         model.fit(X_train, y_train, sample_weight=sample_weight)
         if args.verbose >= 3:
             log.info(
@@ -203,7 +204,3 @@ def model_for_untreated_simulate_recommendation(*posargs, **kwargs):
 def bundle_treated_and_untreated_models(treated_model, untreated_model):
     models_dict = dict(treated=treated_model, untreated=untreated_model)
     return models_dict
-
-
-def initialize_uplift_model(args):
-    return initialize_model(args, model_key="uplift_model_params")
