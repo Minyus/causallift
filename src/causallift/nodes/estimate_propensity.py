@@ -1,7 +1,7 @@
 import logging
 
-import pandas as pd
 from IPython.display import display
+import pandas as pd
 from sklearn import linear_model
 from sklearn.model_selection import GridSearchCV
 

@@ -1,11 +1,11 @@
+from pathlib import Path
 import random
 import sys
 import unittest
-from pathlib import Path
 
+from easydict import EasyDict
 import numpy as np
 import pandas as pd
-from easydict import EasyDict
 
 from causallift import utils
 

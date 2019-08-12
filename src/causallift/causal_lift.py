@@ -1,8 +1,8 @@
 from typing import List, Optional, Tuple, Type  # NOQA
 
+from kedro.io import AbstractDataSet, CSVLocalDataSet, MemoryDataSet, PickleLocalDataSet
 import numpy as np
 import sklearn  # NOQA
-from kedro.io import AbstractDataSet, CSVLocalDataSet, MemoryDataSet, PickleLocalDataSet
 
 from causallift.context.flexible_context import *  # NOQA
 

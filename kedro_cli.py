@@ -29,13 +29,13 @@
 """Command line tools for manipulating a Kedro project.
 Intended to be invoked via `kedro`."""
 
+from collections import Counter
+from glob import iglob
 import os
+from pathlib import Path
 import shutil
 import subprocess
 import sys
-from collections import Counter
-from glob import iglob
-from pathlib import Path
 from typing import Iterable, List
 
 import click

@@ -1,8 +1,8 @@
 from typing import Any, Dict, Type  # NOQA
 
+from easydict import EasyDict
 import numpy as np
 import pandas as pd
-from easydict import EasyDict
 from sklearn.metrics import (
     accuracy_score,
     confusion_matrix,
