@@ -264,6 +264,7 @@ class CausalLift:
         random_state=0,  # type: int
         verbose=2,  # type: int
         uplift_model_params=dict(
+            search_cv="sklearn.model_selection.GridSearchCV",
             estimator="xgboost.XGBClassifier",
             scoring=None,
             cv=3,

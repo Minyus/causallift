@@ -207,20 +207,27 @@ def bundle_treated_and_untreated_models(treated_model, untreated_model):
 
 
 def initialize_model(args):
-    model = args.uplift_model_params
 
-    if isinstance(args.uplift_model_params, dict):
-        uplift_model_params = args.uplift_model_params.copy()
-        estimator_str = uplift_model_params.pop("estimator")
+    if not isinstance(args.uplift_model_params, dict):
+        model = args.uplift_model_params
+        return model
 
-        from sklearn.model_selection import GridSearchCV
+    uplift_model_params = args.uplift_model_params.copy()
+    if not uplift_model_params.get("estimator"):
+        uplift_model_params["estimator"] = "sklearn.ensemble.RandomForestClassifier"
+    estimator_str = uplift_model_params.pop("estimator")
+    estimator_obj = load_obj(estimator_str)
+    estimator = estimator_obj(random_state=args.random_state)
 
-        estimator_obj = load_obj(estimator_str)
+    if not uplift_model_params.get("search_cv"):
+        model = estimator(**uplift_model_params)
+        return model
 
-        estimator = estimator_obj(random_state=args.random_state)
-
-        uplift_model_params["estimator"] = estimator
-
-        model = GridSearchCV(**uplift_model_params)
-
+    search_cv_str = uplift_model_params.pop("search_cv")
+    search_cv_obj = load_obj(search_cv_str)
+    uplift_model_params["estimator"] = estimator
+    model = search_cv_obj(**uplift_model_params)
     return model
+
+
+# class CausalLiftParamError(Exception):
