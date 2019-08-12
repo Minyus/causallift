@@ -1,6 +1,7 @@
 import logging
 
 from IPython.display import display
+from kedro.utils import load_obj
 import numpy as np
 import pandas as pd
 
@@ -209,19 +210,17 @@ def initialize_model(args):
     model = args.uplift_model_params
 
     if isinstance(args.uplift_model_params, dict):
+        uplift_model_params = args.uplift_model_params.copy()
+        estimator_str = uplift_model_params.pop("estimator")
 
         from sklearn.model_selection import GridSearchCV
-        from xgboost import XGBClassifier
 
-        estimator = XGBClassifier(random_state=args.random_state)
+        estimator_obj = load_obj(estimator_str)
 
-        model = GridSearchCV(
-            estimator=estimator,
-            param_grid=args.uplift_model_params,
-            scoring=None,
-            cv=args.cv,
-            return_train_score=False,
-            n_jobs=-1,
-        )
+        estimator = estimator_obj(random_state=args.random_state)
+
+        uplift_model_params["estimator"] = estimator
+
+        model = GridSearchCV(**uplift_model_params)
 
     return model

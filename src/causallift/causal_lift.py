@@ -63,27 +63,27 @@ class CausalLift:
             Refer to https://xgboost.readthedocs.io/en/latest/parameter.html
             If :obj:`None` (default)::
 
-                {
-                'max_depth':[3],
-                'learning_rate':[0.1],
-                'n_estimators':[100],
-                'verbose':[0],
-                'objective':['binary:logistic'],
-                'booster':['gbtree'],
-                'n_jobs':[-1],
-                'nthread':[None],
-                'gamma':[0],
-                'min_child_weight':[1],
-                'max_delta_step':[0],
-                'subsample':[1],
-                'colsample_bytree':[1],
-                'colsample_bylevel':[1],
-                'reg_alpha':[0],
-                'reg_lambda':[1],
-                'scale_pos_weight':[1],
-                'base_score':[0.5],
-                'missing':[None],
-                }
+                dict(
+                    max_depth=[3],
+                    learning_rate=[0.1],
+                    n_estimators=[100],
+                    verbose=[0],
+                    objective=["binary:logistic"],
+                    booster=["gbtree"],
+                    n_jobs=[-1],
+                    nthread=[None],
+                    gamma=[0],
+                    min_child_weight=[1],
+                    max_delta_step=[0],
+                    subsample=[1],
+                    colsample_bytree=[1],
+                    colsample_bylevel=[1],
+                    reg_alpha=[0],
+                    reg_lambda=[1],
+                    scale_pos_weight=[1],
+                    base_score=[0.5],
+                    missing=[None],
+                )
 
             Alternatively, estimator model object is acceptable.
             The object must have the following methods compatible with
@@ -101,20 +101,20 @@ class CausalLift:
             Refer to https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
             If :obj:`None` (default)::
 
-                {
-                'C': [0.1, 1, 10],
-                'class_weight': [None],
-                'dual': [False],
-                'fit_intercept': [True],
-                'intercept_scaling': [1],
-                'max_iter': [100],
-                'multi_class': ['ovr'],
-                'n_jobs': [1],
-                'penalty': ['l1','l2'],
-                'solver': ['liblinear'],
-                'tol': [0.0001],
-                'warm_start': [False]
-                }
+                dict(
+                    C=[0.1, 1, 10],
+                    class_weight=[None],
+                    dual=[False],
+                    fit_intercept=[True],
+                    intercept_scaling=[1],
+                    max_iter=[100],
+                    multi_class=["ovr"],
+                    n_jobs=[1],
+                    penalty=["l1", "l2"],
+                    solver=["liblinear"],
+                    tol=[0.0001],
+                    warm_start=[False],
+                )
 
         cv:
             Cross-Validation for the Grid Search. :obj:`3` in default.
@@ -263,42 +263,49 @@ class CausalLift:
         max_propensity=0.99,  # type: float
         random_state=0,  # type: int
         verbose=2,  # type: int
-        uplift_model_params={
-            "max_depth": [3],
-            "learning_rate": [0.1],
-            "n_estimators": [100],
-            "verbose": [0],
-            "objective": ["binary:logistic"],
-            "booster": ["gbtree"],
-            "n_jobs": [-1],
-            "nthread": [None],
-            "gamma": [0],
-            "min_child_weight": [1],
-            "max_delta_step": [0],
-            "subsample": [1],
-            "colsample_bytree": [1],
-            "colsample_bylevel": [1],
-            "reg_alpha": [0],
-            "reg_lambda": [1],
-            "scale_pos_weight": [1],
-            "base_score": [0.5],
-            "missing": [None],
-        },  # type: Union[Dict[str, List[Any]], Type[sklearn.base.BaseEstimator]]
+        uplift_model_params=dict(
+            estimator="xgboost.XGBClassifier",
+            scoring=None,
+            cv=3,
+            return_train_score=False,
+            n_jobs=-1,
+            param_grid=dict(
+                max_depth=[3],
+                learning_rate=[0.1],
+                n_estimators=[100],
+                verbose=[0],
+                objective=["binary:logistic"],
+                booster=["gbtree"],
+                n_jobs=[-1],
+                nthread=[None],
+                gamma=[0],
+                min_child_weight=[1],
+                max_delta_step=[0],
+                subsample=[1],
+                colsample_bytree=[1],
+                colsample_bylevel=[1],
+                reg_alpha=[0],
+                reg_lambda=[1],
+                scale_pos_weight=[1],
+                base_score=[0.5],
+                missing=[None],
+            ),
+        ),  # type: Union[Dict[str, List[Any]], Type[sklearn.base.BaseEstimator]]
         enable_ipw=True,  # type: bool
-        propensity_model_params={
-            "C": [0.1, 1, 10],
-            "class_weight": [None],
-            "dual": [False],
-            "fit_intercept": [True],
-            "intercept_scaling": [1],
-            "max_iter": [100],
-            "multi_class": ["ovr"],
-            "n_jobs": [1],
-            "penalty": ["l1", "l2"],
-            "solver": ["liblinear"],
-            "tol": [0.0001],
-            "warm_start": [False],
-        },  # type: Dict[str, List[Any]]
+        propensity_model_params=dict(
+            C=[0.1, 1, 10],
+            class_weight=[None],
+            dual=[False],
+            fit_intercept=[True],
+            intercept_scaling=[1],
+            max_iter=[100],
+            multi_class=["ovr"],
+            n_jobs=[1],
+            penalty=["l1", "l2"],
+            solver=["liblinear"],
+            tol=[0.0001],
+            warm_start=[False],
+        ),  # type: Dict[str, List[Any]]
         cv=3,  # type: int
         index_name="index",  # type: str
         partition_name="partition",  # type: str
