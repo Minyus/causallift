@@ -166,11 +166,9 @@
   <h1>Source code for causallift.nodes.model_for_each</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
 
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
-<span class="kn">from</span> <span class="nn">xgboost</span> <span class="k">import</span> <span class="n">XGBClassifier</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="o">*</span>  <span class="c1"># NOQA</span>
 
@@ -183,7 +181,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">treatment_val</span> <span class="o">=</span> <span class="n">treatment_val</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">treatment_label</span> <span class="o">=</span> <span class="s2">&quot;treated&quot;</span> <span class="k">if</span> <span class="n">treatment_val</span> <span class="k">else</span> <span class="s2">&quot;untreated&quot;</span></div>
 
-<div class="viewcode-block" id="ModelForTreatedOrUntreated.fit"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">df_</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelForTreatedOrUntreated.fit"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">df_</span><span class="p">):</span>
 
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df_</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
         <span class="n">treatment_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">treatment_val</span>
@@ -225,6 +223,7 @@
             <span class="c1"># do not use sample weight</span>
             <span class="n">sample_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
+        <span class="n">model</span> <span class="o">=</span> <span class="n">initialize_model</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">model_key</span><span class="o">=</span><span class="s2">&quot;uplift_model_params&quot;</span><span class="p">)</span>
         <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">sample_weight</span><span class="o">=</span><span class="n">sample_weight</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
@@ -371,23 +370,6 @@
 <div class="viewcode-block" id="bundle_treated_and_untreated_models"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.bundle_treated_and_untreated_models">[docs]</a><span class="k">def</span> <span class="nf">bundle_treated_and_untreated_models</span><span class="p">(</span><span class="n">treated_model</span><span class="p">,</span> <span class="n">untreated_model</span><span class="p">):</span>
     <span class="n">models_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">treated</span><span class="o">=</span><span class="n">treated_model</span><span class="p">,</span> <span class="n">untreated</span><span class="o">=</span><span class="n">untreated_model</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">models_dict</span></div>
-
-
-<div class="viewcode-block" id="initialize_model"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.model_for_each.initialize_model">[docs]</a><span class="k">def</span> <span class="nf">initialize_model</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-
-    <span class="n">model</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">GridSearchCV</span><span class="p">(</span>
-            <span class="n">XGBClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">random_state</span><span class="p">),</span>
-            <span class="n">args</span><span class="o">.</span><span class="n">uplift_model_params</span><span class="p">,</span>
-            <span class="n">cv</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">cv</span><span class="p">,</span>
-            <span class="n">return_train_score</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">uplift_model_params</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
-        <span class="k">else</span> <span class="n">args</span><span class="o">.</span><span class="n">uplift_model_params</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">model</span></div>
 </pre></div>
 
            </div>

@@ -4,6 +4,7 @@ from easydict import EasyDict
 from kedro.utils import load_obj
 import numpy as np
 import pandas as pd
+import sklearn  # NOQA
 from sklearn.metrics import (
     accuracy_score,
     confusion_matrix,

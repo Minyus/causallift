@@ -237,7 +237,7 @@
 
 <dl class="method">
 <dt id="causallift.nodes.model_for_each.ModelForTreatedOrUntreated.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">args</em>, <em class="sig-param">df_</em>, <em class="sig-param">model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/nodes/model_for_each.html#ModelForTreatedOrUntreated.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">args</em>, <em class="sig-param">df_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/nodes/model_for_each.html#ModelForTreatedOrUntreated.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.nodes.model_for_each.ModelForTreatedOrUntreated.fit" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -267,11 +267,6 @@
 <dl class="function">
 <dt id="causallift.nodes.model_for_each.bundle_treated_and_untreated_models">
 <code class="sig-prename descclassname">causallift.nodes.model_for_each.</code><code class="sig-name descname">bundle_treated_and_untreated_models</code><span class="sig-paren">(</span><em class="sig-param">treated_model</em>, <em class="sig-param">untreated_model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/nodes/model_for_each.html#bundle_treated_and_untreated_models"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.nodes.model_for_each.bundle_treated_and_untreated_models" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="causallift.nodes.model_for_each.initialize_model">
-<code class="sig-prename descclassname">causallift.nodes.model_for_each.</code><code class="sig-name descname">initialize_model</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/nodes/model_for_each.html#initialize_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.nodes.model_for_each.initialize_model" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -360,6 +355,16 @@ Use df.xs(‘train’) or df.xs(‘test’) to split.</p>
 <dt id="causallift.nodes.utils.impute_cols_features">
 <code class="sig-prename descclassname">causallift.nodes.utils.</code><code class="sig-name descname">impute_cols_features</code><span class="sig-paren">(</span><em class="sig-param">args</em>, <em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/nodes/utils.html#impute_cols_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.nodes.utils.impute_cols_features" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="function">
+<dt id="causallift.nodes.utils.initialize_model">
+<code class="sig-prename descclassname">causallift.nodes.utils.</code><code class="sig-name descname">initialize_model</code><span class="sig-paren">(</span><em class="sig-param">args</em>, <em class="sig-param">model_key='uplift_model_params'</em>, <em class="sig-param">default_estimator='sklearn.linear_model.LogisticRegression'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/nodes/utils.html#initialize_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.nodes.utils.initialize_model" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="causallift.nodes.utils.len_o">

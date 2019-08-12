@@ -166,9 +166,11 @@
   <h1>Source code for causallift.nodes.utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Type</span>  <span class="c1"># NOQA</span>
 
+<span class="kn">from</span> <span class="nn">easydict</span> <span class="k">import</span> <span class="n">EasyDict</span>
+<span class="kn">from</span> <span class="nn">kedro.utils</span> <span class="k">import</span> <span class="n">load_obj</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">easydict</span> <span class="k">import</span> <span class="n">EasyDict</span>
+<span class="kn">import</span> <span class="nn">sklearn</span>  <span class="c1"># NOQA</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="p">(</span>
     <span class="n">accuracy_score</span><span class="p">,</span>
     <span class="n">confusion_matrix</span><span class="p">,</span>
@@ -444,6 +446,38 @@
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">estimated_effect_df</span></div>
+
+
+<div class="viewcode-block" id="initialize_model"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.initialize_model">[docs]</a><span class="k">def</span> <span class="nf">initialize_model</span><span class="p">(</span>
+    <span class="n">args</span><span class="p">,</span>  <span class="c1"># type: Type[EasyDict]</span>
+    <span class="n">model_key</span><span class="o">=</span><span class="s2">&quot;uplift_model_params&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+    <span class="n">default_estimator</span><span class="o">=</span><span class="s2">&quot;sklearn.linear_model.LogisticRegression&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+<span class="p">):</span>
+    <span class="c1"># type: (...) -&gt; Type[sklearn.base.BaseEstimator]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">model_key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">model_key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">model</span>
+
+    <span class="n">model_params</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">model_key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">model_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">):</span>
+        <span class="n">model_params</span><span class="p">[</span><span class="s2">&quot;estimator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_estimator</span>
+    <span class="n">estimator_str</span> <span class="o">=</span> <span class="n">model_params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">)</span>
+    <span class="n">estimator_obj</span> <span class="o">=</span> <span class="n">load_obj</span><span class="p">(</span><span class="n">estimator_str</span><span class="p">)</span>
+    <span class="n">estimator</span> <span class="o">=</span> <span class="n">estimator_obj</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">model_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;search_cv&quot;</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">estimator</span><span class="p">(</span><span class="o">**</span><span class="n">model_params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model</span>
+
+    <span class="n">search_cv_str</span> <span class="o">=</span> <span class="n">model_params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;search_cv&quot;</span><span class="p">)</span>
+    <span class="n">search_cv_obj</span> <span class="o">=</span> <span class="n">load_obj</span><span class="p">(</span><span class="n">search_cv_str</span><span class="p">)</span>
+    <span class="n">model_params</span><span class="p">[</span><span class="s2">&quot;estimator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">estimator</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">search_cv_obj</span><span class="p">(</span><span class="o">**</span><span class="n">model_params</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<span class="c1"># class CausalLiftParamError(Exception):</span>
 </pre></div>
 
            </div>

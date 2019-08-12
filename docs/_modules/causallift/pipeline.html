@@ -262,10 +262,6 @@
                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;131_treatment_fractions_&quot;</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">Pipeline</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">node</span><span class="p">(</span><span class="n">initialize_model</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;args_raw&quot;</span><span class="p">],</span> <span class="s2">&quot;init_model&quot;</span><span class="p">)],</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;141_initialize_model&quot;</span><span class="p">,</span>
-            <span class="p">),</span>
-            <span class="n">Pipeline</span><span class="p">(</span>
                 <span class="p">[</span><span class="n">node</span><span class="p">(</span><span class="n">fit_propensity</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_00&quot;</span><span class="p">],</span> <span class="s2">&quot;propensity_model&quot;</span><span class="p">)],</span>
                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;211_fit_propensity&quot;</span><span class="p">,</span>
             <span class="p">),</span>
@@ -282,13 +278,11 @@
             <span class="n">Pipeline</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="n">node</span><span class="p">(</span>
-                        <span class="n">model_for_treated_fit</span><span class="p">,</span>
-                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">,</span> <span class="s2">&quot;init_model&quot;</span><span class="p">],</span>
-                        <span class="s2">&quot;treated__model_dict&quot;</span><span class="p">,</span>
+                        <span class="n">model_for_treated_fit</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">],</span> <span class="s2">&quot;treated__model_dict&quot;</span>
                     <span class="p">),</span>
                     <span class="n">node</span><span class="p">(</span>
                         <span class="n">model_for_untreated_fit</span><span class="p">,</span>
-                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">,</span> <span class="s2">&quot;init_model&quot;</span><span class="p">],</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">],</span>
                         <span class="s2">&quot;untreated__model_dict&quot;</span><span class="p">,</span>
                     <span class="p">),</span>
                 <span class="p">],</span>
