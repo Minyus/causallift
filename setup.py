@@ -34,6 +34,15 @@ entry_point = "causallift = causallift.run:main"
 with open("requirements.txt", "r") as f:
     requires = [x.strip() for x in f if x.strip()]
 
+with open("requirements_optional.txt", "r") as f:
+    requires_optional = [x.strip() for x in f if x.strip()]
+
+with open("requirements_docs.txt", "r") as f:
+    requires_docs = [x.strip() for x in f if x.strip()]
+
+with open("requirements_dev.txt", "r") as f:
+    requires_dev = [x.strip() for x in f if x.strip()]
+
 setup(
     name="causallift",
     version="1.0.0",  # Align with __version__ in __init__.py
@@ -41,6 +50,9 @@ setup(
     package_dir={"": "src"},
     entry_points={"console_scripts": [entry_point]},
     install_requires=requires,
+    extras_require=dict(
+        optional=requires_optional, docs=requires_docs, dev=requires_dev
+    ),
     license="BSD 2-Clause",
     author="Yusuke Minami",
     author_email="me@minyus.github.com",

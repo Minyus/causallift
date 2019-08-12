@@ -1,0 +1,8 @@
+matplotlib
+xgboost
+ipython
+jupyter
+nbconvert
+nbformat
+# scikit-optimize
+# Manually install hotfix version of scikit-optimize by # pip3 install git+git://github.com/Minyus/scikit-optimize@depr/fit_params

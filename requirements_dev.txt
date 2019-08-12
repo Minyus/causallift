@@ -1,0 +1,12 @@
+-r requirements.txt
+-r requirements_optional.txt
+-r requirements_docs.txt
+pytest-cov
+pytest-mock
+pytest
+requests-mock
+wheel
+black
+isort
+flake8
+mypy

@@ -2,8 +2,6 @@ numpy
 pandas
 scikit-learn
 easydict
-# xgboost  # Optional
-# matplotlib  # Optional
-# kedro==0.15.0
+# kedro>=0.15.0
 # Manually install develop version of kedro by # pip3 install git+git://github.com/quantumblacklabs/kedro@develop#egg=kedro
 
