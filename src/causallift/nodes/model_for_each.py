@@ -215,15 +215,13 @@ def initialize_model(args):
 
         estimator = XGBClassifier(random_state=args.random_state)
 
-        model = (
-            GridSearchCV(
-                estimator=estimator,
-                param_grid=args.uplift_model_params,
-                scoring=None,
-                cv=args.cv,
-                return_train_score=False,
-                n_jobs=-1,
-            )
+        model = GridSearchCV(
+            estimator=estimator,
+            param_grid=args.uplift_model_params,
+            scoring=None,
+            cv=args.cv,
+            return_train_score=False,
+            n_jobs=-1,
         )
 
     return model
