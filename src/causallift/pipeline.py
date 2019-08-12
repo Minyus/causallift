@@ -96,7 +96,7 @@ def create_pipeline(**kwargs):
                 name="131_treatment_fractions_",
             ),
             Pipeline(
-                [node(initialize_model, ["args_raw"], "init_model")],
+                [node(initialize_uplift_model, ["args_raw"], "init_model")],
                 name="141_initialize_model",
             ),
             Pipeline(

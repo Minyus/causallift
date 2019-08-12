@@ -1,7 +1,6 @@
 import logging
 
 from IPython.display import display
-from kedro.utils import load_obj
 import numpy as np
 import pandas as pd
 
@@ -206,28 +205,5 @@ def bundle_treated_and_untreated_models(treated_model, untreated_model):
     return models_dict
 
 
-def initialize_model(args):
-
-    if not isinstance(args.uplift_model_params, dict):
-        model = args.uplift_model_params
-        return model
-
-    uplift_model_params = args.uplift_model_params.copy()
-    if not uplift_model_params.get("estimator"):
-        uplift_model_params["estimator"] = "sklearn.ensemble.RandomForestClassifier"
-    estimator_str = uplift_model_params.pop("estimator")
-    estimator_obj = load_obj(estimator_str)
-    estimator = estimator_obj(random_state=args.random_state)
-
-    if not uplift_model_params.get("search_cv"):
-        model = estimator(**uplift_model_params)
-        return model
-
-    search_cv_str = uplift_model_params.pop("search_cv")
-    search_cv_obj = load_obj(search_cv_str)
-    uplift_model_params["estimator"] = estimator
-    model = search_cv_obj(**uplift_model_params)
-    return model
-
-
-# class CausalLiftParamError(Exception):
+def initialize_uplift_model(args):
+    return initialize_model(args, model_key="uplift_model_params")

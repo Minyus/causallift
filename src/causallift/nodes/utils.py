@@ -1,6 +1,7 @@
 from typing import Any, Dict, Type  # NOQA
 
 from easydict import EasyDict
+from kedro.utils import load_obj
 import numpy as np
 import pandas as pd
 from sklearn.metrics import (
@@ -278,3 +279,35 @@ def estimate_effect(sim_treated_df, sim_untreated_df):
     )
 
     return estimated_effect_df
+
+
+def initialize_model(
+    args,  # type: Type[EasyDict]
+    model_key="uplift_model_params",  # type: str
+    default_estimator="sklearn.linear_model.LogisticRegression",  # type: str
+):
+    # type: (...) -> Type[sklearn.base.BaseEstimator]
+
+    if not isinstance(args[model_key], dict):
+        model = args[model_key]
+        return model
+
+    model_params = args[model_key].copy()
+    if not model_params.get("estimator"):
+        model_params["estimator"] = default_estimator
+    estimator_str = model_params.pop("estimator")
+    estimator_obj = load_obj(estimator_str)
+    estimator = estimator_obj(random_state=args.random_state)
+
+    if not model_params.get("search_cv"):
+        model = estimator(**model_params)
+        return model
+
+    search_cv_str = model_params.pop("search_cv")
+    search_cv_obj = load_obj(search_cv_str)
+    model_params["estimator"] = estimator
+    model = search_cv_obj(**model_params)
+    return model
+
+
+# class CausalLiftParamError(Exception):

@@ -35,13 +35,10 @@ def fit_propensity(args, df):
     # X_train = pca.transform(X_train)
     # X_test = pca.transform(X_test)
 
+    model = initialize_model(args, model_key="propensity_model_params")
+
     if args.verbose >= 2:
-        log.info("## Propensity score is estimated by logistic regression.")
-    lr_ = linear_model.LogisticRegression(
-        random_state=args.random_state, verbose=args.verbose
-    )
-    if args.verbose >= 2:
-        log.info("## Logistic regression model was initialized.")
+        log.info("## Propensity scores will be estimated by logistic regression.")
 
     if args.verbose >= 3:
         log.info(
@@ -49,13 +46,7 @@ def fit_propensity(args, df):
                 args.propensity_model_params
             )
         )
-    model = GridSearchCV(
-        lr_,
-        args.propensity_model_params,
-        cv=args.cv,
-        return_train_score=False,
-        n_jobs=-1,
-    )
+
     model.fit(X_train, y_train)
 
     if args.verbose >= 3:
