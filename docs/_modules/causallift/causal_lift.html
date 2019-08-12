@@ -214,8 +214,6 @@
 <span class="sd">            Minimum propensity score. 0.01 in default.</span>
 <span class="sd">        max_propensity:</span>
 <span class="sd">            Maximum propensity score. 0.99 in defualt.</span>
-<span class="sd">        random_state:</span>
-<span class="sd">            The seed used by the random number generator. 0 in default.</span>
 <span class="sd">        verbose:</span>
 <span class="sd">            How much info to show. Valid values are:</span>
 
@@ -451,7 +449,6 @@
         <span class="n">col_recommendation</span><span class="o">=</span><span class="s2">&quot;Recommendation&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
         <span class="n">min_propensity</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>  <span class="c1"># type: float</span>
         <span class="n">max_propensity</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>  <span class="c1"># type: float</span>
-        <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>  <span class="c1"># type: int</span>
         <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># type: int</span>
         <span class="n">uplift_model_params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
             <span class="n">search_cv</span><span class="o">=</span><span class="s2">&quot;sklearn.model_selection.GridSearchCV&quot;</span><span class="p">,</span>
@@ -461,6 +458,7 @@
             <span class="n">return_train_score</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">param_grid</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">random_state</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                 <span class="n">max_depth</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
                 <span class="n">learning_rate</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">],</span>
                 <span class="n">n_estimators</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span>
@@ -491,6 +489,7 @@
             <span class="n">return_train_score</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">param_grid</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">random_state</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                 <span class="n">C</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
                 <span class="n">class_weight</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span>
                 <span class="n">dual</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">],</span>
@@ -646,7 +645,6 @@
             <span class="n">col_recommendation</span><span class="o">=</span><span class="n">col_recommendation</span><span class="p">,</span>
             <span class="n">min_propensity</span><span class="o">=</span><span class="n">min_propensity</span><span class="p">,</span>
             <span class="n">max_propensity</span><span class="o">=</span><span class="n">max_propensity</span><span class="p">,</span>
-            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
             <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
             <span class="n">uplift_model_params</span><span class="o">=</span><span class="n">uplift_model_params</span><span class="p">,</span>
             <span class="n">enable_ipw</span><span class="o">=</span><span class="n">enable_ipw</span><span class="p">,</span>

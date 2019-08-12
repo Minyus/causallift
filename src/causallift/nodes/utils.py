@@ -298,7 +298,7 @@ def initialize_model(
         model_params["estimator"] = default_estimator
     estimator_str = model_params.pop("estimator")
     estimator_obj = load_obj(estimator_str)
-    estimator = estimator_obj(random_state=args.random_state)
+    estimator = estimator_obj()
 
     if not model_params.get("search_cv"):
         model = estimator(**model_params)

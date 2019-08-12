@@ -58,17 +58,10 @@ def test_skopt():
         index_name="index",
     )
 
-    train_df, test_df = train_test_split(
-        df, test_size=0.2, random_state=seed, stratify=df["Treatment"]
-    )
+    train_df, test_df = train_test_split(df, test_size=0.2, stratify=df["Treatment"])
 
     cl = CausalLift(
-        train_df,
-        test_df,
-        enable_ipw=True,
-        random_state=0,
-        verbose=3,
-        uplift_model_params=model,
+        train_df, test_df, enable_ipw=True, verbose=3, uplift_model_params=model
     )
     train_df, test_df = cl.estimate_cate_by_2_models()
     estimated_effect_df = cl.estimate_recommendation_impact()

@@ -48,8 +48,6 @@ class CausalLift:
             Minimum propensity score. 0.01 in default.
         max_propensity:
             Maximum propensity score. 0.99 in defualt.
-        random_state:
-            The seed used by the random number generator. 0 in default.
         verbose:
             How much info to show. Valid values are:
 
@@ -285,7 +283,6 @@ class CausalLift:
         col_recommendation="Recommendation",  # type: str
         min_propensity=0.01,  # type: float
         max_propensity=0.99,  # type: float
-        random_state=0,  # type: int
         verbose=2,  # type: int
         uplift_model_params=dict(
             search_cv="sklearn.model_selection.GridSearchCV",
@@ -295,6 +292,7 @@ class CausalLift:
             return_train_score=False,
             n_jobs=-1,
             param_grid=dict(
+                random_state=[0],
                 max_depth=[3],
                 learning_rate=[0.1],
                 n_estimators=[100],
@@ -325,6 +323,7 @@ class CausalLift:
             return_train_score=False,
             n_jobs=-1,
             param_grid=dict(
+                random_state=[0],
                 C=[0.1, 1, 10],
                 class_weight=[None],
                 dual=[False],
@@ -480,7 +479,6 @@ class CausalLift:
             col_recommendation=col_recommendation,
             min_propensity=min_propensity,
             max_propensity=max_propensity,
-            random_state=random_state,
             verbose=verbose,
             uplift_model_params=uplift_model_params,
             enable_ipw=enable_ipw,
