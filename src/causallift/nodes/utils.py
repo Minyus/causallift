@@ -298,15 +298,21 @@ def initialize_model(
         model_params["estimator"] = default_estimator
     estimator_str = model_params.pop("estimator")
     estimator_obj = load_obj(estimator_str)
-    estimator = estimator_obj()
+
+    const_params = (
+        (model_params.pop("const_params") or dict())
+        if "const_params" in model_params
+        else dict()
+    )
 
     if not model_params.get("search_cv"):
-        model = estimator(**model_params)
+        const_params.update(model_params)
+        model = estimator_obj(**const_params)
         return model
 
     search_cv_str = model_params.pop("search_cv")
     search_cv_obj = load_obj(search_cv_str)
-    model_params["estimator"] = estimator
+    model_params["estimator"] = estimator_obj(**const_params)
     model = search_cv_obj(**model_params)
     return model
 

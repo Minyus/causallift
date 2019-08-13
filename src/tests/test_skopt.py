@@ -16,17 +16,17 @@ def test_skopt():
 
     seed = 0
 
-    uplift_model_params = {"n_estimators": Integer(100, 200)}
-
-    estimator = XGBClassifier(
-        booster="gbtree",
-        silent=True,
-        objective="binary:logistic",
-        base_score=0.5,
-        eval_metric="auc",
-        n_jobs=-1,
-        seed=seed,
+    uplift_model_params = dict(
+        booster=Categorical(["gbtree"]),
+        silent=Categorical([True]),
+        objective=Categorical(["binary:logistic"]),
+        base_score=Categorical([0.5]),
+        eval_metric=Categorical(["auc"]),
+        n_jobs=Categorical([-1]),
+        seed=Categorical([seed]),
+        n_estimators=Integer(100, 200),
     )
+    estimator = XGBClassifier()
 
     model = BayesSearchCV(
         estimator=estimator,
@@ -58,7 +58,9 @@ def test_skopt():
         index_name="index",
     )
 
-    train_df, test_df = train_test_split(df, test_size=0.2, stratify=df["Treatment"])
+    train_df, test_df = train_test_split(
+        df, test_size=0.2, random_state=seed, stratify=df["Treatment"]
+    )
 
     cl = CausalLift(
         train_df, test_df, enable_ipw=True, verbose=3, uplift_model_params=model
