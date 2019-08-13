@@ -237,19 +237,28 @@ propensity, CATE, and recommendation.</p></li>
 <li><p><strong>max_propensity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Maximum propensity score. 0.99 in defualt.</p></li>
 <li><p><strong>verbose</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – <p>How much info to show. Valid values are:</p>
 <ul>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">0</span></code> to show nothing,</p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">1</span></code> to show only warning,</p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">2</span></code> (default) to show useful info,</p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">3</span></code> to show more info.</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">0</span></code> to show nothing</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">1</span></code> to show only warning</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">2</span></code> (default) to show useful info</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">3</span></code> to show more info</p></li>
 </ul>
 </p></li>
-<li><p><strong>uplift_model_params</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]], <code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code>]]) – <p>Parameters used to fit 2 XGBoost classifier models.
-Use <cite>search_cv</cite> key to specify the Search CV class name such as
-<cite>sklearn.model_selection.GridSearchCV</cite>
-Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</a>
-Use <cite>estimator</cite> key to specify the estimator class name such as
-<cite>xgboost.XGBClassifier</cite>
-Refer to <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/parameter.html">https://xgboost.readthedocs.io/en/latest/parameter.html</a></p>
+<li><p><strong>uplift_model_params</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]], <code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code>]]) – <p>Parameters used to fit 2 XGBoost classifier models.</p>
+<ul>
+<li><p>Optionally use <cite>search_cv</cite> key to specify the Search CV class name.</p>
+<blockquote>
+<div><p>e.g. <cite>sklearn.model_selection.GridSearchCV</cite></p>
+<p>Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</a></p>
+</div></blockquote>
+</li>
+<li><p>Use <cite>estimator</cite> key to specify the estimator class name.</p>
+<blockquote>
+<div><p>e.g. <cite>xgboost.XGBClassifier</cite></p>
+<p>Refer to <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/parameter.html">https://xgboost.readthedocs.io/en/latest/parameter.html</a></p>
+</div></blockquote>
+</li>
+<li><p>Optionally use <cite>const_params</cite> key to specify the constant parameters to             construct the estimator.</p></li>
+</ul>
 <p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">search_cv</span><span class="o">=</span><span class="s2">&quot;sklearn.model_selection.GridSearchCV&quot;</span><span class="p">,</span>
@@ -295,14 +304,23 @@ scikit-learn estimator interface.</p>
 </p></li>
 <li><p><strong>enable_ipw</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Enable Inverse Probability Weighting based on the estimated propensity score.
 True in default.</p></li>
-<li><p><strong>propensity_model_params</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – <p>Parameters used to fit logistic regression model to estimate propensity score.
-Use <cite>search_cv</cite> key to specify the Search CV class name such as
-<cite>sklearn.model_selection.GridSearchCV</cite>
-Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</a>
-Use <cite>estimator</cite> key to specify the estimator class name such as
-<cite>sklearn.linear_model.LogisticRegression</cite>
-Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</a>
-If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default):</p>
+<li><p><strong>propensity_model_params</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – <p>Parameters used to fit logistic regression model to estimate propensity score.</p>
+<ul>
+<li><p>Optionally use <cite>search_cv</cite> key to specify the Search CV class name.</p>
+<blockquote>
+<div><p>e.g. <cite>sklearn.model_selection.GridSearchCV</cite></p>
+<p>Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</a></p>
+</div></blockquote>
+</li>
+<li><p>Use <cite>estimator</cite> key to specify the estimator class name.</p>
+<blockquote>
+<div><p>e.g. <cite>sklearn.linear_model.LogisticRegression</cite></p>
+<p>Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</a></p>
+</div></blockquote>
+</li>
+<li><p>Optionally use <cite>const_params</cite> key to specify the constant parameters             to construct the estimator.</p></li>
+</ul>
+<p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
     <span class="n">search_cv</span><span class="o">=</span><span class="s2">&quot;sklearn.model_selection.GridSearchCV&quot;</span><span class="p">,</span>
     <span class="n">estimator</span><span class="o">=</span><span class="s2">&quot;sklearn.linear_model.LogisticRegression&quot;</span><span class="p">,</span>
@@ -328,20 +346,23 @@ If <code class="xref py py-obj docutils literal notranslate"><span class="pre">N
 </pre></div>
 </div>
 </p></li>
-<li><p><strong>index_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Index name of the pandas data frame after resetting the index. ‘index’ in default.
-If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, the index will not be reset.</p></li>
+<li><p><strong>index_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – <p>Index name of the pandas data frame after resetting the index. ‘index’ in default.</p>
+<p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, the index will not be reset.</p>
+</p></li>
 <li><p><strong>partition_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Additional index name to indicate the partition, train or test. ‘partition’ in default.</p></li>
-<li><p><strong>runner</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – If set to ‘SequentialRunner’ (default) or ‘ParallelRunner’, the pipeline is run by Kedro
-sequentially or in parallel, respectively.
-If set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> , the pipeline is run by native Python.
-Refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners">https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners</a></p></li>
-<li><p><strong>conditionally_skip</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – <em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em>
-Skip running the pipeline if the output files already exist.
-True in default.</p></li>
-<li><p><strong>dataset_catalog</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDataSet</span></code>]) – <p><em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em>
-Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
-To find available file formats, refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets">https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets</a>
-In default:</p>
+<li><p><strong>runner</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – <p>If set to ‘SequentialRunner’ (default) or ‘ParallelRunner’, the pipeline is run by Kedro
+sequentially or in parallel, respectively.</p>
+<p>If set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> , the pipeline is run by native Python.</p>
+<p>Refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners">https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners</a></p>
+</p></li>
+<li><p><strong>conditionally_skip</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – <p><em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em></p>
+<p>Skip running the pipeline if the output files already exist.
+True in default.</p>
+</p></li>
+<li><p><strong>dataset_catalog</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDataSet</span></code>]) – <p><em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em></p>
+<p>Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.</p>
+<p>To find available file formats, refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets">https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets</a></p>
+<p>In default:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
     <span class="c1"># args_raw = CSVLocalDataSet(filepath=&#39;../data/01_raw/args_raw.csv&#39;, version=None),</span>
     <span class="c1"># train_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/train_df.csv&#39;, version=None),</span>
@@ -376,9 +397,9 @@ In default:</p>
 </pre></div>
 </div>
 </p></li>
-<li><p><strong>logging_config</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – <p>Specify logging configuration.
-Refer to <a class="reference external" href="https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema">https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema</a>
-In default:</p>
+<li><p><strong>logging_config</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – <p>Specify logging configuration.</p>
+<p>Refer to <a class="reference external" href="https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema">https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema</a></p>
+<p>In default:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;disable_existing_loggers&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
  <span class="s1">&#39;formatters&#39;</span><span class="p">:</span> <span class="p">{</span>
      <span class="s1">&#39;json_formatter&#39;</span><span class="p">:</span> <span class="p">{</span>

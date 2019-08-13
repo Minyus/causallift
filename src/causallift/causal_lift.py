@@ -21,7 +21,7 @@ log = logging.getLogger(__name__)
 
 
 class CausalLift:
-    r"""
+    """
     Set up datasets for uplift modeling.
     Optionally, propensity scores are estimated based on logistic regression.
 
@@ -51,19 +51,23 @@ class CausalLift:
         verbose:
             How much info to show. Valid values are:
 
-            * :obj:`0` to show nothing,
-            * :obj:`1` to show only warning,
-            * :obj:`2` (default) to show useful info,
-            * :obj:`3` to show more info.
+            * :obj:`0` to show nothing
+            * :obj:`1` to show only warning
+            * :obj:`2` (default) to show useful info
+            * :obj:`3` to show more info
 
         uplift_model_params:
             Parameters used to fit 2 XGBoost classifier models.
-            Use `search_cv` key to specify the Search CV class name such as
-            `sklearn.model_selection.GridSearchCV`
-            Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
-            Use `estimator` key to specify the estimator class name such as
-            `xgboost.XGBClassifier`
-            Refer to https://xgboost.readthedocs.io/en/latest/parameter.html
+
+            * Optionally use `search_cv` key to specify the Search CV class name. \n
+                e.g. `sklearn.model_selection.GridSearchCV` \n
+                Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+            * Use `estimator` key to specify the estimator class name. \n
+                e.g. `xgboost.XGBClassifier` \n
+                Refer to https://xgboost.readthedocs.io/en/latest/parameter.html
+            * Optionally use `const_params` key to specify the constant parameters to \
+            construct the estimator.
+
 
             If :obj:`None` (default)::
 
@@ -110,12 +114,17 @@ class CausalLift:
             True in default.
         propensity_model_params:
             Parameters used to fit logistic regression model to estimate propensity score.
-            Use `search_cv` key to specify the Search CV class name such as
-            `sklearn.model_selection.GridSearchCV`
-            Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
-            Use `estimator` key to specify the estimator class name such as
-            `sklearn.linear_model.LogisticRegression`
-            Refer to https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
+
+            * Optionally use `search_cv` key to specify the Search CV class name.\n
+                e.g. `sklearn.model_selection.GridSearchCV` \n
+                Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
+            * Use `estimator` key to specify the estimator class name. \n
+                e.g. `sklearn.linear_model.LogisticRegression` \n
+                Refer to https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
+            * Optionally use `const_params` key to specify the constant parameters \
+            to construct the estimator.
+
+
             If :obj:`None` (default)::
 
                 dict(
@@ -142,23 +151,23 @@ class CausalLift:
                 )
 
         index_name:
-            Index name of the pandas data frame after resetting the index. 'index' in default.
+            Index name of the pandas data frame after resetting the index. 'index' in default. \n
             If :obj:`None`, the index will not be reset.
         partition_name:
             Additional index name to indicate the partition, train or test. 'partition' in default.
         runner:
             If set to 'SequentialRunner' (default) or 'ParallelRunner', the pipeline is run by Kedro
-            sequentially or in parallel, respectively.
-            If set to :obj:`None` , the pipeline is run by native Python.
+            sequentially or in parallel, respectively. \n
+            If set to :obj:`None` , the pipeline is run by native Python. \n
             Refer to https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners
         conditionally_skip:
-            *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']*
+            *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']* \n
             Skip running the pipeline if the output files already exist.
             True in default.
         dataset_catalog:
-            *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']*
-            Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.
-            To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets
+            *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']* \n
+            Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format. \n
+            To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets \n
             In default::
 
                 dict(
@@ -194,8 +203,8 @@ class CausalLift:
                 )
 
         logging_config:
-            Specify logging configuration.
-            Refer to https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema
+            Specify logging configuration. \n
+            Refer to https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema \n
             In default::
 
                 {'disable_existing_loggers': False,

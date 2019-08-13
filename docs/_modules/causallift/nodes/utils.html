@@ -464,15 +464,21 @@
         <span class="n">model_params</span><span class="p">[</span><span class="s2">&quot;estimator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_estimator</span>
     <span class="n">estimator_str</span> <span class="o">=</span> <span class="n">model_params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">)</span>
     <span class="n">estimator_obj</span> <span class="o">=</span> <span class="n">load_obj</span><span class="p">(</span><span class="n">estimator_str</span><span class="p">)</span>
-    <span class="n">estimator</span> <span class="o">=</span> <span class="n">estimator_obj</span><span class="p">()</span>
+
+    <span class="n">const_params</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">model_params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;const_params&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">())</span>
+        <span class="k">if</span> <span class="s2">&quot;const_params&quot;</span> <span class="ow">in</span> <span class="n">model_params</span>
+        <span class="k">else</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">model_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;search_cv&quot;</span><span class="p">):</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">estimator</span><span class="p">(</span><span class="o">**</span><span class="n">model_params</span><span class="p">)</span>
+        <span class="n">const_params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">estimator_obj</span><span class="p">(</span><span class="o">**</span><span class="n">const_params</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">model</span>
 
     <span class="n">search_cv_str</span> <span class="o">=</span> <span class="n">model_params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;search_cv&quot;</span><span class="p">)</span>
     <span class="n">search_cv_obj</span> <span class="o">=</span> <span class="n">load_obj</span><span class="p">(</span><span class="n">search_cv_str</span><span class="p">)</span>
-    <span class="n">model_params</span><span class="p">[</span><span class="s2">&quot;estimator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">estimator</span>
+    <span class="n">model_params</span><span class="p">[</span><span class="s2">&quot;estimator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">estimator_obj</span><span class="p">(</span><span class="o">**</span><span class="n">const_params</span><span class="p">)</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">search_cv_obj</span><span class="p">(</span><span class="o">**</span><span class="n">model_params</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">model</span></div>
 

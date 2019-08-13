@@ -187,7 +187,7 @@
 
 
 <div class="viewcode-block" id="CausalLift"><a class="viewcode-back" href="../../causallift.html#causallift.causal_lift.CausalLift">[docs]</a><span class="k">class</span> <span class="nc">CausalLift</span><span class="p">:</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set up datasets for uplift modeling.</span>
 <span class="sd">    Optionally, propensity scores are estimated based on logistic regression.</span>
 
@@ -217,19 +217,23 @@
 <span class="sd">        verbose:</span>
 <span class="sd">            How much info to show. Valid values are:</span>
 
-<span class="sd">            * :obj:`0` to show nothing,</span>
-<span class="sd">            * :obj:`1` to show only warning,</span>
-<span class="sd">            * :obj:`2` (default) to show useful info,</span>
-<span class="sd">            * :obj:`3` to show more info.</span>
+<span class="sd">            * :obj:`0` to show nothing</span>
+<span class="sd">            * :obj:`1` to show only warning</span>
+<span class="sd">            * :obj:`2` (default) to show useful info</span>
+<span class="sd">            * :obj:`3` to show more info</span>
 
 <span class="sd">        uplift_model_params:</span>
 <span class="sd">            Parameters used to fit 2 XGBoost classifier models.</span>
-<span class="sd">            Use `search_cv` key to specify the Search CV class name such as</span>
-<span class="sd">            `sklearn.model_selection.GridSearchCV`</span>
-<span class="sd">            Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</span>
-<span class="sd">            Use `estimator` key to specify the estimator class name such as</span>
-<span class="sd">            `xgboost.XGBClassifier`</span>
-<span class="sd">            Refer to https://xgboost.readthedocs.io/en/latest/parameter.html</span>
+
+<span class="sd">            * Optionally use `search_cv` key to specify the Search CV class name. \n</span>
+<span class="sd">                e.g. `sklearn.model_selection.GridSearchCV` \n</span>
+<span class="sd">                Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</span>
+<span class="sd">            * Use `estimator` key to specify the estimator class name. \n</span>
+<span class="sd">                e.g. `xgboost.XGBClassifier` \n</span>
+<span class="sd">                Refer to https://xgboost.readthedocs.io/en/latest/parameter.html</span>
+<span class="sd">            * Optionally use `const_params` key to specify the constant parameters to \</span>
+<span class="sd">            construct the estimator.</span>
+
 
 <span class="sd">            If :obj:`None` (default)::</span>
 
@@ -276,12 +280,17 @@
 <span class="sd">            True in default.</span>
 <span class="sd">        propensity_model_params:</span>
 <span class="sd">            Parameters used to fit logistic regression model to estimate propensity score.</span>
-<span class="sd">            Use `search_cv` key to specify the Search CV class name such as</span>
-<span class="sd">            `sklearn.model_selection.GridSearchCV`</span>
-<span class="sd">            Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</span>
-<span class="sd">            Use `estimator` key to specify the estimator class name such as</span>
-<span class="sd">            `sklearn.linear_model.LogisticRegression`</span>
-<span class="sd">            Refer to https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</span>
+
+<span class="sd">            * Optionally use `search_cv` key to specify the Search CV class name.\n</span>
+<span class="sd">                e.g. `sklearn.model_selection.GridSearchCV` \n</span>
+<span class="sd">                Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</span>
+<span class="sd">            * Use `estimator` key to specify the estimator class name. \n</span>
+<span class="sd">                e.g. `sklearn.linear_model.LogisticRegression` \n</span>
+<span class="sd">                Refer to https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</span>
+<span class="sd">            * Optionally use `const_params` key to specify the constant parameters \</span>
+<span class="sd">            to construct the estimator.</span>
+
+
 <span class="sd">            If :obj:`None` (default)::</span>
 
 <span class="sd">                dict(</span>
@@ -308,23 +317,23 @@
 <span class="sd">                )</span>
 
 <span class="sd">        index_name:</span>
-<span class="sd">            Index name of the pandas data frame after resetting the index. &#39;index&#39; in default.</span>
+<span class="sd">            Index name of the pandas data frame after resetting the index. &#39;index&#39; in default. \n</span>
 <span class="sd">            If :obj:`None`, the index will not be reset.</span>
 <span class="sd">        partition_name:</span>
 <span class="sd">            Additional index name to indicate the partition, train or test. &#39;partition&#39; in default.</span>
 <span class="sd">        runner:</span>
 <span class="sd">            If set to &#39;SequentialRunner&#39; (default) or &#39;ParallelRunner&#39;, the pipeline is run by Kedro</span>
-<span class="sd">            sequentially or in parallel, respectively.</span>
-<span class="sd">            If set to :obj:`None` , the pipeline is run by native Python.</span>
+<span class="sd">            sequentially or in parallel, respectively. \n</span>
+<span class="sd">            If set to :obj:`None` , the pipeline is run by native Python. \n</span>
 <span class="sd">            Refer to https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners</span>
 <span class="sd">        conditionally_skip:</span>
-<span class="sd">            *[Effective only if runner is set to either &#39;SequentialRunner&#39; or &#39;ParallelRunner&#39;]*</span>
+<span class="sd">            *[Effective only if runner is set to either &#39;SequentialRunner&#39; or &#39;ParallelRunner&#39;]* \n</span>
 <span class="sd">            Skip running the pipeline if the output files already exist.</span>
 <span class="sd">            True in default.</span>
 <span class="sd">        dataset_catalog:</span>
-<span class="sd">            *[Effective only if runner is set to either &#39;SequentialRunner&#39; or &#39;ParallelRunner&#39;]*</span>
-<span class="sd">            Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.</span>
-<span class="sd">            To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets</span>
+<span class="sd">            *[Effective only if runner is set to either &#39;SequentialRunner&#39; or &#39;ParallelRunner&#39;]* \n</span>
+<span class="sd">            Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format. \n</span>
+<span class="sd">            To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets \n</span>
 <span class="sd">            In default::</span>
 
 <span class="sd">                dict(</span>
@@ -360,8 +369,8 @@
 <span class="sd">                )</span>
 
 <span class="sd">        logging_config:</span>
-<span class="sd">            Specify logging configuration.</span>
-<span class="sd">            Refer to https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema</span>
+<span class="sd">            Specify logging configuration. \n</span>
+<span class="sd">            Refer to https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema \n</span>
 <span class="sd">            In default::</span>
 
 <span class="sd">                {&#39;disable_existing_loggers&#39;: False,</span>
