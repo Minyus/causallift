@@ -52,6 +52,7 @@ def test_skopt():
             seed=seed,
         ),
         search_spaces=dict(n_estimators=Integer(100, 200)),
+        random_state=seed,
         scoring="roc_auc",
         cv=3,
         n_jobs=-1,
@@ -73,8 +74,6 @@ def test_skopt():
     assert isinstance(test_df, pd.DataFrame)
     assert isinstance(estimated_effect_df, pd.DataFrame)
 
-
-def test_external_skopt():
     seed = 0
 
     df = generate_data(
@@ -112,6 +111,7 @@ def test_external_skopt():
     model = BayesSearchCV(
         estimator=estimator,
         search_spaces=dict(n_estimators=Integer(100, 200)),
+        random_state=seed,
         scoring="roc_auc",
         cv=3,
         n_jobs=-1,
@@ -128,6 +128,10 @@ def test_external_skopt():
     assert isinstance(train_df_ext, pd.DataFrame)
     assert isinstance(test_df_ext, pd.DataFrame)
     assert isinstance(estimated_effect_df_ext, pd.DataFrame)
+
+    # pd.testing.assert_frame_equal(train_df, train_df_ext)
+    # pd.testing.assert_frame_equal(test_df, test_df_ext)
+    # pd.testing.assert_frame_equal(estimated_effect_df, estimated_effect_df_ext)
 
 
 if __name__ == "__main__":
