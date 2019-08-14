@@ -127,22 +127,6 @@ Table data including the following columns:
 </p>
 
 
-## Updates for version 1.x
-
-The latest version 1.x adopts [Kedro](https://kedro.readthedocs.io/) to add the following new 
-features and will be available soon in PyPI.
-
-- [Parallel execution] Train the 2 models in parallel
-- [File management] Save and load intermediate files such as the trained models
-- [Documentation] Generate the API document by Sphinx and visualize the process flow
-
-Other enhancements include:
-
-- [Logging] Show and/or log processing status such as timestamp and the running task
-- [Model options] Specify models other than XGBoost and Logistic Regression for uplift 
-modeling and propensity modeling, respectively.
-
-
 ## How to install CausalLift?
 
 Option 1: install from the PyPI
@@ -236,6 +220,22 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 <p align="center">
 	CausalLift flow diagram
 </p>
+
+## New features introduced in version 1.0.0
+
+CausalLift version 1.0.0 adopted [Kedro](https://kedro.readthedocs.io/) to add the following new 
+features.
+
+- [Parallel execution] Train the 2 models in parallel
+- [File management] Save and load intermediate files such as the trained models
+- [Documentation] Generate the API document by Sphinx and visualize the process flow
+
+Other enhancements include:
+
+- [Logging] Show and/or log processing status such as timestamp and the running task
+- [Model options] Specify models other than XGBoost and Logistic Regression for uplift 
+modeling and propensity modeling, respectively.
+
 
 ## Details about the parameters
 
