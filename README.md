@@ -11,6 +11,8 @@ https://opensource.org/licenses/BSD-2-Clause
 https://colab.research.google.com/github/Minyus/causallift/blob/v1.0/notebooks/demo/CausalLift_demo.ipynb
 )
 
+<img src="readme_images/CausalLift_Viz.PNG">
+
 ## Introduction
 
 If you are simply building a Machine Learning model and executing promotion campaigns to the 

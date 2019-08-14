@@ -45,7 +45,7 @@ class ProjectContext(KedroContext):
     """
 
     project_name = "CausalLift"
-    project_version = "0.14.3"
+    project_version = "0.15.0"
 
     @property
     def pipeline(self):
