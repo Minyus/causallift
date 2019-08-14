@@ -8,7 +8,7 @@ https://badge.fury.io/py/causallift
 https://opensource.org/licenses/BSD-2-Clause
 )
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
-https://colab.research.google.com/github/Minyus/causallift/blob/v1.0/notebooks/demo/CausalLift_demo.ipynb
+https://colab.research.google.com/github/Minyus/causallift/blob/master/notebooks/demo/CausalLift_demo.ipynb
 )
 
 <img src="readme_images/CausalLift_Viz.PNG">
@@ -197,7 +197,7 @@ python setup.py install
 Please see the demo code in Google Colab (free cloud CPU/GPU environment) :
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
-https://colab.research.google.com/github/Minyus/causallift/blob/v1.0/notebooks/demo/CausalLift_demo.ipynb
+https://colab.research.google.com/github/Minyus/causallift/blob/master/notebooks/demo/CausalLift_demo.ipynb
 )
 
 To run the code, navigate to "Runtime" >> "Run all".
