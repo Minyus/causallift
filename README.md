@@ -344,7 +344,7 @@ Any feedback is welcome!
 
 Please create an issue for questions, suggestions, and feature requests.
 Please open pull requests to improve documentation, usability, and features against `v1.0` branch. 
-(`v0.0 is no longer active.)
+(`v0.0` is no longer active.)
 
 Separate pull requests for each improvement are appreciated rather than a big pull request.
 It is encouraged to use:
