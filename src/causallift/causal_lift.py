@@ -178,8 +178,8 @@ class CausalLift:
                         filepath='../data/06_models/propensity_model.pickle',
                         version=None
                     ),
-                    models_dict = PickleLocalDataSet(
-                        filepath='../data/06_models/models_dict.pickle',
+                    uplift_models_dict = PickleLocalDataSet(
+                        filepath='../data/06_models/uplift_models_dict.pickle',
                         version=None
                     ),
                     df_03 = CSVLocalDataSet(
@@ -359,8 +359,8 @@ class CausalLift:
             propensity_model=PickleLocalDataSet(
                 filepath="../data/06_models/propensity_model.pickle", version=None
             ),
-            models_dict=PickleLocalDataSet(
-                filepath="../data/06_models/models_dict.pickle", version=None
+            uplift_models_dict=PickleLocalDataSet(
+                filepath="../data/06_models/uplift_models_dict.pickle", version=None
             ),
             df_03=CSVLocalDataSet(
                 filepath="../data/07_model_output/df.csv",
@@ -462,7 +462,7 @@ class CausalLift:
         self.test_df = None  # type: Optional[Type[pd.DataFrame]]
         self.df = None  # type: Optional[Type[pd.DataFrame]]
         self.propensity_model = None  # type: Optional[Type[sklearn.base.BaseEstimator]]
-        self.models_dict = None  # type: Optional[Type[EasyDict]]
+        self.uplift_models_dict = None  # type: Optional[Type[EasyDict]]
         self.treatment_fractions = None  # type: Optional[Type[EasyDict]]
         self.treatment_fraction_train = None  # type: Optional[float]
         self.treatment_fraction_test = None  # type: Optional[float]
@@ -594,15 +594,15 @@ class CausalLift:
         if self.runner is None:
             treated__model_dict = model_for_treated_fit(self.args, self.df)
             untreated__model_dict = model_for_untreated_fit(self.args, self.df)
-            self.models_dict = bundle_treated_and_untreated_models(
+            self.uplift_models_dict = bundle_treated_and_untreated_models(
                 treated__model_dict, untreated__model_dict
             )
 
             self.treated__proba = model_for_treated_predict_proba(
-                self.args, self.df, self.models_dict
+                self.args, self.df, self.uplift_models_dict
             )
             self.untreated__proba = model_for_untreated_predict_proba(
-                self.args, self.df, self.models_dict
+                self.args, self.df, self.uplift_models_dict
             )
             self.cate_estimated = compute_cate(
                 self.treated__proba, self.untreated__proba
@@ -611,7 +611,9 @@ class CausalLift:
 
         if self.runner:
             self.kedro_context.run(tags=["311_fit", "312_bundle_2_models"])
-            self.models_dict = self.kedro_context.catalog.load("models_dict")
+            self.uplift_models_dict = self.kedro_context.catalog.load(
+                "uplift_models_dict"
+            )
 
             self.kedro_context.run(tags=["321_predict_proba"])
             self.treated__proba = self.kedro_context.catalog.load("treated__proba")
@@ -664,10 +666,10 @@ class CausalLift:
         if self.runner is None:
             self.df = recommend_by_cate(self.args, self.df, self.treatment_fractions)
             self.treated__sim_eval_df = model_for_treated_simulate_recommendation(
-                self.args, self.df, self.models_dict
+                self.args, self.df, self.uplift_models_dict
             )
             self.untreated__sim_eval_df = model_for_untreated_simulate_recommendation(
-                self.args, self.df, self.models_dict
+                self.args, self.df, self.uplift_models_dict
             )
             self.estimated_effect_df = estimate_effect(
                 self.treated__sim_eval_df, self.untreated__sim_eval_df

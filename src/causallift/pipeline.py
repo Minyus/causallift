@@ -127,7 +127,7 @@ def create_pipeline(**kwargs):
                     node(
                         bundle_treated_and_untreated_models,
                         ["treated__model_dict", "untreated__model_dict"],
-                        "models_dict",
+                        "uplift_models_dict",
                     )
                 ],
                 name="312_bundle_2_models",
@@ -136,12 +136,12 @@ def create_pipeline(**kwargs):
                 [
                     node(
                         model_for_treated_predict_proba,
-                        ["args", "df_01", "models_dict"],
+                        ["args", "df_01", "uplift_models_dict"],
                         "treated__proba",
                     ),
                     node(
                         model_for_untreated_predict_proba,
-                        ["args", "df_01", "models_dict"],
+                        ["args", "df_01", "uplift_models_dict"],
                         "untreated__proba",
                     ),
                 ],
@@ -175,12 +175,12 @@ def create_pipeline(**kwargs):
                 [
                     node(
                         model_for_treated_simulate_recommendation,
-                        ["args", "df_03", "models_dict"],
+                        ["args", "df_03", "uplift_models_dict"],
                         "treated__sim_eval_df",
                     ),
                     node(
                         model_for_untreated_simulate_recommendation,
-                        ["args", "df_03", "models_dict"],
+                        ["args", "df_03", "uplift_models_dict"],
                         "untreated__sim_eval_df",
                     ),
                 ],

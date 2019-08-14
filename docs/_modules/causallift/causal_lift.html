@@ -344,8 +344,8 @@
 <span class="sd">                        filepath=&#39;../data/06_models/propensity_model.pickle&#39;,</span>
 <span class="sd">                        version=None</span>
 <span class="sd">                    ),</span>
-<span class="sd">                    models_dict = PickleLocalDataSet(</span>
-<span class="sd">                        filepath=&#39;../data/06_models/models_dict.pickle&#39;,</span>
+<span class="sd">                    uplift_models_dict = PickleLocalDataSet(</span>
+<span class="sd">                        filepath=&#39;../data/06_models/uplift_models_dict.pickle&#39;,</span>
 <span class="sd">                        version=None</span>
 <span class="sd">                    ),</span>
 <span class="sd">                    df_03 = CSVLocalDataSet(</span>
@@ -525,8 +525,8 @@
             <span class="n">propensity_model</span><span class="o">=</span><span class="n">PickleLocalDataSet</span><span class="p">(</span>
                 <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;../data/06_models/propensity_model.pickle&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
             <span class="p">),</span>
-            <span class="n">models_dict</span><span class="o">=</span><span class="n">PickleLocalDataSet</span><span class="p">(</span>
-                <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;../data/06_models/models_dict.pickle&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
+            <span class="n">uplift_models_dict</span><span class="o">=</span><span class="n">PickleLocalDataSet</span><span class="p">(</span>
+                <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;../data/06_models/uplift_models_dict.pickle&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
             <span class="p">),</span>
             <span class="n">df_03</span><span class="o">=</span><span class="n">CSVLocalDataSet</span><span class="p">(</span>
                 <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;../data/07_model_output/df.csv&quot;</span><span class="p">,</span>
@@ -628,7 +628,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">test_df</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[pd.DataFrame]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[pd.DataFrame]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">propensity_model</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[sklearn.base.BaseEstimator]]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models_dict</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[EasyDict]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[EasyDict]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[EasyDict]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fraction_train</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[float]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fraction_test</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[float]</span>
@@ -760,15 +760,15 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">treated__model_dict</span> <span class="o">=</span> <span class="n">model_for_treated_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
             <span class="n">untreated__model_dict</span> <span class="o">=</span> <span class="n">model_for_untreated_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">models_dict</span> <span class="o">=</span> <span class="n">bundle_treated_and_untreated_models</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span> <span class="o">=</span> <span class="n">bundle_treated_and_untreated_models</span><span class="p">(</span>
                 <span class="n">treated__model_dict</span><span class="p">,</span> <span class="n">untreated__model_dict</span>
             <span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">treated__proba</span> <span class="o">=</span> <span class="n">model_for_treated_predict_proba</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_dict</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">untreated__proba</span> <span class="o">=</span> <span class="n">model_for_untreated_predict_proba</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_dict</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cate_estimated</span> <span class="o">=</span> <span class="n">compute_cate</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">treated__proba</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">untreated__proba</span>
@@ -777,7 +777,9 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;311_fit&quot;</span><span class="p">,</span> <span class="s2">&quot;312_bundle_2_models&quot;</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">models_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;models_dict&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="s2">&quot;uplift_models_dict&quot;</span>
+            <span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;321_predict_proba&quot;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">treated__proba</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;treated__proba&quot;</span><span class="p">)</span>
@@ -830,10 +832,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">recommend_by_cate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">treated__sim_eval_df</span> <span class="o">=</span> <span class="n">model_for_treated_simulate_recommendation</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_dict</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">untreated__sim_eval_df</span> <span class="o">=</span> <span class="n">model_for_untreated_simulate_recommendation</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_dict</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">estimated_effect_df</span> <span class="o">=</span> <span class="n">estimate_effect</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">treated__sim_eval_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">untreated__sim_eval_df</span>

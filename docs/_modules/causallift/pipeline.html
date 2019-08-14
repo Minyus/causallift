@@ -293,7 +293,7 @@
                     <span class="n">node</span><span class="p">(</span>
                         <span class="n">bundle_treated_and_untreated_models</span><span class="p">,</span>
                         <span class="p">[</span><span class="s2">&quot;treated__model_dict&quot;</span><span class="p">,</span> <span class="s2">&quot;untreated__model_dict&quot;</span><span class="p">],</span>
-                        <span class="s2">&quot;models_dict&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;uplift_models_dict&quot;</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">],</span>
                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;312_bundle_2_models&quot;</span><span class="p">,</span>
@@ -302,12 +302,12 @@
                 <span class="p">[</span>
                     <span class="n">node</span><span class="p">(</span>
                         <span class="n">model_for_treated_predict_proba</span><span class="p">,</span>
-                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">,</span> <span class="s2">&quot;models_dict&quot;</span><span class="p">],</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">,</span> <span class="s2">&quot;uplift_models_dict&quot;</span><span class="p">],</span>
                         <span class="s2">&quot;treated__proba&quot;</span><span class="p">,</span>
                     <span class="p">),</span>
                     <span class="n">node</span><span class="p">(</span>
                         <span class="n">model_for_untreated_predict_proba</span><span class="p">,</span>
-                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">,</span> <span class="s2">&quot;models_dict&quot;</span><span class="p">],</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_01&quot;</span><span class="p">,</span> <span class="s2">&quot;uplift_models_dict&quot;</span><span class="p">],</span>
                         <span class="s2">&quot;untreated__proba&quot;</span><span class="p">,</span>
                     <span class="p">),</span>
                 <span class="p">],</span>
@@ -341,12 +341,12 @@
                 <span class="p">[</span>
                     <span class="n">node</span><span class="p">(</span>
                         <span class="n">model_for_treated_simulate_recommendation</span><span class="p">,</span>
-                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_03&quot;</span><span class="p">,</span> <span class="s2">&quot;models_dict&quot;</span><span class="p">],</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_03&quot;</span><span class="p">,</span> <span class="s2">&quot;uplift_models_dict&quot;</span><span class="p">],</span>
                         <span class="s2">&quot;treated__sim_eval_df&quot;</span><span class="p">,</span>
                     <span class="p">),</span>
                     <span class="n">node</span><span class="p">(</span>
                         <span class="n">model_for_untreated_simulate_recommendation</span><span class="p">,</span>
-                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_03&quot;</span><span class="p">,</span> <span class="s2">&quot;models_dict&quot;</span><span class="p">],</span>
+                        <span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;df_03&quot;</span><span class="p">,</span> <span class="s2">&quot;uplift_models_dict&quot;</span><span class="p">],</span>
                         <span class="s2">&quot;untreated__sim_eval_df&quot;</span><span class="p">,</span>
                     <span class="p">),</span>
                 <span class="p">],</span>
