@@ -11,45 +11,40 @@ https://opensource.org/licenses/BSD-2-Clause
 https://colab.research.google.com/github/Minyus/causallift/blob/v1.0/notebooks/demo/CausalLift_demo.ipynb
 )
 
-The latest version 1.0.0 adopts [Kedro](https://kedro.readthedocs.io/) to add the following new features and will be available soon in PyPI.
-
-- [Parallel execution] Train the 2 models in parallel
-- [File management] Save and load intermediate files such as the trained models
-- [Logging] Show and/or log processing status such as timestamp and the running task
-- [Documentation] Generate the API document by Sphinx and visualize the process flow
-
-You can install the pre-release development revision from GitHub:
-```bash
-    pip3 install git+git://github.com/quantumblacklabs/kedro@develop#egg=kedro
-    pip3 install git+git://github.com/Minyus/causallift@v1.0
-```
-
-
 ## Introduction
 
-If you are simply building a Machine Learning model and executing promotion campaigns to the customers who are predicted to buy a product, for example, it is not efficient.
+If you are simply building a Machine Learning model and executing promotion campaigns to the 
+customers who are predicted to buy a product, for example, it is not efficient.
 
-There are some customers who will buy a product anyway even without promotion campaigns (called "Sure things").
+There are some customers who will buy a product anyway even without promotion campaigns (called 
+"Sure things").
 
-It is even possible that the campaign triggers some customers to churn (called "Do Not Disturbs" or "Sleeping Dogs").
+It is even possible that the campaign triggers some customers to churn (called "Do Not Disturbs" or 
+"Sleeping Dogs").
 
 The solution is Uplift Modeling.
 
 ## What is Uplift Modeling?
 
 
-Uplift Modeling is a Machine Learning technique to find which customers (individuals) should be targeted ("treated") and which customers should not be targeted. 
+Uplift Modeling is a Machine Learning technique to find which customers (individuals) should be 
+targeted ("treated") and which customers should not be targeted. 
 
-Uplift Modeling is also known as persuasion modeling, incremental modeling, treatment effects modeling, true lift modeling, net modeling.
+Uplift Modeling is also known as persuasion modeling, incremental modeling, treatment effects 
+modeling, true lift modeling, net modeling.
 
 Applications of Uplift Modeling for business include:
-- Increase revenue by finding which customers should be targeted for advertising/marketing campaigns and which customers should not. 
-- Retain revenue by finding which customers should be contacted to prevent churn and which customers should not. 
+- Increase revenue by finding which customers should be targeted for advertising/marketing 
+campaigns and which customers should not. 
+- Retain revenue by finding which customers should be contacted to prevent churn and which 
+customers should not. 
 
 
 ## A famous use case?
 
-The most fammous use case of Uplift Modeling would be the 44th US president Barack Obama's 2nd presidential campaign in 2012. Obama's team used Uplift Modeling to find which voters could be persuaded to vote for him. Here are some articles.
+The most famous use case of Uplift Modeling would be the 44th US president Barack Obama's 2nd 
+presidential campaign in 2012. Obama's team used Uplift Modeling to find which voters could be 
+persuaded to vote for him. Here are some articles.
 
 - [What is ‘Persuasion Modeling’, and how did it help Obama to win the elections?](http://numrush.com/2013/06/28/what-is-persuasion-modeling-and-how-did-it-help-obama-to-win-the-elections/)
 - [How Obama’s Team Used Big Data to Rally Voters](https://www.technologyreview.com/s/509026/how-obamas-team-used-big-data-to-rally-voters/)
@@ -59,13 +54,19 @@ The most fammous use case of Uplift Modeling would be the 44th US president Bara
 
 ## How does Uplift Modeling work?
 
-Uplift Modeling estimates uplift scores (a.k.a. CATE: Conditional Average Treatment Effect or ITE: Individual Treatment Effect). Uplift score is how much the estimated conversion rate will increase by the campaign.
+Uplift Modeling estimates uplift scores (a.k.a. CATE: Conditional Average Treatment Effect or ITE: 
+Individual Treatment Effect). Uplift score is how much the estimated conversion rate will increase 
+by the campaign.
 
-Suppose you are in charge of a marketing campaign to sell a product, and the estimated conversion rate (probability to buy a product) of a customer if targeted is 50 % and the estimated conversion rate if not targeted is 40 %, then the uplift score of the customer is (50–40) = +10 % points.
-Likewise, suppose the estimated conversion rate if targeted is 20 % and the estimated conversion rate if not targeted is 80%, the uplift score is (20–80) = -60 % points (negative value).
+Suppose you are in charge of a marketing campaign to sell a product, and the estimated conversion 
+rate (probability to buy a product) of a customer if targeted is 50 % and the estimated conversion 
+rate if not targeted is 40 %, then the uplift score of the customer is (50–40) = +10 % points.
+Likewise, suppose the estimated conversion rate if targeted is 20 % and the estimated conversion 
+rate if not targeted is 80%, the uplift score is (20–80) = -60 % points (negative value).
 
 The range of uplift scores is between -100 and +100 % points (-1 and +1).
-It is recommended to target customers with high uplift scores and avoid customers with negative uplift scores to optimize the marketing campaign.
+It is recommended to target customers with high uplift scores and avoid customers with negative 
+uplift scores to optimize the marketing campaign.
 
 
 ## What are advantages of "CausalLift" package?
@@ -77,13 +78,25 @@ It is recommended to target customers with high uplift scores and avoid customer
 
 In a word, to use for real-world business.
 
-- Existing packages for Uplift Modeling assumes the dataset is from A/B Testing (a.k.a. Randomized Controlled Trial). In real-world business, however, observational datasets in which treatment (campaign) targets were not chosen randomly are more common especially in the early stage of evidence-based decision making. CausalLift supports observational datasets using a basic methodology in Causal Inference called "Inverse Probability Weighting" based on assumption that propensity to be treated can be inferred from the available features.
+- Existing packages for Uplift Modeling assumes the dataset is from A/B Testing (a.k.a. Randomized 
+Controlled Trial). In real-world business, however, observational datasets in which treatment 
+(campaign) targets were not chosen randomly are more common especially in the early stage of evidence-based decision making. CausalLift supports observational datasets using a basic methodology in Causal Inference called "Inverse Probability Weighting" based on assumption that propensity to be treated can be inferred from the available features.
 
-- There are 2 challenges of Uplift Modeling; explainability of the model and evaluation. CausalLift utilizes a basic methodology of Uplift Modeling called Two Models approach (training 2 models independently for treated and untreated samples to compute the CATE (Conditional Average Treatment Effects) or uplift scores) to address these challenges.
+- There are 2 challenges of Uplift Modeling; explainability of the model and evaluation. CausalLift 
+utilizes a basic methodology of Uplift Modeling called Two Models approach (training 2 models 
+independently for treated and untreated samples to compute the CATE (Conditional Average Treatment 
+Effects) or uplift scores) to address these challenges.
 
-	- [Explainability of the model] Since it is relatively simple, it is less challenging to explain how it works to stakeholders in business.
+	- [Explainability of the model] Since it is relatively simple, it is less challenging to 
+	explain how it works to stakeholders in business.
 
-	- [Explainability of evaluation] To evaluate Uplift Modeling, metrics such as Qini and AUUC (Area Under the Uplift Curve) are used in research, but these metrics are difficult to explain to the stakeholders. For business, a metric that can estimate how much more profit can be earned is more practical. Since CausalLift adopted the Two-Model approach, the 2 models can be reused to simulate the outcome of following the recommendation by the Uplift Model and can estimate how much conversion rate (the proportion of people who took desired action such as buying a product) will increase using the uplift model.
+	- [Explainability of evaluation] To evaluate Uplift Modeling, metrics such as Qini and AUUC 
+	(Area Under the Uplift Curve) are used in research, but these metrics are difficult to explain 
+	to the stakeholders. For business, a metric that can estimate how much more profit can be 
+	earned is more practical. Since CausalLift adopted the Two-Model approach, the 2 models can be 
+	reused to simulate the outcome of following the recommendation by the Uplift Model and can 
+	estimate how much conversion rate (the proportion of people who took desired action such as 
+	buying a product) will increase using the uplift model.
 
 ## What kind of data can be fed to CausalLift?
 Table data including the following columns:
@@ -91,7 +104,8 @@ Table data including the following columns:
 - Features 
 	- a.k.a independent variables, explanatory variables, covariates
 	- e.g. customer gender, age range, etc.
-	- Note: Categorical variables need to be one-hot coded so propensity can be estimated using logistic regression. [pandas.get_dummies](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.get_dummies.html) can be used.
+	- Note: Categorical variables need to be one-hot coded so propensity can be estimated using 
+	logistic regression. [pandas.get_dummies](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.get_dummies.html) can be used.
 - Outcome: binary (0 or 1)
 	- a.k.a dependent variable, target variable, label
 	- e.g. whether the customer bought a product, clicked a link, etc.
@@ -111,36 +125,70 @@ Table data including the following columns:
 </p>
 
 
+## Updates for version 1.x
+
+The latest version 1.x adopts [Kedro](https://kedro.readthedocs.io/) to add the following new 
+features and will be available soon in PyPI.
+
+- [Parallel execution] Train the 2 models in parallel
+- [File management] Save and load intermediate files such as the trained models
+- [Documentation] Generate the API document by Sphinx and visualize the process flow
+
+Other enhancements include:
+
+- [Logging] Show and/or log processing status such as timestamp and the running task
+- [Model options] Specify models other than XGBoost and Logistic Regression for uplift 
+modeling and propensity modeling, respectively.
+
 
 ## How to install CausalLift?
 
 Option 1: install from the PyPI
 
 ```bash
-	pip3 install causallift
+pip3 install causallift
 ```
 
 Option 2: install from the GitHub repository
 
 ```bash
-	pip3 install git+https://github.com/Minyus/causallift.git
+pip3 install git+https://github.com/Minyus/causallift.git
 ```
 
-Option 3: clone the [GitHub repository](https://github.com/Minyus/causallift.git), cd into the downloaded repository, and run:
+Option 3: clone the [GitHub repository](https://github.com/Minyus/causallift.git), cd into the 
+downloaded repository, and run:
 
 ```bash
-	python setup.py install
+python setup.py install
 ```
+
+## How to install the latest pre-release version 1.x of CausalLift?
+
+Option 1: install from the GitHub repository
+```bash
+pip3 install git+git://github.com/Minyus/causallift@v1.0
+```
+
+Option 2: clone `v1.0` branch of the [GitHub repository](https://github.com/Minyus/causallift.git), 
+cd into the downloaded repository, and run:
+```bash
+python setup.py install
+```
+
 
 ## Dependencies:
 
 - numpy
 - pandas
-- matplotlib
 - scikit-learn
-- xgboost
 - easydict
-- kedro 0.15.0
+- kedro>=0.15.0
+
+## Optional but recommended dependencies
+
+- matplotlib
+- xgboost
+- scikit-optimize
 
 ## How to use CausalLift?
 
@@ -205,18 +253,19 @@ Please see [here](https://github.com/Minyus/causallift/blob/v1.0/src/causallift/
 - ["pylift"](https://github.com/wayfair/pylift)
 [[documentation]](https://pylift.readthedocs.io/en/latest/)
 
-	Uplift Modeling based on Transformed Outcome method for A/B Testing data and visualization of metrics such as Qini.
-	
+	Uplift Modeling based on Transformed Outcome method for A/B Testing data and visualization of 
+	metrics such as Qini.
+
 - ["EconML" (ALICE: Automated Learning and Intelligence for Causation and Economics)](https://github.com/Microsoft/EconML) 
 [[documentation]](https://econml.azurewebsites.net/index.html)
 
 	Several advanced methods to estimate CATE from observational data.
-	
+
 - ["DoWhy"](https://github.com/Microsoft/dowhy)
 [[documentation]](https://causalinference.gitlab.io/dowhy/)
 
 	Visualization of steps in Causal Inference for observational data.
-	
+
 - ["pymatch"](https://github.com/benmiroglio/pymatch)
 
 	Propensity Score Matching for observational data.
@@ -231,27 +280,33 @@ Please see [here](https://github.com/Minyus/causallift/blob/v1.0/src/causallift/
 - ["uplift"](https://cran.r-project.org/web/packages/uplift/index.html)
 
 	Uplift Modeling.
-	
-- ["tools4uplift"](https://cran.r-project.org/web/packages/tools4uplift/index.html) [[paper]](https://arxiv.org/abs/1901.10867)
 
-	Uplift Modeling and utility tools for quantization of continuous variables, visualization of metrics such as Qini, and automatic feature selection.
+- ["tools4uplift"](https://cran.r-project.org/web/packages/tools4uplift/index.html) 
+[[paper]](https://arxiv.org/abs/1901.10867)
+
+	Uplift Modeling and utility tools for quantization of continuous variables, visualization of 
+	metrics such as Qini, and automatic feature selection.
 
 - ["matching"](https://cran.r-project.org/web/packages/Matching/index.html)
 
 	Propensity Score Matching for observational data.
 
-- ["CausalImpact"](https://cran.r-project.org/web/packages/CausalImpact/index.html) [[documentation]](https://google.github.io/CausalImpact/CausalImpact.html)
+- ["CausalImpact"](https://cran.r-project.org/web/packages/CausalImpact/index.html) 
+[[documentation]](https://google.github.io/CausalImpact/CausalImpact.html)
 
 	Causal inference using Bayesian structural time-series models 
 
 
 ## References
 
-- Gutierrez, Pierre. and G´erardy, Jean-Yves. Causal inference and uplift modelling: A review of the literature. In International Conference on Predictive Applications and APIs, pages 1–13, 2017.
+- Gutierrez, Pierre. and G´erardy, Jean-Yves. Causal inference and uplift modelling: A review of 
+the literature. In International Conference on Predictive Applications and APIs, pages 1–13, 2017.
 
-- Athey, Susan and Imbens, Guido W. Machine learning methods for estimating heterogeneous causal effects. Stat, 2015.
+- Athey, Susan and Imbens, Guido W. Machine learning methods for estimating heterogeneous causal 
+effects. Stat, 2015.
 
-- Yi, Robert. and Frost, Will. (n.d.). Pylift: A Fast Python Package for Uplift Modeling. Retrieved April 3, 2019, from https://tech.wayfair.com/2018/10/pylift-a-fast-python-package-for-uplift-modeling/
+- Yi, Robert. and Frost, Will. (n.d.). Pylift: A Fast Python Package for Uplift Modeling. Retrieved 
+April 3, 2019, from https://tech.wayfair.com/2018/10/pylift-a-fast-python-package-for-uplift-modeling/
 
 
 ## Introductive resources about Uplift Modeling
@@ -274,10 +329,10 @@ https://en.wikipedia.org/wiki/Uplift_modelling
 ## To-dos
 
 - Improve documentation
-- Add examples of applying uplift modeling to more publicly available datasets (such as [Lending Club Loan Data](https://www.kaggle.com/wendykan/lending-club-loan-data) as [pymatch](https://github.com/benmiroglio/pymatch) did.
 - Clarify the model summary output including visualization
-- Support for classification models other than XGBoost (Random Forest, LightGBM, etc.) to predict outcome
-- Support for classification models other than Logistic Regression to estimate propensity scores which would need calibration
+- Add examples of applying uplift modeling to more publicly available datasets 
+(such as [Lending Club Loan Data](https://www.kaggle.com/wendykan/lending-club-loan-data) 
+as [pymatch](https://github.com/benmiroglio/pymatch) did.
 - Support for multiple treatments
 
 
@@ -286,13 +341,19 @@ https://en.wikipedia.org/wiki/Uplift_modelling
 Any feedback is welcome!
 
 Please create an issue for questions, suggestions, and feature requests.
-Please open pull requests to improve documentation, usability, and features against `v1.0` branch. (`v0.0 is no longer active.)
+Please open pull requests to improve documentation, usability, and features against `v1.0` branch. 
+(`v0.0 is no longer active.)
 
 Separate pull requests for each improvement are appreciated rather than a big pull request.
-It is encouraged to adopt PEP 8 style guide, Google docstrings, and PEP 484 type hints.
-It is recommended to use an intelligent IDE such as PyCharm.
+It is encouraged to use:
+- [Google style docstrings](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) 
+- [PEP 484 comment-style type annotation](https://mypy.readthedocs.io/en/latest/cheat_sheet.html)
+although Python 2 is not supported.
+- An intelligent IDE e.g. PyCharm
 
-If you could write a review about CausalLift in any natural languages (English, Chinese, Japanese, etc.) or implement similar features in any programming languages (R, SAS, etc.), please let me know. I will add the link here.
+If you could write a review about CausalLift in any natural languages (English, Chinese, Japanese, 
+etc.) or implement similar features in any programming languages (R, SAS, etc.), please let me 
+know. I will add the link here.
 
 ## Keywords to search
 
