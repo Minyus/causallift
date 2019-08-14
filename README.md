@@ -237,9 +237,9 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 	CausalLift flow diagram
 </p>
 
-## What parameters are available for CausalLift?
+## Details about the parameters
 
-Please see [here](https://github.com/Minyus/causallift/blob/v1.0/src/causallift/causal_lift.py#L20)
+Please see [[CausalLift API reference]](https://minyus.github.io/causallift/causallift.html).
 
 
 ## Supported Python versions
