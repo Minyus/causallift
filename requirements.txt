@@ -1,0 +1,5 @@
+numpy
+pandas
+scikit-learn
+easydict
+kedro>=0.15.0

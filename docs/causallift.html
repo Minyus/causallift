@@ -1,0 +1,746 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>causallift package &mdash; causallift 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/qb1-sphinx-rtd.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/theme-overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="causallift.nodes package" href="causallift.nodes.html" />
+    <link rel="prev" title="causallift" href="modules.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> causallift
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">causallift</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">causallift package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="causallift.nodes.html">causallift.nodes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="causallift.context.html">causallift.context package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-causallift.causal_lift">causallift.causal_lift module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-causallift.generate_data">causallift.generate_data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-causallift.pipeline">causallift.pipeline module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-causallift.run">causallift.run module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">causallift</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">causallift</a> &raquo;</li>
+        
+      <li>causallift package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="module-causallift">
+<span id="causallift-package"></span><h1>causallift package<a class="headerlink" href="#module-causallift" title="Permalink to this headline">¶</a></h1>
+<p>CausalLift</p>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="causallift.nodes.html">causallift.nodes package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="causallift.nodes.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.nodes.html#module-causallift.nodes.estimate_propensity">causallift.nodes.estimate_propensity module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.nodes.html#module-causallift.nodes.model_for_each">causallift.nodes.model_for_each module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.nodes.html#module-causallift.nodes.utils">causallift.nodes.utils module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="causallift.context.html">causallift.context package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="causallift.context.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.context.html#module-causallift.context.base_context">causallift.context.base_context module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causallift.context.html#module-causallift.context.flexible_context">causallift.context.flexible_context module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-causallift.causal_lift">
+<span id="causallift-causal-lift-module"></span><h2>causallift.causal_lift module<a class="headerlink" href="#module-causallift.causal_lift" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="causallift.causal_lift.CausalLift">
+<em class="property">class </em><code class="sig-prename descclassname">causallift.causal_lift.</code><code class="sig-name descname">CausalLift</code><span class="sig-paren">(</span><em class="sig-param">train_df=None, test_df=None, cols_features=None, col_treatment='Treatment', col_outcome='Outcome', col_propensity='Propensity', col_cate='CATE', col_recommendation='Recommendation', min_propensity=0.01, max_propensity=0.99, verbose=2, uplift_model_params={'cv': 3, 'estimator': 'xgboost.XGBClassifier', 'n_jobs': -1, 'param_grid': {'base_score': [0.5], 'booster': ['gbtree'], 'colsample_bylevel': [1], 'colsample_bytree': [1], 'gamma': [0], 'learning_rate': [0.1], 'max_delta_step': [0], 'max_depth': [3], 'min_child_weight': [1], 'missing': [None], 'n_estimators': [100], 'n_jobs': [-1], 'nthread': [None], 'objective': ['binary:logistic'], 'random_state': [0], 'reg_alpha': [0], 'reg_lambda': [1], 'scale_pos_weight': [1], 'subsample': [1], 'verbose': [0]}, 'return_train_score': False, 'scoring': None, 'search_cv': 'sklearn.model_selection.GridSearchCV'}, enable_ipw=True, propensity_model_params={'cv': 3, 'estimator': 'sklearn.linear_model.LogisticRegression', 'n_jobs': -1, 'param_grid': {'C': [0.1, 1, 10], 'class_weight': [None], 'dual': [False], 'fit_intercept': [True], 'intercept_scaling': [1], 'max_iter': [100], 'multi_class': ['ovr'], 'n_jobs': [1], 'penalty': ['l1', 'l2'], 'random_state': [0], 'solver': ['liblinear'], 'tol': [0.0001], 'warm_start': [False]}, 'return_train_score': False, 'scoring': None, 'search_cv': 'sklearn.model_selection.GridSearchCV'}, cv=3, index_name='index', partition_name='partition', runner='SequentialRunner', conditionally_skip=False, dataset_catalog={'df_03': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'estimated_effect_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'propensity_model': &lt;kedro.io.pickle_local.PickleLocalDataSet object&gt;, 'treated__sim_eval_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'untreated__sim_eval_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'uplift_models_dict': &lt;kedro.io.pickle_local.PickleLocalDataSet object&gt;}, logging_config={'disable_existing_loggers': False, 'formatters': {'json_formatter': {'class': 'pythonjsonlogger.jsonlogger.JsonFormatter', 'format': '[%(asctime)s|%(name)s|%(funcName)s|%(levelname)s] %(message)s'}, 'simple': {'format': '[%(asctime)s|%(name)s|%(levelname)s] %(message)s'}}, 'handlers': {'console': {'class': 'logging.StreamHandler', 'formatter': 'simple', 'level': 'INFO', 'stream': 'ext://sys.stdout'}, 'error_file_handler': {'backupCount': 20, 'class': 'logging.handlers.RotatingFileHandler', 'delay': True, 'encoding': 'utf8', 'filename': './errors.log', 'formatter': 'simple', 'level': 'ERROR', 'maxBytes': 10485760}, 'info_file_handler': {'backupCount': 20, 'class': 'logging.handlers.RotatingFileHandler', 'delay': True, 'encoding': 'utf8', 'filename': './info.log', 'formatter': 'simple', 'level': 'INFO', 'maxBytes': 10485760}}, 'loggers': {'anyconfig': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'WARNING', 'propagate': False}, 'causallift': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}, 'kedro.io': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'WARNING', 'propagate': False}, 'kedro.pipeline': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}, 'kedro.runner': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}}, 'root': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO'}, 'version': 1}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Set up datasets for uplift modeling.
+Optionally, propensity scores are estimated based on logistic regression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_df</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]) – Pandas Data Frame containing samples used for training</p></li>
+<li><p><strong>test_df</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]) – Pandas Data Frame containing samples used for testing</p></li>
+<li><p><strong>cols_features</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – List of column names used as features.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), all the columns except for outcome,
+propensity, CATE, and recommendation.</p></li>
+<li><p><strong>col_treatment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of treatment column. ‘Treatment’ in default.</p></li>
+<li><p><strong>col_outcome</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of outcome column. ‘Outcome’ in default.</p></li>
+<li><p><strong>col_propensity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of propensity column. ‘Propensity’ in default.</p></li>
+<li><p><strong>col_cate</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of CATE (Conditional Average Treatment Effect) column. ‘CATE’ in default.</p></li>
+<li><p><strong>col_recommendation</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of recommendation column. ‘Recommendation’ in default.</p></li>
+<li><p><strong>min_propensity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Minimum propensity score. 0.01 in default.</p></li>
+<li><p><strong>max_propensity</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Maximum propensity score. 0.99 in defualt.</p></li>
+<li><p><strong>verbose</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – <p>How much info to show. Valid values are:</p>
+<ul>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">0</span></code> to show nothing</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">1</span></code> to show only warning</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">2</span></code> (default) to show useful info</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">3</span></code> to show more info</p></li>
+</ul>
+</p></li>
+<li><p><strong>uplift_model_params</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]], <code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code>]]) – <p>Parameters used to fit 2 XGBoost classifier models.</p>
+<ul>
+<li><p>Optionally use <cite>search_cv</cite> key to specify the Search CV class name.</p>
+<blockquote>
+<div><p>e.g. <cite>sklearn.model_selection.GridSearchCV</cite></p>
+<p>Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</a></p>
+</div></blockquote>
+</li>
+<li><p>Use <cite>estimator</cite> key to specify the estimator class name.</p>
+<blockquote>
+<div><p>e.g. <cite>xgboost.XGBClassifier</cite></p>
+<p>Refer to <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/parameter.html">https://xgboost.readthedocs.io/en/latest/parameter.html</a></p>
+</div></blockquote>
+</li>
+<li><p>Optionally use <cite>const_params</cite> key to specify the constant parameters to             construct the estimator.</p></li>
+</ul>
+<p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">search_cv</span><span class="o">=</span><span class="s2">&quot;sklearn.model_selection.GridSearchCV&quot;</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="s2">&quot;xgboost.XGBClassifier&quot;</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">return_train_score</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">param_grid</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">max_depth</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">learning_rate</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">],</span>
+        <span class="n">n_estimators</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">objective</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;binary:logistic&quot;</span><span class="p">],</span>
+        <span class="n">booster</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gbtree&quot;</span><span class="p">],</span>
+        <span class="n">n_jobs</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">nthread</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span>
+        <span class="n">gamma</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">min_child_weight</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">max_delta_step</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">subsample</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">colsample_bytree</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">colsample_bylevel</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">reg_alpha</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">reg_lambda</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">scale_pos_weight</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">base_score</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">],</span>
+        <span class="n">missing</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively, estimator model object is acceptable.
+The object must have the following methods compatible with
+scikit-learn estimator interface.</p>
+<blockquote>
+<div><ul>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">predict()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">predict_proba()</span></code></p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>enable_ipw</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Enable Inverse Probability Weighting based on the estimated propensity score.
+True in default.</p></li>
+<li><p><strong>propensity_model_params</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – <p>Parameters used to fit logistic regression model to estimate propensity score.</p>
+<ul>
+<li><p>Optionally use <cite>search_cv</cite> key to specify the Search CV class name.</p>
+<blockquote>
+<div><p>e.g. <cite>sklearn.model_selection.GridSearchCV</cite></p>
+<p>Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</a></p>
+</div></blockquote>
+</li>
+<li><p>Use <cite>estimator</cite> key to specify the estimator class name.</p>
+<blockquote>
+<div><p>e.g. <cite>sklearn.linear_model.LogisticRegression</cite></p>
+<p>Refer to <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</a></p>
+</div></blockquote>
+</li>
+<li><p>Optionally use <cite>const_params</cite> key to specify the constant parameters             to construct the estimator.</p></li>
+</ul>
+<p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
+    <span class="n">search_cv</span><span class="o">=</span><span class="s2">&quot;sklearn.model_selection.GridSearchCV&quot;</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="s2">&quot;sklearn.linear_model.LogisticRegression&quot;</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">return_train_score</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">param_grid</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">C</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+        <span class="n">class_weight</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span>
+        <span class="n">dual</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">],</span>
+        <span class="n">fit_intercept</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">],</span>
+        <span class="n">intercept_scaling</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">max_iter</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span>
+        <span class="n">multi_class</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ovr&quot;</span><span class="p">],</span>
+        <span class="n">n_jobs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">penalty</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;l1&quot;</span><span class="p">,</span> <span class="s2">&quot;l2&quot;</span><span class="p">],</span>
+        <span class="n">solver</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;liblinear&quot;</span><span class="p">],</span>
+        <span class="n">tol</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0001</span><span class="p">],</span>
+        <span class="n">warm_start</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">],</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</p></li>
+<li><p><strong>index_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – <p>Index name of the pandas data frame after resetting the index. ‘index’ in default.</p>
+<p>If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, the index will not be reset.</p>
+</p></li>
+<li><p><strong>partition_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Additional index name to indicate the partition, train or test. ‘partition’ in default.</p></li>
+<li><p><strong>runner</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – <p>If set to ‘SequentialRunner’ (default) or ‘ParallelRunner’, the pipeline is run by Kedro
+sequentially or in parallel, respectively.</p>
+<p>If set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> , the pipeline is run by native Python.</p>
+<p>Refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners">https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners</a></p>
+</p></li>
+<li><p><strong>conditionally_skip</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – <p><em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em></p>
+<p>Skip running the pipeline if the output files already exist.
+True in default.</p>
+</p></li>
+<li><p><strong>dataset_catalog</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDataSet</span></code>]) – <p><em>[Effective only if runner is set to either ‘SequentialRunner’ or ‘ParallelRunner’]</em></p>
+<p>Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format.</p>
+<p>To find available file formats, refer to <a class="reference external" href="https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets">https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets</a></p>
+<p>In default:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">dict</span><span class="p">(</span>
+    <span class="c1"># args_raw = CSVLocalDataSet(filepath=&#39;../data/01_raw/args_raw.csv&#39;, version=None),</span>
+    <span class="c1"># train_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/train_df.csv&#39;, version=None),</span>
+    <span class="c1"># test_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/test_df.csv&#39;, version=None),</span>
+    <span class="n">propensity_model</span>  <span class="o">=</span> <span class="n">PickleLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/06_models/propensity_model.pickle&#39;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">),</span>
+    <span class="n">uplift_models_dict</span> <span class="o">=</span> <span class="n">PickleLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/06_models/uplift_models_dict.pickle&#39;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">),</span>
+    <span class="n">df_03</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/07_model_output/df.csv&#39;</span><span class="p">,</span>
+        <span class="n">load_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;partition&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">],</span> <span class="n">float_precision</span><span class="o">=</span><span class="s1">&#39;high&#39;</span><span class="p">),</span>
+        <span class="n">save_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.16e</span><span class="s1">&#39;</span><span class="p">),</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">treated__sim_eval_df</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/08_reporting/treated__sim_eval_df.csv&#39;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">untreated__sim_eval_df</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/08_reporting/untreated__sim_eval_df.csv&#39;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">estimated_effect_df</span> <span class="o">=</span> <span class="n">CSVLocalDataSet</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;../data/08_reporting/estimated_effect_df.csv&#39;</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</p></li>
+<li><p><strong>logging_config</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – <p>Specify logging configuration.</p>
+<p>Refer to <a class="reference external" href="https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema">https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema</a></p>
+<p>In default:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;disable_existing_loggers&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+ <span class="s1">&#39;formatters&#39;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s1">&#39;json_formatter&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;pythonjsonlogger.jsonlogger.JsonFormatter&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">|</span><span class="si">%(name)s</span><span class="s1">|</span><span class="si">%(funcName)s</span><span class="s1">|</span><span class="si">%(levelname)s</span><span class="s1">] </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+     <span class="p">},</span>
+     <span class="s1">&#39;simple&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">|</span><span class="si">%(name)s</span><span class="s1">|</span><span class="si">%(levelname)s</span><span class="s1">] </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+     <span class="p">},</span>
+ <span class="p">},</span>
+ <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s1">&#39;console&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.StreamHandler&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;simple&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;stream&#39;</span><span class="p">:</span> <span class="s1">&#39;ext://sys.stdout&#39;</span><span class="p">,</span>
+     <span class="p">},</span>
+    <span class="s1">&#39;info_file_handler&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.handlers.RotatingFileHandler&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;simple&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;./info.log&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;maxBytes&#39;</span><span class="p">:</span> <span class="mi">10485760</span><span class="p">,</span> <span class="c1"># 10MB</span>
+        <span class="s1">&#39;backupCount&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="s1">&#39;encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;delay&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">},</span>
+     <span class="s1">&#39;error_file_handler&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.handlers.RotatingFileHandler&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;simple&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;./errors.log&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;maxBytes&#39;</span><span class="p">:</span> <span class="mi">10485760</span><span class="p">,</span>  <span class="c1"># 10MB</span>
+         <span class="s1">&#39;backupCount&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+         <span class="s1">&#39;encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;delay&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+     <span class="p">},</span>
+ <span class="p">},</span>
+ <span class="s1">&#39;loggers&#39;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s1">&#39;anyconfig&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;WARNING&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+     <span class="p">},</span>
+     <span class="s1">&#39;kedro.io&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;WARNING&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+     <span class="p">},</span>
+     <span class="s1">&#39;kedro.pipeline&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+     <span class="p">},</span>
+     <span class="s1">&#39;kedro.runner&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+     <span class="p">},</span>
+     <span class="s1">&#39;causallift&#39;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+         <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+     <span class="p">},</span>
+ <span class="p">},</span>
+ <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;info_file_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;error_file_handler&#39;</span><span class="p">],</span>
+     <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+ <span class="p">},</span>
+ <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="causallift.causal_lift.CausalLift.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">train_df=None, test_df=None, cols_features=None, col_treatment='Treatment', col_outcome='Outcome', col_propensity='Propensity', col_cate='CATE', col_recommendation='Recommendation', min_propensity=0.01, max_propensity=0.99, verbose=2, uplift_model_params={'cv': 3, 'estimator': 'xgboost.XGBClassifier', 'n_jobs': -1, 'param_grid': {'base_score': [0.5], 'booster': ['gbtree'], 'colsample_bylevel': [1], 'colsample_bytree': [1], 'gamma': [0], 'learning_rate': [0.1], 'max_delta_step': [0], 'max_depth': [3], 'min_child_weight': [1], 'missing': [None], 'n_estimators': [100], 'n_jobs': [-1], 'nthread': [None], 'objective': ['binary:logistic'], 'random_state': [0], 'reg_alpha': [0], 'reg_lambda': [1], 'scale_pos_weight': [1], 'subsample': [1], 'verbose': [0]}, 'return_train_score': False, 'scoring': None, 'search_cv': 'sklearn.model_selection.GridSearchCV'}, enable_ipw=True, propensity_model_params={'cv': 3, 'estimator': 'sklearn.linear_model.LogisticRegression', 'n_jobs': -1, 'param_grid': {'C': [0.1, 1, 10], 'class_weight': [None], 'dual': [False], 'fit_intercept': [True], 'intercept_scaling': [1], 'max_iter': [100], 'multi_class': ['ovr'], 'n_jobs': [1], 'penalty': ['l1', 'l2'], 'random_state': [0], 'solver': ['liblinear'], 'tol': [0.0001], 'warm_start': [False]}, 'return_train_score': False, 'scoring': None, 'search_cv': 'sklearn.model_selection.GridSearchCV'}, cv=3, index_name='index', partition_name='partition', runner='SequentialRunner', conditionally_skip=False, dataset_catalog={'df_03': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'estimated_effect_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'propensity_model': &lt;kedro.io.pickle_local.PickleLocalDataSet object&gt;, 'treated__sim_eval_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'untreated__sim_eval_df': &lt;kedro.io.csv_local.CSVLocalDataSet object&gt;, 'uplift_models_dict': &lt;kedro.io.pickle_local.PickleLocalDataSet object&gt;}, logging_config={'disable_existing_loggers': False, 'formatters': {'json_formatter': {'class': 'pythonjsonlogger.jsonlogger.JsonFormatter', 'format': '[%(asctime)s|%(name)s|%(funcName)s|%(levelname)s] %(message)s'}, 'simple': {'format': '[%(asctime)s|%(name)s|%(levelname)s] %(message)s'}}, 'handlers': {'console': {'class': 'logging.StreamHandler', 'formatter': 'simple', 'level': 'INFO', 'stream': 'ext://sys.stdout'}, 'error_file_handler': {'backupCount': 20, 'class': 'logging.handlers.RotatingFileHandler', 'delay': True, 'encoding': 'utf8', 'filename': './errors.log', 'formatter': 'simple', 'level': 'ERROR', 'maxBytes': 10485760}, 'info_file_handler': {'backupCount': 20, 'class': 'logging.handlers.RotatingFileHandler', 'delay': True, 'encoding': 'utf8', 'filename': './info.log', 'formatter': 'simple', 'level': 'INFO', 'maxBytes': 10485760}}, 'loggers': {'anyconfig': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'WARNING', 'propagate': False}, 'causallift': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}, 'kedro.io': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'WARNING', 'propagate': False}, 'kedro.pipeline': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}, 'kedro.runner': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO', 'propagate': False}}, 'root': {'handlers': ['console', 'info_file_handler', 'error_file_handler'], 'level': 'INFO'}, 'version': 1}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="causallift.causal_lift.CausalLift.estimate_cate_by_2_models">
+<code class="sig-name descname">estimate_cate_by_2_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift.estimate_cate_by_2_models"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift.estimate_cate_by_2_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate CATE (Conditional Average Treatment Effect) using 2 XGBoost classifier models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="causallift.causal_lift.CausalLift.estimate_recommendation_impact">
+<code class="sig-name descname">estimate_recommendation_impact</code><span class="sig-paren">(</span><em class="sig-param">cate_estimated=None</em>, <em class="sig-param">treatment_fraction_train=None</em>, <em class="sig-param">treatment_fraction_test=None</em>, <em class="sig-param">verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/causal_lift.html#CausalLift.estimate_recommendation_impact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.causal_lift.CausalLift.estimate_recommendation_impact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the impact of recommendation based on uplift modeling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cate_estimated</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code>]]) – Pandas series containing the CATE.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the ones calculated by estimate_cate_by_2_models method.</p></li>
+<li><p><strong>treatment_fraction_train</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The fraction of treatment in train dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the ones calculated by estimate_cate_by_2_models method.</p></li>
+<li><p><strong>treatment_fraction_test</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The fraction of treatment in test dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the ones calculated by estimate_cate_by_2_models method.</p></li>
+<li><p><strong>verbose</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – How much info to show.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), use the value set in the constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-causallift.generate_data">
+<span id="causallift-generate-data-module"></span><h2>causallift.generate_data module<a class="headerlink" href="#module-causallift.generate_data" title="Permalink to this headline">¶</a></h2>
+<p>The original code is at
+<a class="reference external" href="https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py">https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py</a>
+licensed under the BSD 2-Clause “Simplified” License
+Copyright 2018, Wayfair, Inc.</p>
+<p>This code is an enhanced (backward-compatible) version that can simulate
+observational dataset including “sleeping dogs.”</p>
+<p>“Sleeping dogs” (people who will “buy” if not treated but will not “buy”
+if treated) can be simulated by negative values in tau parameter.
+Observational data which includes confounding can be simulated by non-zero
+values in propensity_coef parameter.
+A/B Test (RCT) with a 50:50 split can be simulated by all-zeros values in
+propensity_coef parameter (default).
+The first element in each list parameter specifies the intercept.</p>
+<dl class="function">
+<dt id="causallift.generate_data.generate_data">
+<code class="sig-prename descclassname">causallift.generate_data.</code><code class="sig-name descname">generate_data</code><span class="sig-paren">(</span><em class="sig-param">N=1000, n_features=3, beta=[1,-2,3,-0.8], error_std=0.5, tau=3, discrete_outcome=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/generate_data.html#generate_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.generate_data.generate_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates random data with a ground truth data generating process.
+Draws random values for features from [0, 1), errors from a 0-centered
+distribution with std <cite>error_std</cite>, and creates an outcome y.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
+Number of observations.</p></li>
+<li><p><strong>n_features</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
+Number of features.</p></li>
+<li><p><strong>beta</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[List[float]]</span></code>) -
+Array of beta coefficients to multiply by X to get y.</p></li>
+<li><p><strong>error_std</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[float]</span></code>) -
+Standard deviation (scale) of distribution from which errors are drawn.</p></li>
+<li><p><strong>tau</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Union[List[float],</span> <span class="pre">float]</span></code>) -
+Array of coefficients to multiply by X to get y if treated.
+More/larger negative values will simulate more “sleeping dogs”
+If float scalar is input, effect of features is not considered.</p></li>
+<li><p><strong>tau_std</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[float]</span></code>) -
+When not <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, draws tau from a normal distribution centered around tau
+with standard deviation tau_std rather than just using a constant value
+of tau.</p></li>
+<li><p><strong>discrete_outcome</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[bool]</span></code>) -
+If True, outcomes are 0 or 1; otherwise continuous.</p></li>
+<li><p><strong>seed</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[int]</span></code>) -
+Random seed fed to np.random.seed to allow for deterministic behavior.</p></li>
+<li><p><strong>feature_effect</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[float]</span></code>) -
+Effect of beta on outcome if treated.</p></li>
+<li><p><strong>propensity_coef</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[List[float]]</span></code>) -
+Array of coefficients to multiply by X to get propensity log-odds to be treated.</p></li>
+<li><p><strong>index_name</strong> – (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Optional[str]</span></code>) -
+Index name in the output DataFrame. If <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code> (default), index name will not be set.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame containing the generated data.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>df</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-causallift.pipeline">
+<span id="causallift-pipeline-module"></span><h2>causallift.pipeline module<a class="headerlink" href="#module-causallift.pipeline" title="Permalink to this headline">¶</a></h2>
+<p>Pipeline construction.</p>
+<dl class="function">
+<dt id="causallift.pipeline.create_pipeline">
+<code class="sig-prename descclassname">causallift.pipeline.</code><code class="sig-name descname">create_pipeline</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/pipeline.html#create_pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.pipeline.create_pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the project’s pipeline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kwargs</strong> – Ignore any additional arguments added in the future.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The resulting pipeline.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-causallift.run">
+<span id="causallift-run-module"></span><h2>causallift.run module<a class="headerlink" href="#module-causallift.run" title="Permalink to this headline">¶</a></h2>
+<p>Application entry point.</p>
+<dl class="class">
+<dt id="causallift.run.ProjectContext">
+<em class="property">class </em><code class="sig-prename descclassname">causallift.run.</code><code class="sig-name descname">ProjectContext</code><span class="sig-paren">(</span><em class="sig-param">project_path</em>, <em class="sig-param">env=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#ProjectContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.ProjectContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">kedro.context.context.KedroContext</span></code></p>
+<p>Users can override the remaining methods from the parent class here, or create new ones
+(e.g. as required by plugins)</p>
+<dl class="method">
+<dt id="causallift.run.ProjectContext.pipeline">
+<em class="property">property </em><code class="sig-name descname">pipeline</code><a class="headerlink" href="#causallift.run.ProjectContext.pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract property for Pipeline getter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Defined pipeline.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="causallift.run.ProjectContext.project_name">
+<code class="sig-name descname">project_name</code><em class="property"> = 'CausalLift'</em><a class="headerlink" href="#causallift.run.ProjectContext.project_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="causallift.run.ProjectContext.project_version">
+<code class="sig-name descname">project_version</code><em class="property"> = '0.14.3'</em><a class="headerlink" href="#causallift.run.ProjectContext.project_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="causallift.run.main">
+<code class="sig-prename descclassname">causallift.run.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">tags=None</em>, <em class="sig-param">env=None</em>, <em class="sig-param">runner=None</em>, <em class="sig-param">node_names=None</em>, <em class="sig-param">from_nodes=None</em>, <em class="sig-param">to_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/causallift/run.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#causallift.run.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Application main entry point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tags</strong> – An optional list of node tags which should be used to
+filter the nodes of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>. If specified, only the nodes
+containing <em>any</em> of these tags will be run.</p></li>
+<li><p><strong>env</strong> – An optional parameter specifying the environment in which
+the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> should be run.</p></li>
+<li><p><strong>runner</strong> – An optional parameter specifying the runner that you want to run
+the pipeline with.</p></li>
+<li><p><strong>node_names</strong> – An optional list of node names which should be used to filter
+the nodes of the <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>. If specified, only the nodes with these
+names will be run.</p></li>
+<li><p><strong>from_nodes</strong> – An optional list of node names which should be used as a
+starting point of the new <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>.</p></li>
+<li><p><strong>to_nodes</strong> – An optional list of node names which should be used as an
+end point of the new <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="causallift.nodes.html" class="btn btn-neutral float-right" title="causallift.nodes package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral" title="causallift" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Yusuke Minami.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+      <script type="text/javascript" src="_static/copybutton.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,547 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>causallift.nodes.utils &mdash; causallift 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/qb1-sphinx-rtd.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/theme-overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> causallift
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">causallift</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../causallift.html">causallift package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../causallift.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../causallift.nodes.html">causallift.nodes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../causallift.context.html">causallift.context package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../causallift.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../causallift.html#module-causallift.causal_lift">causallift.causal_lift module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../causallift.html#module-causallift.generate_data">causallift.generate_data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../causallift.html#module-causallift.pipeline">causallift.pipeline module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../causallift.html#module-causallift.run">causallift.run module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">causallift</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>causallift.nodes.utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for causallift.nodes.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Type</span>  <span class="c1"># NOQA</span>
+
+<span class="kn">from</span> <span class="nn">easydict</span> <span class="k">import</span> <span class="n">EasyDict</span>
+<span class="kn">from</span> <span class="nn">kedro.utils</span> <span class="k">import</span> <span class="n">load_obj</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">sklearn</span>  <span class="c1"># NOQA</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">accuracy_score</span><span class="p">,</span>
+    <span class="n">confusion_matrix</span><span class="p">,</span>
+    <span class="n">f1_score</span><span class="p">,</span>
+    <span class="n">precision_score</span><span class="p">,</span>
+    <span class="n">recall_score</span><span class="p">,</span>
+    <span class="n">roc_auc_score</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_cols_features"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.get_cols_features">[docs]</a><span class="k">def</span> <span class="nf">get_cols_features</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span>
+    <span class="n">non_feature_cols</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;Treatment&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Outcome&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TransformedOutcome&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Propensity&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Recommendation&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">column</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">non_feature_cols</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="concat_train_test"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.concat_train_test">[docs]</a><span class="k">def</span> <span class="nf">concat_train_test</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Concatenate train and test series.</span>
+<span class="sd">    Use series.xs(&#39;train&#39;) or series.xs(&#39;test&#39;) to split</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">train</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">test</span><span class="p">)],</span>
+        <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">],</span>
+        <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">partition_name</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">index_name</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">series</span></div>
+
+
+<div class="viewcode-block" id="concat_train_test_df"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.concat_train_test_df">[docs]</a><span class="k">def</span> <span class="nf">concat_train_test_df</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Concatenate train and test data frames.</span>
+<span class="sd">    Use df.xs(&#39;train&#39;) or df.xs(&#39;test&#39;) to split.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">],</span>
+        <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">],</span>
+        <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">partition_name</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">index_name</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="len_t"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.len_t">[docs]</a><span class="k">def</span> <span class="nf">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s2">&quot;Treatment&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">==</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">treatment</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="len_o"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.len_o">[docs]</a><span class="k">def</span> <span class="nf">len_o</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s2">&quot;Outcome&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">==</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col_outcome</span><span class="p">,</span> <span class="n">outcome</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="len_to"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.len_to">[docs]</a><span class="k">def</span> <span class="nf">len_to</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s2">&quot;Treatment&quot;</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s2">&quot;Outcome&quot;</span>
+<span class="p">):</span>
+    <span class="n">len_</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+        <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">==</span><span class="si">{}</span><span class="s2"> &amp; </span><span class="si">{}</span><span class="s2">==</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">treatment</span><span class="p">,</span> <span class="n">col_outcome</span><span class="p">,</span> <span class="n">outcome</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">len_</span></div>
+
+
+<div class="viewcode-block" id="treatment_fraction_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.treatment_fraction_">[docs]</a><span class="k">def</span> <span class="nf">treatment_fraction_</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s2">&quot;Treatment&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="treatment_fractions_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.treatment_fractions_">[docs]</a><span class="k">def</span> <span class="nf">treatment_fractions_</span><span class="p">(</span>
+    <span class="n">args</span><span class="p">,</span>  <span class="c1"># type: Dict[str, Any]</span>
+    <span class="n">df</span><span class="p">,</span>  <span class="c1"># type: Type[pd.DataFrame]</span>
+<span class="p">):</span>
+    <span class="c1"># type: (...) -&gt; Type[EasyDict]</span>
+    <span class="n">col_treatment</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span>
+    <span class="n">treatment_fractions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">treatment_fraction_</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">),</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">),</span>
+        <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">treatment_fraction_</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">),</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">EasyDict</span><span class="p">(</span><span class="n">treatment_fractions</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="outcome_fraction_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.outcome_fraction_">[docs]</a><span class="k">def</span> <span class="nf">outcome_fraction_</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s2">&quot;Outcome&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">len_o</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="n">col_outcome</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="overall_uplift_gain_"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.overall_uplift_gain_">[docs]</a><span class="k">def</span> <span class="nf">overall_uplift_gain_</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="s2">&quot;Treatment&quot;</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="s2">&quot;Outcome&quot;</span>
+<span class="p">):</span>
+    <span class="n">overall_uplift_gain</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">len_to</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="n">col_outcome</span><span class="p">)</span>
+        <span class="o">/</span> <span class="n">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">)</span>
+    <span class="p">)</span> <span class="o">-</span> <span class="p">(</span>
+        <span class="n">len_to</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">,</span> <span class="n">col_outcome</span><span class="o">=</span><span class="n">col_outcome</span><span class="p">)</span>
+        <span class="o">/</span> <span class="n">len_t</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">overall_uplift_gain</span></div>
+
+
+<div class="viewcode-block" id="gain_tuple"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.gain_tuple">[docs]</a><span class="k">def</span> <span class="nf">gain_tuple</span><span class="p">(</span><span class="n">df_</span><span class="p">,</span> <span class="n">r_</span><span class="p">):</span>
+    <span class="n">treatment_fraction</span> <span class="o">=</span> <span class="n">treatment_fraction_</span><span class="p">(</span><span class="n">df_</span><span class="p">)</span>
+    <span class="n">outcome_fraction</span> <span class="o">=</span> <span class="n">outcome_fraction_</span><span class="p">(</span><span class="n">df_</span><span class="p">)</span>
+    <span class="n">overall_uplift_gain</span> <span class="o">=</span> <span class="n">overall_uplift_gain_</span><span class="p">(</span><span class="n">df_</span><span class="p">)</span>
+
+    <span class="n">cgain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">treatment_fraction</span><span class="p">,</span> <span class="n">r_</span><span class="o">.</span><span class="n">cgains_x</span><span class="p">,</span> <span class="n">r_</span><span class="o">.</span><span class="n">cgains_y</span><span class="p">)</span>
+    <span class="n">cgain_base</span> <span class="o">=</span> <span class="n">overall_uplift_gain</span> <span class="o">*</span> <span class="n">treatment_fraction</span>
+    <span class="n">cgain_factor</span> <span class="o">=</span> <span class="n">cgain</span> <span class="o">/</span> <span class="n">cgain_base</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">treatment_fraction</span><span class="p">,</span>
+        <span class="n">outcome_fraction</span><span class="p">,</span>
+        <span class="n">overall_uplift_gain</span><span class="p">,</span>
+        <span class="n">cgain</span><span class="p">,</span>
+        <span class="n">cgain_base</span><span class="p">,</span>
+        <span class="n">cgain_factor</span><span class="p">,</span>
+        <span class="n">r_</span><span class="o">.</span><span class="n">Q_cgains</span><span class="p">,</span>
+        <span class="n">r_</span><span class="o">.</span><span class="n">q1_cgains</span><span class="p">,</span>
+        <span class="n">r_</span><span class="o">.</span><span class="n">q2_cgains</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="score_df"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.score_df">[docs]</a><span class="k">def</span> <span class="nf">score_df</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_train</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_pred_train</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Lengths of true and predicted for train do not match.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_pred_test</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_pred_test</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Lengths of true and predicted for test do not match.&quot;</span><span class="p">)</span>
+    <span class="n">num_classes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+    <span class="n">score_2darray</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">y_</span><span class="p">),</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_</span><span class="p">)</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
+            <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">),</span>
+            <span class="n">precision_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="n">average</span><span class="p">),</span>
+            <span class="n">recall_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="n">average</span><span class="p">),</span>
+            <span class="n">f1_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="n">average</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="o">+</span> <span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">),</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_pred_</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="n">num_classes</span> <span class="o">==</span> <span class="mi">2</span>
+            <span class="k">else</span> <span class="p">[]</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">y_pred_</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_pred_train</span><span class="p">),</span> <span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_test</span><span class="p">)]</span>
+    <span class="p">]</span>
+    <span class="n">score_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">score_2darray</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">],</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;# samples&quot;</span><span class="p">,</span> <span class="s2">&quot;# classes&quot;</span><span class="p">,</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;precision&quot;</span><span class="p">,</span> <span class="s2">&quot;recall&quot;</span><span class="p">,</span> <span class="s2">&quot;f1&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;roc_auc&quot;</span><span class="p">,</span> <span class="s2">&quot;observed conversion rate&quot;</span><span class="p">,</span> <span class="s2">&quot;predicted conversion rate&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">num_classes</span> <span class="o">==</span> <span class="mi">2</span>
+            <span class="k">else</span> <span class="p">[]</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">score_df</span></div>
+
+
+<div class="viewcode-block" id="conf_mat_df"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.conf_mat_df">[docs]</a><span class="k">def</span> <span class="nf">conf_mat_df</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+    <span class="n">conf_mat</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+    <span class="n">num_class</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf_mat</span><span class="p">)</span>
+    <span class="n">true_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;True_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">)]</span>
+    <span class="n">pred_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Pred_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">)]</span>
+    <span class="n">conf_mat_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">conf_mat</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">pred_labels</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">conf_mat_df</span></div>
+
+
+<div class="viewcode-block" id="bundle_train_and_test_data"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.bundle_train_and_test_data">[docs]</a><span class="k">def</span> <span class="nf">bundle_train_and_test_data</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">test_df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">test_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">col_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">train_df</span><span class="o">.</span><span class="n">columns</span><span class="p">])</span>
+
+    <span class="n">index_name</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">index_name</span>
+
+    <span class="k">if</span> <span class="n">index_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">train_df</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">train_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">index_name</span>
+        <span class="n">test_df</span> <span class="o">=</span> <span class="n">test_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">test_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">index_name</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">train_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">test_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">concat_train_test_df</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="impute_cols_features"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.impute_cols_features">[docs]</a><span class="k">def</span> <span class="nf">impute_cols_features</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+    <span class="n">non_feature_cols</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">col_treatment</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">col_outcome</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">col_propensity</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">col_cate</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">col_recommendation</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">args</span><span class="o">.</span><span class="n">cols_features</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">cols_features</span> <span class="ow">or</span> <span class="n">get_cols_features</span><span class="p">(</span>
+        <span class="n">df</span><span class="p">,</span> <span class="n">non_feature_cols</span><span class="o">=</span><span class="n">non_feature_cols</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">args</span></div>
+
+
+<div class="viewcode-block" id="compute_cate"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.compute_cate">[docs]</a><span class="k">def</span> <span class="nf">compute_cate</span><span class="p">(</span><span class="n">proba_treated</span><span class="p">,</span> <span class="n">proba_untreated</span><span class="p">):</span>
+    <span class="n">cate_estimated</span> <span class="o">=</span> <span class="n">proba_treated</span> <span class="o">-</span> <span class="n">proba_untreated</span>
+    <span class="k">return</span> <span class="n">cate_estimated</span></div>
+
+
+<div class="viewcode-block" id="add_cate_to_df"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.add_cate_to_df">[docs]</a><span class="k">def</span> <span class="nf">add_cate_to_df</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">cate_estimated</span><span class="p">):</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">args</span><span class="o">.</span><span class="n">col_cate</span><span class="p">]</span> <span class="o">=</span> <span class="n">cate_estimated</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="recommend_by_cate"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.recommend_by_cate">[docs]</a><span class="k">def</span> <span class="nf">recommend_by_cate</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">treatment_fractions</span><span class="p">):</span>
+    <span class="n">cate_series</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">col_cate</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">recommendation</span><span class="p">(</span><span class="n">cate_series</span><span class="p">,</span> <span class="n">treatment_fraction</span><span class="p">):</span>
+        <span class="n">rank_series</span> <span class="o">=</span> <span class="n">cate_series</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;first&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pct</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rank_series</span> <span class="o">&lt;=</span> <span class="n">treatment_fraction</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span>
+
+    <span class="n">recommendation_train</span> <span class="o">=</span> <span class="n">recommendation</span><span class="p">(</span>
+        <span class="n">cate_series</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">),</span> <span class="n">treatment_fractions</span><span class="o">.</span><span class="n">train</span>
+    <span class="p">)</span>
+    <span class="n">recommendation_test</span> <span class="o">=</span> <span class="n">recommendation</span><span class="p">(</span>
+        <span class="n">cate_series</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">),</span> <span class="n">treatment_fractions</span><span class="o">.</span><span class="n">test</span>
+    <span class="p">)</span>
+
+    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">args</span><span class="o">.</span><span class="n">col_recommendation</span><span class="p">]</span> <span class="o">=</span> <span class="n">concat_train_test</span><span class="p">(</span>
+        <span class="n">args</span><span class="p">,</span> <span class="n">recommendation_train</span><span class="p">,</span> <span class="n">recommendation_test</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="estimate_effect"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.estimate_effect">[docs]</a><span class="k">def</span> <span class="nf">estimate_effect</span><span class="p">(</span><span class="n">sim_treated_df</span><span class="p">,</span> <span class="n">sim_untreated_df</span><span class="p">):</span>
+    <span class="n">estimated_effect_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;# samples&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1">## Original (without uplift model)</span>
+
+    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;observed conversion rate without uplift model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;observed conversion rate without uplift model&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;observed conversion rate without uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;# samples chosen without uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1">## Recommended (with uplift model)</span>
+
+    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;predicted conversion rate using uplift model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;# samples recommended by uplift model&quot;</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;predicted conversion rate using uplift model&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;# samples recommended by uplift model&quot;</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;predicted conversion rate using uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">sim_treated_df</span><span class="p">[</span><span class="s2">&quot;# samples recommended by uplift model&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">sim_untreated_df</span><span class="p">[</span><span class="s2">&quot;# samples recommended by uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;predicted improvement rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;predicted conversion rate using uplift model&quot;</span><span class="p">]</span>
+        <span class="o">/</span> <span class="n">estimated_effect_df</span><span class="p">[</span><span class="s2">&quot;observed conversion rate without uplift model&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">estimated_effect_df</span></div>
+
+
+<div class="viewcode-block" id="initialize_model"><a class="viewcode-back" href="../../../causallift.nodes.html#causallift.nodes.utils.initialize_model">[docs]</a><span class="k">def</span> <span class="nf">initialize_model</span><span class="p">(</span>
+    <span class="n">args</span><span class="p">,</span>  <span class="c1"># type: Type[EasyDict]</span>
+    <span class="n">model_key</span><span class="o">=</span><span class="s2">&quot;uplift_model_params&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+    <span class="n">default_estimator</span><span class="o">=</span><span class="s2">&quot;sklearn.linear_model.LogisticRegression&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+<span class="p">):</span>
+    <span class="c1"># type: (...) -&gt; Type[sklearn.base.BaseEstimator]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">model_key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">model_key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">model</span>
+
+    <span class="n">model_params</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">model_key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">model_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">):</span>
+        <span class="n">model_params</span><span class="p">[</span><span class="s2">&quot;estimator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_estimator</span>
+    <span class="n">estimator_str</span> <span class="o">=</span> <span class="n">model_params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">)</span>
+    <span class="n">estimator_obj</span> <span class="o">=</span> <span class="n">load_obj</span><span class="p">(</span><span class="n">estimator_str</span><span class="p">)</span>
+
+    <span class="n">const_params</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">model_params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;const_params&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">())</span>
+        <span class="k">if</span> <span class="s2">&quot;const_params&quot;</span> <span class="ow">in</span> <span class="n">model_params</span>
+        <span class="k">else</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">model_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;search_cv&quot;</span><span class="p">):</span>
+        <span class="n">const_params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">estimator_obj</span><span class="p">(</span><span class="o">**</span><span class="n">const_params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model</span>
+
+    <span class="n">search_cv_str</span> <span class="o">=</span> <span class="n">model_params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;search_cv&quot;</span><span class="p">)</span>
+    <span class="n">search_cv_obj</span> <span class="o">=</span> <span class="n">load_obj</span><span class="p">(</span><span class="n">search_cv_str</span><span class="p">)</span>
+    <span class="n">model_params</span><span class="p">[</span><span class="s2">&quot;estimator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">estimator_obj</span><span class="p">(</span><span class="o">**</span><span class="n">const_params</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">search_cv_obj</span><span class="p">(</span><span class="o">**</span><span class="n">model_params</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<span class="c1"># class CausalLiftParamError(Exception):</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Yusuke Minami.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="../../../_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+      <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

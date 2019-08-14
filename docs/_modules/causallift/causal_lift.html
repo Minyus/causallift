@@ -1,0 +1,933 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>causallift.causal_lift &mdash; causallift 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/qb1-sphinx-rtd.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/theme-overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> causallift
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">causallift</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../causallift.html">causallift package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../causallift.nodes.html">causallift.nodes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../causallift.context.html">causallift.context package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.causal_lift">causallift.causal_lift module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.generate_data">causallift.generate_data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.pipeline">causallift.pipeline module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.run">causallift.run module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">causallift</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>causallift.causal_lift</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for causallift.causal_lift</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>  <span class="c1"># NOQA</span>
+
+<span class="kn">from</span> <span class="nn">kedro.io</span> <span class="k">import</span> <span class="n">AbstractDataSet</span><span class="p">,</span> <span class="n">CSVLocalDataSet</span><span class="p">,</span> <span class="n">MemoryDataSet</span><span class="p">,</span> <span class="n">PickleLocalDataSet</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">sklearn</span>  <span class="c1"># NOQA</span>
+
+<span class="kn">from</span> <span class="nn">causallift.context.flexible_context</span> <span class="k">import</span> <span class="o">*</span>  <span class="c1"># NOQA</span>
+
+<span class="kn">from</span> <span class="nn">.nodes.estimate_propensity</span> <span class="k">import</span> <span class="o">*</span>  <span class="c1"># NOQA</span>
+<span class="kn">from</span> <span class="nn">.nodes.model_for_each</span> <span class="k">import</span> <span class="o">*</span>  <span class="c1"># NOQA</span>
+
+<span class="c1"># import logging  # NOQA</span>
+<span class="c1"># from typing import Any, Dict, List, Optional, Tuple, Union  # NOQA</span>
+<span class="c1">#</span>
+<span class="c1"># import pandas as pd  # NOQA</span>
+<span class="c1"># import sklearn  # NOQA</span>
+<span class="c1"># from easydict import EasyDict  # NOQA</span>
+<span class="c1"># from IPython.core.display import display  # NOQA</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CausalLift"><a class="viewcode-back" href="../../causallift.html#causallift.causal_lift.CausalLift">[docs]</a><span class="k">class</span> <span class="nc">CausalLift</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set up datasets for uplift modeling.</span>
+<span class="sd">    Optionally, propensity scores are estimated based on logistic regression.</span>
+
+<span class="sd">    args:</span>
+<span class="sd">        train_df:</span>
+<span class="sd">            Pandas Data Frame containing samples used for training</span>
+<span class="sd">        test_df:</span>
+<span class="sd">            Pandas Data Frame containing samples used for testing</span>
+<span class="sd">        cols_features:</span>
+<span class="sd">            List of column names used as features.</span>
+<span class="sd">            If :obj:`None` (default), all the columns except for outcome,</span>
+<span class="sd">            propensity, CATE, and recommendation.</span>
+<span class="sd">        col_treatment:</span>
+<span class="sd">            Name of treatment column. &#39;Treatment&#39; in default.</span>
+<span class="sd">        col_outcome:</span>
+<span class="sd">            Name of outcome column. &#39;Outcome&#39; in default.</span>
+<span class="sd">        col_propensity:</span>
+<span class="sd">            Name of propensity column. &#39;Propensity&#39; in default.</span>
+<span class="sd">        col_cate:</span>
+<span class="sd">            Name of CATE (Conditional Average Treatment Effect) column. &#39;CATE&#39; in default.</span>
+<span class="sd">        col_recommendation:</span>
+<span class="sd">            Name of recommendation column. &#39;Recommendation&#39; in default.</span>
+<span class="sd">        min_propensity:</span>
+<span class="sd">            Minimum propensity score. 0.01 in default.</span>
+<span class="sd">        max_propensity:</span>
+<span class="sd">            Maximum propensity score. 0.99 in defualt.</span>
+<span class="sd">        verbose:</span>
+<span class="sd">            How much info to show. Valid values are:</span>
+
+<span class="sd">            * :obj:`0` to show nothing</span>
+<span class="sd">            * :obj:`1` to show only warning</span>
+<span class="sd">            * :obj:`2` (default) to show useful info</span>
+<span class="sd">            * :obj:`3` to show more info</span>
+
+<span class="sd">        uplift_model_params:</span>
+<span class="sd">            Parameters used to fit 2 XGBoost classifier models.</span>
+
+<span class="sd">            * Optionally use `search_cv` key to specify the Search CV class name. \n</span>
+<span class="sd">                e.g. `sklearn.model_selection.GridSearchCV` \n</span>
+<span class="sd">                Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</span>
+<span class="sd">            * Use `estimator` key to specify the estimator class name. \n</span>
+<span class="sd">                e.g. `xgboost.XGBClassifier` \n</span>
+<span class="sd">                Refer to https://xgboost.readthedocs.io/en/latest/parameter.html</span>
+<span class="sd">            * Optionally use `const_params` key to specify the constant parameters to \</span>
+<span class="sd">            construct the estimator.</span>
+
+
+<span class="sd">            If :obj:`None` (default)::</span>
+
+<span class="sd">                dict(</span>
+<span class="sd">                    search_cv=&quot;sklearn.model_selection.GridSearchCV&quot;,</span>
+<span class="sd">                    estimator=&quot;xgboost.XGBClassifier&quot;,</span>
+<span class="sd">                    scoring=None,</span>
+<span class="sd">                    cv=3,</span>
+<span class="sd">                    return_train_score=False,</span>
+<span class="sd">                    n_jobs=-1,</span>
+<span class="sd">                    param_grid=dict(</span>
+<span class="sd">                        max_depth=[3],</span>
+<span class="sd">                        learning_rate=[0.1],</span>
+<span class="sd">                        n_estimators=[100],</span>
+<span class="sd">                        verbose=[0],</span>
+<span class="sd">                        objective=[&quot;binary:logistic&quot;],</span>
+<span class="sd">                        booster=[&quot;gbtree&quot;],</span>
+<span class="sd">                        n_jobs=[-1],</span>
+<span class="sd">                        nthread=[None],</span>
+<span class="sd">                        gamma=[0],</span>
+<span class="sd">                        min_child_weight=[1],</span>
+<span class="sd">                        max_delta_step=[0],</span>
+<span class="sd">                        subsample=[1],</span>
+<span class="sd">                        colsample_bytree=[1],</span>
+<span class="sd">                        colsample_bylevel=[1],</span>
+<span class="sd">                        reg_alpha=[0],</span>
+<span class="sd">                        reg_lambda=[1],</span>
+<span class="sd">                        scale_pos_weight=[1],</span>
+<span class="sd">                        base_score=[0.5],</span>
+<span class="sd">                        missing=[None],</span>
+<span class="sd">                    ),</span>
+<span class="sd">                )</span>
+
+<span class="sd">            Alternatively, estimator model object is acceptable.</span>
+<span class="sd">            The object must have the following methods compatible with</span>
+<span class="sd">            scikit-learn estimator interface.</span>
+
+<span class="sd">                * :func:`fit`</span>
+<span class="sd">                * :func:`predict`</span>
+<span class="sd">                * :func:`predict_proba`</span>
+
+<span class="sd">        enable_ipw:</span>
+<span class="sd">            Enable Inverse Probability Weighting based on the estimated propensity score.</span>
+<span class="sd">            True in default.</span>
+<span class="sd">        propensity_model_params:</span>
+<span class="sd">            Parameters used to fit logistic regression model to estimate propensity score.</span>
+
+<span class="sd">            * Optionally use `search_cv` key to specify the Search CV class name.\n</span>
+<span class="sd">                e.g. `sklearn.model_selection.GridSearchCV` \n</span>
+<span class="sd">                Refer to https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html</span>
+<span class="sd">            * Use `estimator` key to specify the estimator class name. \n</span>
+<span class="sd">                e.g. `sklearn.linear_model.LogisticRegression` \n</span>
+<span class="sd">                Refer to https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</span>
+<span class="sd">            * Optionally use `const_params` key to specify the constant parameters \</span>
+<span class="sd">            to construct the estimator.</span>
+
+
+<span class="sd">            If :obj:`None` (default)::</span>
+
+<span class="sd">                dict(</span>
+<span class="sd">                    search_cv=&quot;sklearn.model_selection.GridSearchCV&quot;,</span>
+<span class="sd">                    estimator=&quot;sklearn.linear_model.LogisticRegression&quot;,</span>
+<span class="sd">                    scoring=None,</span>
+<span class="sd">                    cv=3,</span>
+<span class="sd">                    return_train_score=False,</span>
+<span class="sd">                    n_jobs=-1,</span>
+<span class="sd">                    param_grid=dict(</span>
+<span class="sd">                        C=[0.1, 1, 10],</span>
+<span class="sd">                        class_weight=[None],</span>
+<span class="sd">                        dual=[False],</span>
+<span class="sd">                        fit_intercept=[True],</span>
+<span class="sd">                        intercept_scaling=[1],</span>
+<span class="sd">                        max_iter=[100],</span>
+<span class="sd">                        multi_class=[&quot;ovr&quot;],</span>
+<span class="sd">                        n_jobs=[1],</span>
+<span class="sd">                        penalty=[&quot;l1&quot;, &quot;l2&quot;],</span>
+<span class="sd">                        solver=[&quot;liblinear&quot;],</span>
+<span class="sd">                        tol=[0.0001],</span>
+<span class="sd">                        warm_start=[False],</span>
+<span class="sd">                    ),</span>
+<span class="sd">                )</span>
+
+<span class="sd">        index_name:</span>
+<span class="sd">            Index name of the pandas data frame after resetting the index. &#39;index&#39; in default. \n</span>
+<span class="sd">            If :obj:`None`, the index will not be reset.</span>
+<span class="sd">        partition_name:</span>
+<span class="sd">            Additional index name to indicate the partition, train or test. &#39;partition&#39; in default.</span>
+<span class="sd">        runner:</span>
+<span class="sd">            If set to &#39;SequentialRunner&#39; (default) or &#39;ParallelRunner&#39;, the pipeline is run by Kedro</span>
+<span class="sd">            sequentially or in parallel, respectively. \n</span>
+<span class="sd">            If set to :obj:`None` , the pipeline is run by native Python. \n</span>
+<span class="sd">            Refer to https://kedro.readthedocs.io/en/latest/04_user_guide/05_nodes_and_pipelines.html#runners</span>
+<span class="sd">        conditionally_skip:</span>
+<span class="sd">            *[Effective only if runner is set to either &#39;SequentialRunner&#39; or &#39;ParallelRunner&#39;]* \n</span>
+<span class="sd">            Skip running the pipeline if the output files already exist.</span>
+<span class="sd">            True in default.</span>
+<span class="sd">        dataset_catalog:</span>
+<span class="sd">            *[Effective only if runner is set to either &#39;SequentialRunner&#39; or &#39;ParallelRunner&#39;]* \n</span>
+<span class="sd">            Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format. \n</span>
+<span class="sd">            To find available file formats, refer to https://kedro.readthedocs.io/en/latest/kedro.io.html#data-sets \n</span>
+<span class="sd">            In default::</span>
+
+<span class="sd">                dict(</span>
+<span class="sd">                    # args_raw = CSVLocalDataSet(filepath=&#39;../data/01_raw/args_raw.csv&#39;, version=None),</span>
+<span class="sd">                    # train_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/train_df.csv&#39;, version=None),</span>
+<span class="sd">                    # test_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/test_df.csv&#39;, version=None),</span>
+<span class="sd">                    propensity_model  = PickleLocalDataSet(</span>
+<span class="sd">                        filepath=&#39;../data/06_models/propensity_model.pickle&#39;,</span>
+<span class="sd">                        version=None</span>
+<span class="sd">                    ),</span>
+<span class="sd">                    uplift_models_dict = PickleLocalDataSet(</span>
+<span class="sd">                        filepath=&#39;../data/06_models/uplift_models_dict.pickle&#39;,</span>
+<span class="sd">                        version=None</span>
+<span class="sd">                    ),</span>
+<span class="sd">                    df_03 = CSVLocalDataSet(</span>
+<span class="sd">                        filepath=&#39;../data/07_model_output/df.csv&#39;,</span>
+<span class="sd">                        load_args=dict(index_col=[&#39;partition&#39;, &#39;index&#39;], float_precision=&#39;high&#39;),</span>
+<span class="sd">                        save_args=dict(index=True, float_format=&#39;%.16e&#39;),</span>
+<span class="sd">                        version=None,</span>
+<span class="sd">                    ),</span>
+<span class="sd">                    treated__sim_eval_df = CSVLocalDataSet(</span>
+<span class="sd">                        filepath=&#39;../data/08_reporting/treated__sim_eval_df.csv&#39;,</span>
+<span class="sd">                        version=None,</span>
+<span class="sd">                    ),</span>
+<span class="sd">                    untreated__sim_eval_df = CSVLocalDataSet(</span>
+<span class="sd">                        filepath=&#39;../data/08_reporting/untreated__sim_eval_df.csv&#39;,</span>
+<span class="sd">                        version=None,</span>
+<span class="sd">                    ),</span>
+<span class="sd">                    estimated_effect_df = CSVLocalDataSet(</span>
+<span class="sd">                        filepath=&#39;../data/08_reporting/estimated_effect_df.csv&#39;,</span>
+<span class="sd">                        version=None,</span>
+<span class="sd">                    ),</span>
+<span class="sd">                )</span>
+
+<span class="sd">        logging_config:</span>
+<span class="sd">            Specify logging configuration. \n</span>
+<span class="sd">            Refer to https://docs.python.org/3.6/library/logging.config.html#logging-config-dictschema \n</span>
+<span class="sd">            In default::</span>
+
+<span class="sd">                {&#39;disable_existing_loggers&#39;: False,</span>
+<span class="sd">                 &#39;formatters&#39;: {</span>
+<span class="sd">                     &#39;json_formatter&#39;: {</span>
+<span class="sd">                         &#39;class&#39;: &#39;pythonjsonlogger.jsonlogger.JsonFormatter&#39;,</span>
+<span class="sd">                         &#39;format&#39;: &#39;[%(asctime)s|%(name)s|%(funcName)s|%(levelname)s] %(message)s&#39;,</span>
+<span class="sd">                     },</span>
+<span class="sd">                     &#39;simple&#39;: {</span>
+<span class="sd">                         &#39;format&#39;: &#39;[%(asctime)s|%(name)s|%(levelname)s] %(message)s&#39;,</span>
+<span class="sd">                     },</span>
+<span class="sd">                 },</span>
+<span class="sd">                 &#39;handlers&#39;: {</span>
+<span class="sd">                     &#39;console&#39;: {</span>
+<span class="sd">                         &#39;class&#39;: &#39;logging.StreamHandler&#39;,</span>
+<span class="sd">                         &#39;formatter&#39;: &#39;simple&#39;,</span>
+<span class="sd">                         &#39;level&#39;: &#39;INFO&#39;,</span>
+<span class="sd">                         &#39;stream&#39;: &#39;ext://sys.stdout&#39;,</span>
+<span class="sd">                     },</span>
+<span class="sd">                    &#39;info_file_handler&#39;: {</span>
+<span class="sd">                        &#39;class&#39;: &#39;logging.handlers.RotatingFileHandler&#39;,</span>
+<span class="sd">                        &#39;level&#39;: &#39;INFO&#39;,</span>
+<span class="sd">                        &#39;formatter&#39;: &#39;simple&#39;,</span>
+<span class="sd">                        &#39;filename&#39;: &#39;./info.log&#39;,</span>
+<span class="sd">                        &#39;maxBytes&#39;: 10485760, # 10MB</span>
+<span class="sd">                        &#39;backupCount&#39;: 20,</span>
+<span class="sd">                        &#39;encoding&#39;: &#39;utf8&#39;,</span>
+<span class="sd">                        &#39;delay&#39;: True,</span>
+<span class="sd">                    },</span>
+<span class="sd">                     &#39;error_file_handler&#39;: {</span>
+<span class="sd">                         &#39;class&#39;: &#39;logging.handlers.RotatingFileHandler&#39;,</span>
+<span class="sd">                         &#39;level&#39;: &#39;ERROR&#39;,</span>
+<span class="sd">                         &#39;formatter&#39;: &#39;simple&#39;,</span>
+<span class="sd">                         &#39;filename&#39;: &#39;./errors.log&#39;,</span>
+<span class="sd">                         &#39;maxBytes&#39;: 10485760,  # 10MB</span>
+<span class="sd">                         &#39;backupCount&#39;: 20,</span>
+<span class="sd">                         &#39;encoding&#39;: &#39;utf8&#39;,</span>
+<span class="sd">                         &#39;delay&#39;: True,</span>
+<span class="sd">                     },</span>
+<span class="sd">                 },</span>
+<span class="sd">                 &#39;loggers&#39;: {</span>
+<span class="sd">                     &#39;anyconfig&#39;: {</span>
+<span class="sd">                         &#39;handlers&#39;: [&#39;console&#39;, &#39;info_file_handler&#39;, &#39;error_file_handler&#39;],</span>
+<span class="sd">                         &#39;level&#39;: &#39;WARNING&#39;,</span>
+<span class="sd">                         &#39;propagate&#39;: False,</span>
+<span class="sd">                     },</span>
+<span class="sd">                     &#39;kedro.io&#39;: {</span>
+<span class="sd">                         &#39;handlers&#39;: [&#39;console&#39;, &#39;info_file_handler&#39;, &#39;error_file_handler&#39;],</span>
+<span class="sd">                         &#39;level&#39;: &#39;WARNING&#39;,</span>
+<span class="sd">                         &#39;propagate&#39;: False,</span>
+<span class="sd">                     },</span>
+<span class="sd">                     &#39;kedro.pipeline&#39;: {</span>
+<span class="sd">                         &#39;handlers&#39;: [&#39;console&#39;, &#39;info_file_handler&#39;, &#39;error_file_handler&#39;],</span>
+<span class="sd">                         &#39;level&#39;: &#39;INFO&#39;,</span>
+<span class="sd">                         &#39;propagate&#39;: False,</span>
+<span class="sd">                     },</span>
+<span class="sd">                     &#39;kedro.runner&#39;: {</span>
+<span class="sd">                         &#39;handlers&#39;: [&#39;console&#39;, &#39;info_file_handler&#39;, &#39;error_file_handler&#39;],</span>
+<span class="sd">                         &#39;level&#39;: &#39;INFO&#39;,</span>
+<span class="sd">                         &#39;propagate&#39;: False,</span>
+<span class="sd">                     },</span>
+<span class="sd">                     &#39;causallift&#39;: {</span>
+<span class="sd">                         &#39;handlers&#39;: [&#39;console&#39;, &#39;info_file_handler&#39;, &#39;error_file_handler&#39;],</span>
+<span class="sd">                         &#39;level&#39;: &#39;INFO&#39;,</span>
+<span class="sd">                         &#39;propagate&#39;: False,</span>
+<span class="sd">                     },</span>
+<span class="sd">                 },</span>
+<span class="sd">                 &#39;root&#39;: {</span>
+<span class="sd">                     &#39;handlers&#39;: [&#39;console&#39;, &#39;info_file_handler&#39;, &#39;error_file_handler&#39;],</span>
+<span class="sd">                     &#39;level&#39;: &#39;INFO&#39;,</span>
+<span class="sd">                 },</span>
+<span class="sd">                 &#39;version&#39;: 1}</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CausalLift.__init__"><a class="viewcode-back" href="../../causallift.html#causallift.causal_lift.CausalLift.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">train_df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[pd.DataFrame]</span>
+        <span class="n">test_df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[pd.DataFrame]</span>
+        <span class="n">cols_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[List[str]]</span>
+        <span class="n">col_treatment</span><span class="o">=</span><span class="s2">&quot;Treatment&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+        <span class="n">col_outcome</span><span class="o">=</span><span class="s2">&quot;Outcome&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+        <span class="n">col_propensity</span><span class="o">=</span><span class="s2">&quot;Propensity&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+        <span class="n">col_cate</span><span class="o">=</span><span class="s2">&quot;CATE&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+        <span class="n">col_recommendation</span><span class="o">=</span><span class="s2">&quot;Recommendation&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+        <span class="n">min_propensity</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>  <span class="c1"># type: float</span>
+        <span class="n">max_propensity</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>  <span class="c1"># type: float</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># type: int</span>
+        <span class="n">uplift_model_params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">search_cv</span><span class="o">=</span><span class="s2">&quot;sklearn.model_selection.GridSearchCV&quot;</span><span class="p">,</span>
+            <span class="n">estimator</span><span class="o">=</span><span class="s2">&quot;xgboost.XGBClassifier&quot;</span><span class="p">,</span>
+            <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">return_train_score</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">param_grid</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">random_state</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">max_depth</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                <span class="n">learning_rate</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">],</span>
+                <span class="n">n_estimators</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">objective</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;binary:logistic&quot;</span><span class="p">],</span>
+                <span class="n">booster</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gbtree&quot;</span><span class="p">],</span>
+                <span class="n">n_jobs</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">nthread</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span>
+                <span class="n">gamma</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">min_child_weight</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">max_delta_step</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">subsample</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">colsample_bytree</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">colsample_bylevel</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">reg_alpha</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">reg_lambda</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">scale_pos_weight</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">base_score</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">],</span>
+                <span class="n">missing</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">),</span>  <span class="c1"># type: Union[Dict[str, List[Any]], Type[sklearn.base.BaseEstimator]]</span>
+        <span class="n">enable_ipw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># type: bool</span>
+        <span class="n">propensity_model_params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">search_cv</span><span class="o">=</span><span class="s2">&quot;sklearn.model_selection.GridSearchCV&quot;</span><span class="p">,</span>
+            <span class="n">estimator</span><span class="o">=</span><span class="s2">&quot;sklearn.linear_model.LogisticRegression&quot;</span><span class="p">,</span>
+            <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">return_train_score</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">param_grid</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">random_state</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">C</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+                <span class="n">class_weight</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span>
+                <span class="n">dual</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">],</span>
+                <span class="n">fit_intercept</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">],</span>
+                <span class="n">intercept_scaling</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">max_iter</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span>
+                <span class="n">multi_class</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ovr&quot;</span><span class="p">],</span>
+                <span class="n">n_jobs</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">penalty</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;l1&quot;</span><span class="p">,</span> <span class="s2">&quot;l2&quot;</span><span class="p">],</span>
+                <span class="n">solver</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;liblinear&quot;</span><span class="p">],</span>
+                <span class="n">tol</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0001</span><span class="p">],</span>
+                <span class="n">warm_start</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">),</span>  <span class="c1"># type: Dict[str, List[Any]]</span>
+        <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>  <span class="c1"># type: int</span>
+        <span class="n">index_name</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+        <span class="n">partition_name</span><span class="o">=</span><span class="s2">&quot;partition&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+        <span class="n">runner</span><span class="o">=</span><span class="s2">&quot;SequentialRunner&quot;</span><span class="p">,</span>  <span class="c1"># type: str</span>
+        <span class="n">conditionally_skip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># type: bool</span>
+        <span class="n">dataset_catalog</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="c1"># args_raw = CSVLocalDataSet(filepath=&#39;../data/01_raw/args_raw.csv&#39;, version=None),</span>
+            <span class="c1"># train_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/train_df.csv&#39;, version=None),</span>
+            <span class="c1"># test_df = CSVLocalDataSet(filepath=&#39;../data/01_raw/test_df.csv&#39;, version=None),</span>
+            <span class="n">propensity_model</span><span class="o">=</span><span class="n">PickleLocalDataSet</span><span class="p">(</span>
+                <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;../data/06_models/propensity_model.pickle&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">),</span>
+            <span class="n">uplift_models_dict</span><span class="o">=</span><span class="n">PickleLocalDataSet</span><span class="p">(</span>
+                <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;../data/06_models/uplift_models_dict.pickle&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">),</span>
+            <span class="n">df_03</span><span class="o">=</span><span class="n">CSVLocalDataSet</span><span class="p">(</span>
+                <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;../data/07_model_output/df.csv&quot;</span><span class="p">,</span>
+                <span class="n">load_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;partition&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">],</span> <span class="n">float_precision</span><span class="o">=</span><span class="s2">&quot;high&quot;</span>
+                <span class="p">),</span>
+                <span class="n">save_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.16e</span><span class="s2">&quot;</span><span class="p">),</span>
+                <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">treated__sim_eval_df</span><span class="o">=</span><span class="n">CSVLocalDataSet</span><span class="p">(</span>
+                <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;../data/08_reporting/treated__sim_eval_df.csv&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">),</span>
+            <span class="n">untreated__sim_eval_df</span><span class="o">=</span><span class="n">CSVLocalDataSet</span><span class="p">(</span>
+                <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;../data/08_reporting/untreated__sim_eval_df.csv&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">),</span>
+            <span class="n">estimated_effect_df</span><span class="o">=</span><span class="n">CSVLocalDataSet</span><span class="p">(</span>
+                <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;../data/08_reporting/estimated_effect_df.csv&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">),</span>
+        <span class="p">),</span>  <span class="c1"># type: Dict[str, AbstractDataSet]</span>
+        <span class="n">logging_config</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;disable_existing_loggers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;formatters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;json_formatter&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;pythonjsonlogger.jsonlogger.JsonFormatter&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">|</span><span class="si">%(name)s</span><span class="s2">|</span><span class="si">%(funcName)s</span><span class="s2">|</span><span class="si">%(levelname)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;simple&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">|</span><span class="si">%(name)s</span><span class="s2">|</span><span class="si">%(levelname)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;console&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.StreamHandler&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;simple&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="s2">&quot;ext://sys.stdout&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;info_file_handler&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.handlers.RotatingFileHandler&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;simple&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="s2">&quot;./info.log&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;maxBytes&quot;</span><span class="p">:</span> <span class="mi">10485760</span><span class="p">,</span>  <span class="c1"># 10MB</span>
+                    <span class="s2">&quot;backupCount&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+                    <span class="s2">&quot;encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;utf8&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;delay&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;error_file_handler&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.handlers.RotatingFileHandler&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;simple&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="s2">&quot;./errors.log&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;maxBytes&quot;</span><span class="p">:</span> <span class="mi">10485760</span><span class="p">,</span>  <span class="c1"># 10MB</span>
+                    <span class="s2">&quot;backupCount&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+                    <span class="s2">&quot;encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;utf8&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;delay&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;loggers&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;anyconfig&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;info_file_handler&quot;</span><span class="p">,</span> <span class="s2">&quot;error_file_handler&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;kedro.io&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;info_file_handler&quot;</span><span class="p">,</span> <span class="s2">&quot;error_file_handler&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;kedro.pipeline&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;info_file_handler&quot;</span><span class="p">,</span> <span class="s2">&quot;error_file_handler&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;kedro.runner&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;info_file_handler&quot;</span><span class="p">,</span> <span class="s2">&quot;error_file_handler&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;causallift&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;info_file_handler&quot;</span><span class="p">,</span> <span class="s2">&quot;error_file_handler&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;info_file_handler&quot;</span><span class="p">,</span> <span class="s2">&quot;error_file_handler&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="p">},</span>  <span class="c1"># type: Optional[Dict[str, Any]]</span>
+    <span class="p">):</span>
+        <span class="c1"># type: (...) -&gt; None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[str]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[FlexibleKedroContext]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[EasyDict]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[pd.DataFrame]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_df</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[pd.DataFrame]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[pd.DataFrame]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">propensity_model</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[sklearn.base.BaseEstimator]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[EasyDict]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[EasyDict]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fraction_train</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[float]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fraction_test</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[float]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">treated__proba</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[np.array]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">untreated__proba</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[np.array]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cate_estimated</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[pd.Series]]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">treated__sim_eval_df</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[pd.DataFrame]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">untreated__sim_eval_df</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[pd.DataFrame]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">estimated_effect_df</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Optional[Type[pd.DataFrame]]</span>
+
+        <span class="c1"># Instance attributes were defined above.</span>
+        <span class="k">if</span> <span class="n">logging_config</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">logging_config</span><span class="p">)</span>
+
+        <span class="n">args_raw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">cols_features</span><span class="o">=</span><span class="n">cols_features</span><span class="p">,</span>
+            <span class="n">col_treatment</span><span class="o">=</span><span class="n">col_treatment</span><span class="p">,</span>
+            <span class="n">col_outcome</span><span class="o">=</span><span class="n">col_outcome</span><span class="p">,</span>
+            <span class="n">col_propensity</span><span class="o">=</span><span class="n">col_propensity</span><span class="p">,</span>
+            <span class="n">col_cate</span><span class="o">=</span><span class="n">col_cate</span><span class="p">,</span>
+            <span class="n">col_recommendation</span><span class="o">=</span><span class="n">col_recommendation</span><span class="p">,</span>
+            <span class="n">min_propensity</span><span class="o">=</span><span class="n">min_propensity</span><span class="p">,</span>
+            <span class="n">max_propensity</span><span class="o">=</span><span class="n">max_propensity</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+            <span class="n">uplift_model_params</span><span class="o">=</span><span class="n">uplift_model_params</span><span class="p">,</span>
+            <span class="n">enable_ipw</span><span class="o">=</span><span class="n">enable_ipw</span><span class="p">,</span>
+            <span class="n">propensity_model_params</span><span class="o">=</span><span class="n">propensity_model_params</span><span class="p">,</span>
+            <span class="n">index_name</span><span class="o">=</span><span class="n">index_name</span><span class="p">,</span>
+            <span class="n">partition_name</span><span class="o">=</span><span class="n">partition_name</span><span class="p">,</span>
+            <span class="n">runner</span><span class="o">=</span><span class="n">runner</span><span class="p">,</span>
+            <span class="n">conditionally_skip</span><span class="o">=</span><span class="n">conditionally_skip</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">args_raw</span> <span class="o">=</span> <span class="n">EasyDict</span><span class="p">(</span><span class="n">args_raw</span><span class="p">)</span>
+        <span class="n">args_raw</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dataset_catalog</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;args_raw&quot;</span><span class="p">,</span> <span class="n">MemoryDataSet</span><span class="p">({})</span><span class="o">.</span><span class="n">load</span><span class="p">()))</span>
+
+        <span class="k">assert</span> <span class="n">args_raw</span><span class="o">.</span><span class="n">runner</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;SequentialRunner&quot;</span><span class="p">,</span> <span class="s2">&quot;ParallelRunner&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">args_raw</span><span class="o">.</span><span class="n">runner</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">args_raw</span><span class="o">.</span><span class="n">conditionally_skip</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;[Warning] conditionally_skip option is ignored since runner is None&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span> <span class="o">=</span> <span class="n">FlexibleKedroContext</span><span class="p">(</span>
+            <span class="n">runner</span><span class="o">=</span><span class="n">args_raw</span><span class="o">.</span><span class="n">runner</span><span class="p">,</span> <span class="n">only_missing</span><span class="o">=</span><span class="n">args_raw</span><span class="o">.</span><span class="n">conditionally_skip</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="n">args_raw</span><span class="o">.</span><span class="n">runner</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">bundle_train_and_test_data</span><span class="p">(</span><span class="n">args_raw</span><span class="p">,</span> <span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">impute_cols_features</span><span class="p">(</span><span class="n">args_raw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">schedule_propensity_scoring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span> <span class="o">=</span> <span class="n">treatment_fractions_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">need_propensity_scoring</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">propensity_model</span> <span class="o">=</span> <span class="n">fit_propensity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">estimate_propensity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">propensity_model</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">add_feed_dict</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;train_df&quot;</span><span class="p">:</span> <span class="n">MemoryDataSet</span><span class="p">(</span><span class="n">train_df</span><span class="p">),</span>
+                    <span class="s2">&quot;test_df&quot;</span><span class="p">:</span> <span class="n">MemoryDataSet</span><span class="p">(</span><span class="n">test_df</span><span class="p">),</span>
+                    <span class="s2">&quot;args_raw&quot;</span><span class="p">:</span> <span class="n">MemoryDataSet</span><span class="p">(</span><span class="n">args_raw</span><span class="p">),</span>
+                <span class="p">},</span>
+                <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">add_feed_dict</span><span class="p">(</span><span class="n">dataset_catalog</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;011_bundle_train_and_test_data&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;df_00&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">[</span>
+                    <span class="s2">&quot;121_prepare_args&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;131_treatment_fractions_&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;141_initialize_model&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="s2">&quot;treatment_fractions&quot;</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">need_propensity_scoring</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;211_fit_propensity&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">propensity_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                    <span class="s2">&quot;propensity_model&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;221_estimate_propensity&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;df_01&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">add_feed_dict</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s2">&quot;df_01&quot;</span><span class="p">:</span> <span class="n">MemoryDataSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)},</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fraction_train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span><span class="o">.</span><span class="n">train</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fraction_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span><span class="o">.</span><span class="n">test</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;### Treatment fraction in train dataset: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span><span class="o">.</span><span class="n">train</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;### Treatment fraction in test dataset: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span><span class="o">.</span><span class="n">test</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_separate_train_test</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_separate_train_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># type: (...) -&gt; Tuple[pd.DataFrame, pd.DataFrame]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">xs</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_df</span>
+
+<div class="viewcode-block" id="CausalLift.estimate_cate_by_2_models"><a class="viewcode-back" href="../../causallift.html#causallift.causal_lift.CausalLift.estimate_cate_by_2_models">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_cate_by_2_models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># type: (...) -&gt; Tuple[pd.DataFrame, pd.DataFrame]</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimate CATE (Conditional Average Treatment Effect) using 2 XGBoost classifier models.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">treated__model_dict</span> <span class="o">=</span> <span class="n">model_for_treated_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">untreated__model_dict</span> <span class="o">=</span> <span class="n">model_for_untreated_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span> <span class="o">=</span> <span class="n">bundle_treated_and_untreated_models</span><span class="p">(</span>
+                <span class="n">treated__model_dict</span><span class="p">,</span> <span class="n">untreated__model_dict</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">treated__proba</span> <span class="o">=</span> <span class="n">model_for_treated_predict_proba</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">untreated__proba</span> <span class="o">=</span> <span class="n">model_for_untreated_predict_proba</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cate_estimated</span> <span class="o">=</span> <span class="n">compute_cate</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">treated__proba</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">untreated__proba</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">add_cate_to_df</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cate_estimated</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;311_fit&quot;</span><span class="p">,</span> <span class="s2">&quot;312_bundle_2_models&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="s2">&quot;uplift_models_dict&quot;</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;321_predict_proba&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">treated__proba</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;treated__proba&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">untreated__proba</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;untreated__proba&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;411_compute_cate&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cate_estimated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;cate_estimated&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;421_add_cate_to_df&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;df_02&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_separate_train_test</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CausalLift.estimate_recommendation_impact"><a class="viewcode-back" href="../../causallift.html#causallift.causal_lift.CausalLift.estimate_recommendation_impact">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_recommendation_impact</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cate_estimated</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[Type[pd.Series]]</span>
+        <span class="n">treatment_fraction_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[float]</span>
+        <span class="n">treatment_fraction_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[float]</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: Optional[int]</span>
+    <span class="p">):</span>
+        <span class="c1"># type: (...) -&gt; Type[pd.DataFrame]</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimate the impact of recommendation based on uplift modeling.</span>
+
+<span class="sd">        args:</span>
+<span class="sd">            cate_estimated:</span>
+<span class="sd">                Pandas series containing the CATE.</span>
+<span class="sd">                If :obj:`None` (default), use the ones calculated by estimate_cate_by_2_models method.</span>
+<span class="sd">            treatment_fraction_train:</span>
+<span class="sd">                The fraction of treatment in train dataset.</span>
+<span class="sd">                If :obj:`None` (default), use the ones calculated by estimate_cate_by_2_models method.</span>
+<span class="sd">            treatment_fraction_test:</span>
+<span class="sd">                The fraction of treatment in test dataset.</span>
+<span class="sd">                If :obj:`None` (default), use the ones calculated by estimate_cate_by_2_models method.</span>
+<span class="sd">            verbose:</span>
+<span class="sd">                How much info to show.</span>
+<span class="sd">                If :obj:`None` (default), use the value set in the constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">cate_estimated</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cate_estimated</span> <span class="o">=</span> <span class="n">cate_estimated</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">col_cate</span><span class="p">]</span> <span class="o">=</span> <span class="n">cate_estimated</span><span class="o">.</span><span class="n">values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span><span class="o">.</span><span class="n">train</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">treatment_fraction_train</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span><span class="o">.</span><span class="n">train</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">treatment_fraction_test</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span><span class="o">.</span><span class="n">test</span>
+        <span class="p">)</span>
+
+        <span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">verbose</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">recommend_by_cate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">treatment_fractions</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">treated__sim_eval_df</span> <span class="o">=</span> <span class="n">model_for_treated_simulate_recommendation</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">untreated__sim_eval_df</span> <span class="o">=</span> <span class="n">model_for_untreated_simulate_recommendation</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uplift_models_dict</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">estimated_effect_df</span> <span class="o">=</span> <span class="n">estimate_effect</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">treated__sim_eval_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">untreated__sim_eval_df</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">:</span>
+            <span class="c1"># self.kedro_context.catalog.save(&#39;args&#39;, self.args)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;511_recommend_by_cate&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;df_03&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;521_simulate_recommendation&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">treated__sim_eval_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="s2">&quot;treated__sim_eval_df&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">untreated__sim_eval_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="s2">&quot;untreated__sim_eval_df&quot;</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;531_estimate_effect&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">estimated_effect_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kedro_context</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="s2">&quot;estimated_effect_df&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Treated samples without and with uplift model:&quot;</span><span class="p">)</span>
+            <span class="n">display</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">treated__sim_eval_df</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Untreated samples without and with uplift model:&quot;</span><span class="p">)</span>
+            <span class="n">display</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">untreated__sim_eval_df</span><span class="p">)</span>
+
+        <span class="c1"># if verbose &gt;= 2:</span>
+        <span class="c1">#    log.info(&#39;\n## Overall (both treated and untreated) samples without and with uplift model:&#39;)</span>
+        <span class="c1">#    display(estimated_effect_df)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimated_effect_df</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Yusuke Minami.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="../../_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+      <script type="text/javascript" src="../../_static/copybutton.js"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

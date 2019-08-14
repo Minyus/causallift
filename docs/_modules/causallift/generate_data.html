@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>causallift.generate_data &mdash; causallift 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/qb1-sphinx-rtd.css" type="text/css" />
+  <link rel="stylesheet" href="/usr/local/lib/python3.6/dist-packages/kedro/html/_static/css/theme-overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> causallift
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">causallift</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../causallift.html">causallift package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../causallift.nodes.html">causallift.nodes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../causallift.context.html">causallift.context package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.causal_lift">causallift.causal_lift module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.generate_data">causallift.generate_data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.pipeline">causallift.pipeline module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../causallift.html#module-causallift.run">causallift.run module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">causallift</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>causallift.generate_data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for causallift.generate_data</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The original code is at</span>
+<span class="sd">https://github.com/wayfair/pylift/blob/master/pylift/generate_data.py</span>
+<span class="sd">licensed under the BSD 2-Clause &quot;Simplified&quot; License</span>
+<span class="sd">Copyright 2018, Wayfair, Inc.</span>
+
+<span class="sd">This code is an enhanced (backward-compatible) version that can simulate</span>
+<span class="sd">observational dataset including &quot;sleeping dogs.&quot;</span>
+
+<span class="sd">&quot;Sleeping dogs&quot; (people who will &quot;buy&quot; if not treated but will not &quot;buy&quot;</span>
+<span class="sd">if treated) can be simulated by negative values in tau parameter.</span>
+<span class="sd">Observational data which includes confounding can be simulated by non-zero</span>
+<span class="sd">values in propensity_coef parameter.</span>
+<span class="sd">A/B Test (RCT) with a 50:50 split can be simulated by all-zeros values in</span>
+<span class="sd">propensity_coef parameter (default).</span>
+<span class="sd">The first element in each list parameter specifies the intercept.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="generate_data"><a class="viewcode-back" href="../../causallift.html#causallift.generate_data.generate_data">[docs]</a><span class="k">def</span> <span class="nf">generate_data</span><span class="p">(</span>
+    <span class="n">N</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">n_features</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">beta</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">],</span>
+    <span class="n">error_std</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">tau</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">tau_std</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">discrete_outcome</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">2701</span><span class="p">,</span>
+    <span class="n">feature_effect</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">propensity_coef</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="n">index_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    generate_data(N=1000, n_features=3, beta=[1,-2,3,-0.8], error_std=0.5, tau=3, discrete_outcome=False)</span>
+<span class="sd">    Generates random data with a ground truth data generating process.</span>
+<span class="sd">    Draws random values for features from [0, 1), errors from a 0-centered</span>
+<span class="sd">    distribution with std `error_std`, and creates an outcome y.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        N :</span>
+<span class="sd">            (:obj:`Optional[int]`) -</span>
+<span class="sd">            Number of observations.</span>
+<span class="sd">        n_features :</span>
+<span class="sd">            (:obj:`Optional[int]`) -</span>
+<span class="sd">            Number of features.</span>
+<span class="sd">        beta :</span>
+<span class="sd">            (:obj:`Optional[List[float]]`) -</span>
+<span class="sd">            Array of beta coefficients to multiply by X to get y.</span>
+<span class="sd">        error_std :</span>
+<span class="sd">            (:obj:`Optional[float]`) -</span>
+<span class="sd">            Standard deviation (scale) of distribution from which errors are drawn.</span>
+<span class="sd">        tau :</span>
+<span class="sd">            (:obj:`Union[List[float], float]`) -</span>
+<span class="sd">            Array of coefficients to multiply by X to get y if treated.</span>
+<span class="sd">            More/larger negative values will simulate more &quot;sleeping dogs&quot;</span>
+<span class="sd">            If float scalar is input, effect of features is not considered.</span>
+<span class="sd">        tau_std :</span>
+<span class="sd">            (:obj:`Optional[float]`) -</span>
+<span class="sd">            When not :obj:`None`, draws tau from a normal distribution centered around tau</span>
+<span class="sd">            with standard deviation tau_std rather than just using a constant value</span>
+<span class="sd">            of tau.</span>
+<span class="sd">        discrete_outcome :</span>
+<span class="sd">            (:obj:`Optional[bool]`) -</span>
+<span class="sd">            If True, outcomes are 0 or 1; otherwise continuous.</span>
+<span class="sd">        seed :</span>
+<span class="sd">             (:obj:`Optional[int]`) -</span>
+<span class="sd">            Random seed fed to np.random.seed to allow for deterministic behavior.</span>
+<span class="sd">        feature_effect :</span>
+<span class="sd">            (:obj:`Optional[float]`) -</span>
+<span class="sd">            Effect of beta on outcome if treated.</span>
+<span class="sd">        propensity_coef :</span>
+<span class="sd">            (:obj:`Optional[List[float]]`) -</span>
+<span class="sd">            Array of coefficients to multiply by X to get propensity log-odds to be treated.</span>
+<span class="sd">        index_name :</span>
+<span class="sd">            (:obj:`Optional[str]`) -</span>
+<span class="sd">            Index name in the output DataFrame. If :obj:`None` (default), index name will not be set.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        df : pd.DataFrame</span>
+<span class="sd">            A DataFrame containing the generated data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check the length of input lists</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">propensity_coef</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;len(propensity_coef) != n_features + 1&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;len(beta) != n_features + 1&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+        <span class="n">tau_</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">tau_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tau</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;len(tau) != n_features + 1&quot;</span><span class="p">)</span>
+        <span class="n">tau_</span> <span class="o">=</span> <span class="n">tau</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="c1"># Define features, error, and random treatment assignment.</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">n_features</span><span class="p">))</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">error_std</span><span class="p">)</span>
+
+    <span class="c1"># Effect of features on treatment.</span>
+    <span class="c1"># treatment = np.random.binomial(1, .5, size=(N))</span>
+    <span class="n">propensity_logodds</span> <span class="o">=</span> <span class="n">propensity_coef</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">propensity_coef</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">propensity</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">propensity_logodds</span><span class="p">))</span>
+    <span class="n">treatment</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">propensity</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+
+    <span class="c1"># Effect of features on outcome.</span>
+    <span class="k">if</span> <span class="n">beta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">n_features</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Treatment heterogeneity.</span>
+    <span class="n">tau_vec</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">tau_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="n">tau_std</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">tau_</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">feature_effect</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Calculate outcome.</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">+</span> <span class="n">error</span> <span class="o">+</span> <span class="n">treatment</span> <span class="o">*</span> <span class="n">tau_vec</span>
+
+    <span class="k">if</span> <span class="n">discrete_outcome</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Feature_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_features</span><span class="p">)]</span>
+    <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;Treatment&quot;</span><span class="p">,</span> <span class="s2">&quot;Outcome&quot;</span><span class="p">])</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">treatment</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">columns</span><span class="o">=</span><span class="n">names</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">index_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">index_name</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Yusuke Minami.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="../../_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+      <script type="text/javascript" src="../../_static/copybutton.js"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

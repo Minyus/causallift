@@ -1,0 +1,11 @@
+sphinx
+sphinx_rtd_theme
+nbsphinx
+nbstripout
+recommonmark
+sphinx-autodoc-typehints>=1.7.0
+typed_ast>=1.4.0
+sphinx_copybutton
+jupyter_client
+tornado
+ipykernel
