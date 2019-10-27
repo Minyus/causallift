@@ -174,13 +174,16 @@ python setup.py install
 - scikit-learn
 - easydict
 - kedro>=0.15.0
-- kedro-viz
 
-## Optional but recommended dependencies
+## Optional:
 
 - matplotlib
 - xgboost
 - scikit-optimize
+
+## Optional for visualization of the pipeline:
+
+- kedro-viz
 
 ## How to use CausalLift?
 
