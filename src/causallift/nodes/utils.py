@@ -215,7 +215,9 @@ def compute_cate(proba_treated, proba_untreated):
     return cate_estimated
 
 
-def add_cate_to_df(args, df, cate_estimated):
+def add_cate_to_df(args, df, cate_estimated, proba_treated, proba_untreated):
+    df.loc[:, args.col_proba_if_treated] = proba_treated
+    df.loc[:, args.col_proba_if_untreated] = proba_untreated
     df.loc[:, args.col_cate] = cate_estimated.values
     return df
 

@@ -59,18 +59,27 @@ class ModelForTreatedOrUntreated:
 
         model = initialize_model(args, model_key="uplift_model_params")
         model.fit(X_train, y_train, sample_weight=sample_weight)
+
+        best_estimator = (
+            model.best_estimator_ if hasattr(model, "best_estimator_") else model
+        )
+        estimator_params = best_estimator.get_params()
+        if "steps" in estimator_params:
+            best_estimator = estimator_params["steps"][-1][1]
+            estimator_params = best_estimator.get_params()
+
         if args.verbose >= 3:
             log.info(
                 "### Best parameters of the model trained using samples "
                 "with observational Treatment: {} \n {}".format(
-                    treatment_val, model.best_params_
+                    treatment_val, estimator_params
                 )
             )
 
         if args.verbose >= 2:
-            if hasattr(model.best_estimator_, "feature_importances_"):
+            if hasattr(estimator_params, "feature_importances_"):
                 fi_df = pd.DataFrame(
-                    model.best_estimator_.feature_importances_.reshape(1, -1),
+                    estimator_params.feature_importances_.reshape(1, -1),
                     index=["feature importance"],
                 )
                 log.info(

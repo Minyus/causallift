@@ -49,14 +49,22 @@ def fit_propensity(args, df):
 
     model.fit(X_train, y_train)
 
+    best_estimator = (
+        model.best_estimator_ if hasattr(model, "best_estimator_") else model
+    )
+    estimator_params = best_estimator.get_params()
+    if "steps" in estimator_params:
+        best_estimator = estimator_params["steps"][-1][1]
+        estimator_params = best_estimator.get_params()
+
     if args.verbose >= 3:
         log.info(
-            "### Best parameter for logistic regression:\n{}".format(model.best_params_)
+            "### Best parameter for logistic regression:\n{}".format(estimator_params)
         )
     if args.verbose >= 2:
         log.info("\n## Coefficients of logistic regression:")
         coef_df = pd.DataFrame(
-            model.best_estimator_.coef_.reshape(1, -1),
+            best_estimator.coef_.reshape(1, -1),
             columns=args.cols_features,
             index=["coefficient"],
         )

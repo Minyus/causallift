@@ -158,7 +158,19 @@ def create_pipeline(**kwargs):
                 name="411_compute_cate",
             ),
             Pipeline(
-                [node(add_cate_to_df, ["args", "df_01", "cate_estimated"], "df_02")],
+                [
+                    node(
+                        add_cate_to_df,
+                        [
+                            "args",
+                            "df_01",
+                            "cate_estimated",
+                            "treated__proba",
+                            "untreated__proba",
+                        ],
+                        "df_02",
+                    )
+                ],
                 name="421_add_cate_to_df",
             ),
             Pipeline(

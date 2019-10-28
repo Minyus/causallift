@@ -288,6 +288,8 @@ class CausalLift:
         col_treatment="Treatment",  # type: str
         col_outcome="Outcome",  # type: str
         col_propensity="Propensity",  # type: str
+        col_proba_if_treated="Proba_if_Treated",  # type: str
+        col_proba_if_untreated="Proba_if_Untreated",  # type: str
         col_cate="CATE",  # type: str
         col_recommendation="Recommendation",  # type: str
         min_propensity=0.01,  # type: float
@@ -484,6 +486,8 @@ class CausalLift:
             col_treatment=col_treatment,
             col_outcome=col_outcome,
             col_propensity=col_propensity,
+            col_proba_if_treated=col_proba_if_treated,
+            col_proba_if_untreated=col_proba_if_untreated,
             col_cate=col_cate,
             col_recommendation=col_recommendation,
             min_propensity=min_propensity,
@@ -607,7 +611,13 @@ class CausalLift:
             self.cate_estimated = compute_cate(
                 self.treated__proba, self.untreated__proba
             )
-            self.df = add_cate_to_df(self.args, self.df, self.cate_estimated)
+            self.df = add_cate_to_df(
+                self.args,
+                self.df,
+                self.cate_estimated,
+                self.treated__proba,
+                self.untreated__proba,
+            )
 
         if self.runner:
             self.kedro_context.run(tags=["311_fit", "312_bundle_2_models"])
