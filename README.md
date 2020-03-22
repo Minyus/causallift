@@ -225,6 +225,31 @@ train_df, test_df = cl.estimate_cate_by_2_models()
 estimated_effect_df = cl.estimate_recommendation_impact()
 ```
 
+## How CausalLift works?
+
+CausalLift provides the following 3 steps:
+
+### Step 1: `cl = CausalLift(train_df, test_df)`
+
+If the `train_df` is from observational data (not A/B Test), you can set `enable_ipw`=True so IPW (Inverse Probability Weighting) can address the issue that treatment should have been chosen based on a different probability (propensity score) for each individual (e.g. customer, patient, etc.)
+
+If the `train_df` is from A/B Test or RCT (Randomized Controlled Trial), set `enble_ipw`=False to skip estimating propensity score. 
+
+### Step 2: `CausalLift.estimate_cate_by_2_models`
+This step is the Uplift Modeling consisting of 2 sub-steps:
+
+1. Training using train_df (Note: `Treatment` and `Outcome` are used)
+
+2. Prediction of CATE for train_df and test_df (Note: Neither `Treatment` nor `Outcome` is used.) 
+
+### Step 3 [Optional]: `CausalLift.estimate_recommendation_impact`
+     
+You can optionally evaluate the predicted CATE for train_df and test_df (Note: `CATE`, `Treatment` and `Outcome` are used.)
+
+This step is optional; you can skip if you want only CATE and you do not find this evaluation step useful.
+
+
+
 <p align="center">
 <img src="readme_images/CausalLift_flow_diagram.png" width="415" height="274">
 </p>
@@ -232,6 +257,15 @@ estimated_effect_df = cl.estimate_recommendation_impact()
 <p align="center">
 	CausalLift flow diagram
 </p>
+
+## How to run inferrence (prediction of CATE for new data with `Treatment` and `Outcome` unknown)?
+
+Use the whole historical data (A/B Test data or observational data) as train_df instead of splitting into `tran_df` and `test_df`, and use the new data with `Treatment` and `Outcome` unknown as `test_df`.
+
+This is possible because `Treatment` and `Outcome` are not used for prediction of CATE after Uplift Model is trained using `Treatment` and `Outcome`.
+
+Please note that valid evaluation for `test_df` will not be available as valid `Treatment` and `Outcome` are not available.
+
 
 ## New features introduced in version 1.0.0
 
