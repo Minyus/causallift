@@ -44,6 +44,8 @@ class CausalLift:
             Name of CATE (Conditional Average Treatment Effect) column. 'CATE' in default.
         col_recommendation:
             Name of recommendation column. 'Recommendation' in default.
+        col_weight:
+            Name of weight column. 'Weight' in default.
         min_propensity:
             Minimum propensity score. 0.01 in default.
         max_propensity:
@@ -112,6 +114,9 @@ class CausalLift:
         enable_ipw:
             Enable Inverse Probability Weighting based on the estimated propensity score.
             True in default.
+        enable_weighting:
+            Enable Weighting.
+            False in default.
         propensity_model_params:
             Parameters used to fit logistic regression model to estimate propensity score.
 
@@ -292,6 +297,7 @@ class CausalLift:
         col_proba_if_untreated="Proba_if_Untreated",  # type: str
         col_cate="CATE",  # type: str
         col_recommendation="Recommendation",  # type: str
+        col_weight="Weight",  # type: str
         min_propensity=0.01,  # type: float
         max_propensity=0.99,  # type: float
         verbose=2,  # type: int
@@ -326,6 +332,7 @@ class CausalLift:
             ),
         ),  # type: Union[Dict[str, List[Any]], Type[sklearn.base.BaseEstimator]]
         enable_ipw=True,  # type: bool
+        enable_weighting=False,  # type: bool
         propensity_model_params=dict(
             search_cv="sklearn.model_selection.GridSearchCV",
             estimator="sklearn.linear_model.LogisticRegression",
@@ -490,11 +497,13 @@ class CausalLift:
             col_proba_if_untreated=col_proba_if_untreated,
             col_cate=col_cate,
             col_recommendation=col_recommendation,
+            col_weight=col_weight,
             min_propensity=min_propensity,
             max_propensity=max_propensity,
             verbose=verbose,
             uplift_model_params=uplift_model_params,
             enable_ipw=enable_ipw,
+            enable_weighting=enable_weighting,
             propensity_model_params=propensity_model_params,
             index_name=index_name,
             partition_name=partition_name,

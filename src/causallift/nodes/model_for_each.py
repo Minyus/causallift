@@ -30,6 +30,8 @@ class ModelForTreatedOrUntreated:
         X_test = df.xs("test")[args.cols_features]
         y_test = df.xs("test")[args.col_outcome]
 
+        model = initialize_model(args, model_key="uplift_model_params")
+
         if args.enable_ipw and (args.col_propensity in df.xs("train").columns):
             propensity = df.xs("train")[args.col_propensity]
 
@@ -53,12 +55,11 @@ class ModelForTreatedOrUntreated:
             sample_weight = (
                 (1 / propensity) if treatment_val == 1.0 else (1 / (1 - propensity))
             )
-        else:
-            # do not use sample weight
-            sample_weight = np.ones_like(y_train, dtype=float)
 
-        model = initialize_model(args, model_key="uplift_model_params")
-        model.fit(X_train, y_train, sample_weight=sample_weight)
+            model.fit(X_train, y_train, sample_weight=sample_weight)
+
+        else:
+            model.fit(X_train, y_train)
 
         best_estimator = (
             model.best_estimator_ if hasattr(model, "best_estimator_") else model
