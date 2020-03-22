@@ -57,6 +57,10 @@ class ModelForTreatedOrUntreated:
             )
 
             model.fit(X_train, y_train, sample_weight=sample_weight)
+        
+        elif args.enable_weighting and (args.col_weight in df.xs("train").columns):
+            sample_weight = df.xs("train")[args.col_weight]
+            model.fit(X_train, y_train, sample_weight=sample_weight)
 
         else:
             model.fit(X_train, y_train)
