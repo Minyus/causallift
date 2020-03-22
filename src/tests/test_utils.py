@@ -17,7 +17,7 @@ class UtilsTest(unittest.TestCase):
         pass
 
     def test_get_cols_features_should_return_feature_columns_excluding_default_non_feature(
-        self
+        self,
     ):
         df = pd.DataFrame(
             data=np.random.rand(3, 6),
@@ -29,7 +29,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(["var1", "var2", "var3"], result)
 
     def test_get_cols_features_should_return_feature_columns_excluding_non_default_non_feature(
-        self
+        self,
     ):
         df = pd.DataFrame(
             data=np.random.rand(3, 6),
@@ -53,7 +53,7 @@ class UtilsTest(unittest.TestCase):
         np.testing.assert_array_equal(test_array, result.xs("test"))
 
     def test_concat_train_test_df_should_concatnate_both_sets_into_frames_with_keys(
-        self
+        self,
     ):
         args = EasyDict(dict(index_name="index", partition_name="partition"))
         train_df = pd.DataFrame(
@@ -89,7 +89,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(length, result)
 
     def test_len_t_should_return_the_number_of_records_where_treatment_equals_0_and_treatment_col_is_not_default(
-        self
+        self,
     ):
         df = pd.DataFrame(data=np.random.rand(6, 2), columns=["var1", "var2"])
         df["MarketedTo"] = [random.sample(range(2), 1)[0] for i in range(6)]
@@ -118,7 +118,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(length, result)
 
     def test_len_o_should_return_the_number_of_records_where_outcome_equals_0_and_outcome_col_is_not_default(
-        self
+        self,
     ):
         df = pd.DataFrame(data=np.random.rand(6, 2), columns=["var1", "var2"])
         df["Result"] = [random.sample(range(2), 1)[0] for i in range(6)]
@@ -129,7 +129,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(length, result)
 
     def test_len_to_should_return_the_number_of_records_where_outcome_and_treatment_is_1(
-        self
+        self,
     ):
         df = pd.DataFrame(data=np.random.rand(12, 2), columns=["var1", "var2"])
         df["Outcome"] = [random.sample(range(2), 1)[0] for i in range(12)]
@@ -141,7 +141,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(length, result)
 
     def test_len_to_should_return_the_number_of_records_where_outcome_and_treatment_are_different(
-        self
+        self,
     ):
         df = pd.DataFrame(data=np.random.rand(12, 2), columns=["var1", "var2"])
         df["Outcome"] = [random.sample(range(2), 1)[0] for i in range(12)]
@@ -153,7 +153,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(length, result)
 
     def test_len_to_should_return_the_number_of_records_where_outcome_and_treatment_are_different_with_custom_column_names(
-        self
+        self,
     ):
         df = pd.DataFrame(data=np.random.rand(12, 2), columns=["var1", "var2"])
         df["result"] = [random.sample(range(2), 1)[0] for i in range(12)]
@@ -176,7 +176,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(value, result)
 
     def test_treatment_fraction_should_compute_percentage_of_treated_with_custom_name(
-        self
+        self,
     ):
         df = pd.DataFrame(data=np.random.rand(12, 2), columns=["var1", "var2"])
         df["marketed"] = [random.sample(range(2), 1)[0] for i in range(12)]
@@ -196,7 +196,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(value, result)
 
     def test_outcome_fraction_should_compute_percentage_of_positive_outcome_with_custom_name(
-        self
+        self,
     ):
         df = pd.DataFrame(data=np.random.rand(12, 2), columns=["var1", "var2"])
         df["result"] = [random.sample(range(2), 1)[0] for i in range(12)]
@@ -228,7 +228,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(gain, result)
 
     def test_overall_uplift_gain_should_compute_uplift_for_sure_things_with_custom_colum_names(
-        self
+        self,
     ):
         df = pd.DataFrame(data=np.random.rand(12, 2), columns=["var1", "var2"])
         df["Result"] = [random.sample(range(2), 1)[0] for i in range(12)]
