@@ -171,7 +171,7 @@ python setup.py install
 
 - numpy
 - pandas
-- scikit-learn
+- scikit-learn<0.22 (sklearn==0.22 may not work.)
 - easydict
 - kedro>=0.15.0
 
