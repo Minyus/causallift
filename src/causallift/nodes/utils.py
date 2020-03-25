@@ -33,11 +33,18 @@ def concat_train_test(args, train, test):
     Concatenate train and test series.
     Use series.xs('train') or series.xs('test') to split
     """
-    series = pd.concat(
-        [pd.Series(train), pd.Series(test)],
-        keys=["train", "test"],
-        names=[args.partition_name, args.index_name],
-    )
+    if test is None:
+        series = pd.concat(
+            [pd.Series(train)],
+            keys=["train"],
+            names=[args.partition_name, args.index_name],
+        )
+    else:
+        series = pd.concat(
+            [pd.Series(train), pd.Series(test)],
+            keys=["train", "test"],
+            names=[args.partition_name, args.index_name],
+        )
     return series
 
 
@@ -128,41 +135,68 @@ def gain_tuple(df_, r_):
 
 
 def score_df(y_train, y_test, y_pred_train, y_pred_test, average="binary"):
-    if len(y_train) != len(y_pred_train):
+    if (
+        y_train is not None
+        and y_pred_train is not None
+        and len(y_train) != len(y_pred_train)
+    ):
         raise Exception("Lengths of true and predicted for train do not match.")
-    if len(y_pred_test) != len(y_pred_test):
+    if (
+        y_test is not None
+        and y_pred_test is not None
+        and len(y_test) != len(y_pred_test)
+    ):
         raise Exception("Lengths of true and predicted for test do not match.")
-    num_classes = pd.Series(y_train).nunique()
-    score_2darray = [
-        [
-            len(y_),
-            pd.Series(y_).nunique(),
-            accuracy_score(y_, y_pred_),
-            precision_score(y_, y_pred_, average=average),
-            recall_score(y_, y_pred_, average=average),
-            f1_score(y_, y_pred_, average=average),
-        ]
-        + (
-            [
-                roc_auc_score(y_, y_pred_),
-                pd.Series(y_).mean(),
-                pd.Series(y_pred_).mean(),
-            ]
-            if num_classes == 2
-            else []
-        )
-        for (y_, y_pred_) in [(y_train, y_pred_train), (y_test, y_pred_test)]
-    ]
-    score_df = pd.DataFrame(
-        score_2darray,
-        index=["train", "test"],
-        columns=["# samples", "# classes", "accuracy", "precision", "recall", "f1"]
-        + (
-            ["roc_auc", "observed conversion rate", "predicted conversion rate"]
-            if num_classes == 2
-            else []
-        ),
-    )
+
+    score_df = pd.DataFrame()
+
+    for (partition_, y_, y_pred_) in [
+        ("train", y_train, y_pred_train),
+        ("test", y_test, y_pred_test),
+    ]:
+        if (
+            y_ is not None
+            and y_pred_ is not None
+            and (0 <= y_).all()
+            and (y_ <= 1).all()
+            and (0 <= y_pred_).all()
+            and (y_pred_ <= 1).all()
+        ):
+
+            num_classes = pd.Series(y_).nunique()
+            score_list = [
+                len(y_),
+                pd.Series(y_).nunique(),
+                accuracy_score(y_, y_pred_),
+                precision_score(y_, y_pred_, average=average),
+                recall_score(y_, y_pred_, average=average),
+                f1_score(y_, y_pred_, average=average),
+            ] + (
+                [
+                    roc_auc_score(y_, y_pred_),
+                    pd.Series(y_).mean(),
+                    pd.Series(y_pred_).mean(),
+                ]
+                if num_classes == 2
+                else []
+            )
+            column_list = [
+                "# samples",
+                "# classes",
+                "accuracy",
+                "precision",
+                "recall",
+                "f1",
+            ] + (
+                ["roc_auc", "observed conversion rate", "predicted conversion rate"]
+                if num_classes == 2
+                else []
+            )
+
+            score_df_ = pd.DataFrame(
+                [score_list], index=[partition_], columns=column_list,
+            )
+            score_df = score_df.append(score_df_)
     return score_df
 
 
@@ -177,8 +211,8 @@ def conf_mat_df(y_true, y_pred):
 
 def bundle_train_and_test_data(args, train_df, test_df):
     assert isinstance(train_df, pd.DataFrame)
-    assert isinstance(test_df, pd.DataFrame)
-    assert set(train_df.columns) == set(test_df.columns)
+    # assert isinstance(test_df, pd.DataFrame)
+    # assert set(train_df.columns) == set(test_df.columns)
     assert all([isinstance(col_name, str) for col_name in train_df.columns])
 
     index_name = args.index_name
@@ -186,9 +220,10 @@ def bundle_train_and_test_data(args, train_df, test_df):
     if index_name is not None:
         train_df = train_df.reset_index(drop=True).copy()
         train_df.index.name = index_name
-        test_df = test_df.reset_index(drop=True).copy()
-        test_df.index.name = index_name
-    else:
+        if test_df is not None:
+            test_df = test_df.reset_index(drop=True).copy()
+            test_df.index.name = index_name
+    elif test_df is not None:
         assert train_df.index.name == test_df.index.name
 
     df = concat_train_test_df(args, train_df, test_df)

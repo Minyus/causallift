@@ -27,8 +27,6 @@ class ModelForTreatedOrUntreated:
 
         X_train = df.xs("train")[args.cols_features]
         y_train = df.xs("train")[args.col_outcome]
-        X_test = df.xs("test")[args.cols_features]
-        y_test = df.xs("test")[args.col_outcome]
 
         model = initialize_model(args, model_key="uplift_model_params")
 
@@ -57,7 +55,7 @@ class ModelForTreatedOrUntreated:
             )
 
             model.fit(X_train, y_train, sample_weight=sample_weight)
-        
+
         elif args.enable_weighting and (args.col_weight in df.xs("train").columns):
             sample_weight = df.xs("train")[args.col_weight]
             model.fit(X_train, y_train, sample_weight=sample_weight)
@@ -96,7 +94,31 @@ class ModelForTreatedOrUntreated:
                 log.info("## Feature importances not available.")
 
         y_pred_train = model.predict(X_train)
-        y_pred_test = model.predict(X_test)
+
+        y_test = None
+        y_pred_test = None
+        if "test" not in df.index:
+            log.warn(
+                "Samples for test not found. Metrics for test dataset will not be computed."
+            )
+        else:
+            test_df = df.xs("test")
+
+            if args.col_outcome not in test_df.columns:
+                log.warn(
+                    "Column for outcome not found. Metrics for test dataset will not be computed."
+                )
+            else:
+                for col in args.cols_features:
+                    if col not in test_df.columns:
+                        error_str = "{} not found in test dataframe columns: {}.".format(
+                            col, test_df.columns
+                        )
+                        log.error(error_str)
+                        raise ValueError(error_str)
+                X_test = test_df[args.cols_features]
+                y_test = test_df[args.col_outcome]
+                y_pred_test = model.predict(X_test)
 
         score_original_treatment_df = score_df(
             y_train, y_test, y_pred_train, y_pred_test, average="binary"
@@ -140,11 +162,33 @@ class ModelForTreatedOrUntreated:
 
         X_train = df.xs("train")[args.cols_features]
         y_train = df.xs("train")[args.col_outcome]
-        X_test = df.xs("test")[args.cols_features]
-        y_test = df.xs("test")[args.col_outcome]
 
         y_pred_train = model.predict(X_train)
-        y_pred_test = model.predict(X_test)
+
+        y_test = None
+        y_pred_test = None
+        if "test" not in df.index:
+            log.warn(
+                "Samples for test not found. Metrics for test dataset will not be computed."
+            )
+        else:
+            test_df = df.xs("test")
+
+            if args.col_outcome not in test_df.columns:
+                log.warn(
+                    "Column for outcome not found. Metrics for test dataset will not be computed."
+                )
+            else:
+                for col in args.cols_features:
+                    if col not in test_df.columns:
+                        error_str = "{} not found in test dataframe columns: {}.".format(
+                            col, test_df.columns
+                        )
+                        log.error(error_str)
+                        raise ValueError(error_str)
+                X_test = test_df[args.cols_features]
+                y_test = test_df[args.col_outcome]
+                y_pred_test = model.predict(X_test)
 
         score_recommended_treatment_df = score_df(
             y_train, y_test, y_pred_train, y_pred_test, average="binary"
