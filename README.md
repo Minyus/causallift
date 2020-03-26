@@ -389,7 +389,7 @@ as [pymatch](https://github.com/benmiroglio/pymatch) did.
 Any feedback is welcome!
 
 Please create an issue for questions, suggestions, and feature requests.
-Please open pull requests to improve documentation, usability, and features against `v1.0` branch.
+Please open pull requests to improve documentation, usability, and features against `develop` branch.
 (`v0.0` is no longer active.)
 
 Separate pull requests for each improvement are appreciated rather than a big pull request.
@@ -397,7 +397,7 @@ It is encouraged to use:
 - [Google-style docstrings](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html)
 - [PEP 484 comment-style type annotation](https://mypy.readthedocs.io/en/latest/cheat_sheet.html)
 although Python 2 is not supported.
-- An intelligent IDE e.g. PyCharm
+- An intelligent IDE such as PyCharm or VS Code
 
 If you could write a review about CausalLift in any natural languages (English, Chinese, Japanese,
 etc.) or implement similar features in any programming languages (R, SAS, etc.), please let me
