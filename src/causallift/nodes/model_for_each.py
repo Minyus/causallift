@@ -202,6 +202,7 @@ class ModelForTreatedOrUntreated:
             display(score_recommended_treatment_df)
 
         out_df = pd.DataFrame(index=["train", "test"])
+        out_df.index.name = "partition"
         out_df["# samples chosen without uplift model"] = score_original_treatment_df[
             ["# samples"]
         ]

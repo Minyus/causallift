@@ -168,7 +168,7 @@ class CausalLift:
         conditionally_skip:
             *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']* \n
             Skip running the pipeline if the output files already exist.
-            True in default.
+            False in default.
         dataset_catalog:
             *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']* \n
             Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format. \n
@@ -380,13 +380,22 @@ class CausalLift:
                 version=None,
             ),
             treated__sim_eval_df=CSVLocalDataSet(
-                filepath="../data/08_reporting/treated__sim_eval_df.csv", version=None
+                filepath="../data/08_reporting/treated__sim_eval_df.csv",
+                load_args=dict(index_col=["partition"], float_precision="high"),
+                save_args=dict(index=True, float_format="%.16e"),
+                version=None,
             ),
             untreated__sim_eval_df=CSVLocalDataSet(
-                filepath="../data/08_reporting/untreated__sim_eval_df.csv", version=None
+                filepath="../data/08_reporting/untreated__sim_eval_df.csv",
+                load_args=dict(index_col=["partition"], float_precision="high"),
+                save_args=dict(index=True, float_format="%.16e"),
+                version=None,
             ),
             estimated_effect_df=CSVLocalDataSet(
-                filepath="../data/08_reporting/estimated_effect_df.csv", version=None
+                filepath="../data/08_reporting/estimated_effect_df.csv",
+                load_args=dict(index_col=["partition"], float_precision="high"),
+                save_args=dict(index=True, float_format="%.16e"),
+                version=None,
             ),
         ),  # type: Dict[str, AbstractDataSet]
         logging_config={
