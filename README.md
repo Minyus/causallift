@@ -178,10 +178,10 @@ $ python setup.py develop
 ## How to use CausalLift?
 
 There are 2 ways:
-  - [Option 1] Use `causallift.CausalLift` class interface
-  - [Option 2] Use `causallift.nodes` subpackage with [`PipelineX`](https://github.com/Minyus/pipelinex) package (Recommended for flexibility)
+  - [Deprecated option] Use `causallift.CausalLift` class interface
+  - [Recommended option] Use `causallift.nodes` subpackage with [`PipelineX`](https://github.com/Minyus/pipelinex) package
 
-## [Option 1] Use `causallift.CausalLift` class interface
+## [Deprecated option] Use `causallift.CausalLift` class interface
 
 
 Please see the demo code in Google Colab (free cloud CPU/GPU environment):
@@ -259,8 +259,7 @@ Other enhancements include:
 - [Model options] Specify models other than XGBoost and Logistic Regression for uplift
 modeling and propensity modeling, respectively.
 
-
-## [Option 2] Use `causallift.nodes` subpackage with [`PipelineX`](https://github.com/Minyus/pipelinex) package (Recommended for flexibility)
+## [Recommended option] Use `causallift.nodes` subpackage with [`PipelineX`](https://github.com/Minyus/pipelinex) package
 
 Please see [PipelineX](https://github.com/Minyus/pipelinex) package and
  use [PipelineX Causallift example project](https://github.com/Minyus/pipelinex_causallift).
