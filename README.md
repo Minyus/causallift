@@ -105,6 +105,14 @@ Effects) or uplift scores) to address these challenges.
 	estimate how much conversion rate (the proportion of people who took the desired action such as
 	buying a product) will increase using the uplift model.
 
+<p align="center">
+<img src="readme_images/CausalLift_flow_diagram.png" width="415" height="274">
+</p>
+
+<p align="center">
+	CausalLift flow diagram
+</p>
+
 ## What kind of data can be fed to CausalLift?
 Table data including the following columns:
 
@@ -126,10 +134,6 @@ Table data including the following columns:
 	- If not provided, CausalLift can estimate from the features using logistic regression.
 
 
-<img src="readme_images/Example_table_data.png">
-<p align="center">
-	Example table data
-</p>
 
 ## Installation
 
@@ -153,7 +157,7 @@ $ cd pipelinex
 $ python setup.py develop
 ```
 
-## Dependencies:
+### Dependencies:
 
 - numpy
 - pandas
@@ -161,19 +165,26 @@ $ python setup.py develop
 - easydict
 - kedro>=0.15.0
 
-## Optional:
+### Optional:
 
 - matplotlib
 - xgboost
 - scikit-optimize
 
-## Optional for visualization of the pipeline:
+### Optional for visualization of the pipeline:
 
 - kedro-viz
 
 ## How to use CausalLift?
 
-Please see the demo code in Google Colab (free cloud CPU/GPU environment) :
+There are 2 ways:
+  - [Option 1] Use `causallift.CausalLift` class interface
+  - [Option 2] Use `causallift.nodes` subpackage with [`PipelineX`](https://github.com/Minyus/pipelinex) package (Recommended for flexibility)
+
+## [Option 1] Use `causallift.CausalLift` class interface
+
+
+Please see the demo code in Google Colab (free cloud CPU/GPU environment):
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
 https://colab.research.google.com/github/Minyus/causallift/blob/master/notebooks/demo/CausalLift_demo.ipynb
@@ -211,49 +222,29 @@ train_df, test_df = cl.estimate_cate_by_2_models()
 estimated_effect_df = cl.estimate_recommendation_impact()
 ```
 
-## How CausalLift works?
-
-CausalLift provides the following 3 steps:
+`causallift.CausalLift` class interface provides the following 3 steps:
 
 ### Step 1: `cl = CausalLift(train_df, test_df)`
 
 If the `train_df` is from observational data (not A/B Test), you can set `enable_ipw`=True so IPW (Inverse Probability Weighting) can address the issue that treatment should have been chosen based on a different probability (propensity score) for each individual (e.g. customer, patient, etc.)
 
-If the `train_df` is from A/B Test or RCT (Randomized Controlled Trial), set `enble_ipw`=False to skip estimating propensity score. 
+If the `train_df` is from A/B Test or RCT (Randomized Controlled Trial), set `enble_ipw`=False to skip estimating propensity score.
 
 ### Step 2: `CausalLift.estimate_cate_by_2_models`
 This step is the Uplift Modeling consisting of 2 sub-steps:
 
 1. Training using train_df (Note: `Treatment` and `Outcome` are used)
 
-2. Prediction of CATE for train_df and test_df (Note: Neither `Treatment` nor `Outcome` is used.) 
+2. Prediction of CATE for train_df and test_df (Note: Neither `Treatment` nor `Outcome` is used.)
 
 ### Step 3 [Optional]: `CausalLift.estimate_recommendation_impact`
-     
+
 You can optionally evaluate the predicted CATE for train_df and test_df (Note: `CATE`, `Treatment` and `Outcome` are used.)
 
 This step is optional; you can skip if you want only CATE and you do not find this evaluation step useful.
 
 
-
-<p align="center">
-<img src="readme_images/CausalLift_flow_diagram.png" width="415" height="274">
-</p>
-
-<p align="center">
-	CausalLift flow diagram
-</p>
-
-## How to run inferrence (prediction of CATE for new data with `Treatment` and `Outcome` unknown)?
-
-Use the whole historical data (A/B Test data or observational data) as train_df instead of splitting into `tran_df` and `test_df`, and use the new data with `Treatment` and `Outcome` unknown as `test_df`.
-
-This is possible because `Treatment` and `Outcome` are not used for prediction of CATE after Uplift Model is trained using `Treatment` and `Outcome`.
-
-Please note that valid evaluation for `test_df` will not be available as valid `Treatment` and `Outcome` are not available.
-
-
-## New features introduced in version 1.0.0
+### New features introduced in version 1.0.0
 
 CausalLift version 1.0.0 adopted [Kedro](https://kedro.readthedocs.io/) to add the following new
 features.
@@ -269,6 +260,21 @@ Other enhancements include:
 modeling and propensity modeling, respectively.
 
 
+## [Option 2] Use `causallift.nodes` subpackage with [`PipelineX`](https://github.com/Minyus/pipelinex) package (Recommended for flexibility)
+
+Please see [PipelineX](https://github.com/Minyus/pipelinex) package and
+ use [PipelineX Causallift example project](https://github.com/Minyus/pipelinex_causallift).
+
+
+## How to run inferrence (prediction of CATE for new data with `Treatment` and `Outcome` unknown)?
+
+Use the whole historical data (A/B Test data or observational data) as train_df instead of splitting into `tran_df` and `test_df`, and use the new data with `Treatment` and `Outcome` unknown as `test_df`.
+
+This is possible because `Treatment` and `Outcome` are not used for prediction of CATE after Uplift Model is trained using `Treatment` and `Outcome`.
+
+Please note that valid evaluation for `test_df` will not be available as valid `Treatment` and `Outcome` are not available.
+
+
 ## Details about the parameters
 
 Please see [[CausalLift API reference]](https://minyus.github.io/causallift/causallift.html).
@@ -277,9 +283,8 @@ Please see [[CausalLift API reference]](https://minyus.github.io/causallift/caus
 ## Supported Python versions
 
 - Python 3.5
-- Python 3.6
+- Python 3.6 (Tested and recommended)
 - Python 3.7
-
 
 
 ## Related Python packages
@@ -376,7 +381,6 @@ Any feedback is welcome!
 
 Please create an issue for questions, suggestions, and feature requests.
 Please open pull requests to improve documentation, usability, and features against `develop` branch.
-(`v0.0` is no longer active.)
 
 Separate pull requests for each improvement are appreciated rather than a big pull request.
 It is encouraged to use:
@@ -398,6 +402,7 @@ know. I will add the link here.
 [日本語] 因果推論, 反事実, 傾向スコア, 計量経済学
 
 ## Article about CausalList in Japanese
+
 - https://qiita.com/Minyus86/items/07ce57a8bddc49c2bbf5
 
 ## Author:
