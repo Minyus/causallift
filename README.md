@@ -137,35 +137,26 @@ Table data including the following columns:
 Option 1: install from the PyPI
 
 ```bash
-pip3 install causallift
+$ pip install causallift
 ```
 
 Option 2: install from the GitHub repository
 
 ```bash
-pip3 install git+https://github.com/Minyus/causallift.git
+$ pip install git+https://github.com/Minyus/causallift.git
 ```
 
 Option 3: clone the [GitHub repository](https://github.com/Minyus/causallift.git), cd into the
 downloaded repository, and run:
 
 ```bash
-python setup.py install
+$ python setup.py install
 ```
+or
 
-## How to install the latest pre-release version 1.x of CausalLift?
-
-Option 1: install from the GitHub repository
 ```bash
-pip3 install git+git://github.com/Minyus/causallift@v1.0
+$ python setup.py develop
 ```
-
-Option 2: clone `v1.0` branch of the [GitHub repository](https://github.com/Minyus/causallift.git),
-cd into the downloaded repository, and run:
-```bash
-python setup.py install
-```
-
 
 ## Dependencies:
 
