@@ -131,30 +131,25 @@ Table data including the following columns:
 	Example table data
 </p>
 
+## Installation
 
-## How to install CausalLift?
-
-Option 1: install from the PyPI
+- [Option 1] To install the latest release from the PyPI:
 
 ```bash
 $ pip install causallift
 ```
 
-Option 2: install from the GitHub repository
+- [Option 2] To install the latest pre-release:
 
 ```bash
 $ pip install git+https://github.com/Minyus/causallift.git
 ```
 
-Option 3: clone the [GitHub repository](https://github.com/Minyus/causallift.git), cd into the
-downloaded repository, and run:
+- [Option 3] To install the latest pre-release without need to reinstall even after modifying the source code:
 
 ```bash
-$ python setup.py install
-```
-or
-
-```bash
+$ git clone https://github.com/Minyus/causallift.git
+$ cd pipelinex
 $ python setup.py develop
 ```
 
