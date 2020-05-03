@@ -197,9 +197,6 @@ To download the notebook file, navigate to "File" >> "Download .ipynb".
 Here are the basic steps to use.
 
 ```python
-""" Step 0. Import CausalLift
-"""
-
 from causallift import CausalLift
 
 """ Step 1. Feed datasets and optionally compute estimated propensity scores
