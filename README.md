@@ -177,6 +177,11 @@ Prepare the following columns in 2 pandas DataFrames, train and test (validation
 	- propensity (or probability) to be treated for observational datasets (not needed for A/B Testing results)
 	- If not provided, CausalLift can estimate from the features using logistic regression.
 
+<img src="readme_images/Example_table_data.png">
+<p align="center">
+	Example table data
+</p>
+
 ### Step 1: Prepare for Uplift modeling and optionally estimate propensity scores using a supervised classification model
 
 If the `train_df` is from observational data (not A/B Test), you can set `enable_ipw`=True so IPW (Inverse Probability Weighting) can address the issue that treatment should have been chosen based on a different probability (propensity score) for each individual (e.g. customer, patient, etc.)
