@@ -113,27 +113,6 @@ Effects) or uplift scores) to address these challenges.
 	CausalLift flow diagram
 </p>
 
-## What kind of data can be fed to CausalLift?
-Table data including the following columns:
-
-- Features
-	- a.k.a independent variables, explanatory variables, covariates
-	- e.g. customer gender, age range, etc.
-	- Note: Categorical variables need to be one-hot coded so propensity can be estimated using
-	logistic regression. [pandas.get_dummies](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.get_dummies.html) can be used.
-- Outcome: binary (0 or 1)
-	- a.k.a dependent variable, target variable, label
-	- e.g. whether the customer bought a product, clicked a link, etc.
-- Treatment: binary (0 or 1)
-	- a variable you can control and want to optimize for each individual (customer)
-	- a.k.a intervention
-	- e.g. whether an advertising campaign was executed, whether a discount was offered, etc.
-	- Note: if you cannot find a treatment column, you may need to ask stakeholders to get the data, which might take hours to years.
-- [Optional] Propensity: continuous between 0 and 1
-	- propensity (or probability) to be treated for observational datasets (not needed for A/B Testing results)
-	- If not provided, CausalLift can estimate from the features using logistic regression.
-
-
 
 ## Installation
 
@@ -175,14 +154,61 @@ $ python setup.py develop
 
 - kedro-viz
 
+## How is the data pipeline implemented by CausalLift?
+
+### Step 0: Prepare data
+
+Prepare the following columns in 2 pandas DataFrames, train and test (validation).
+
+- Features
+	- a.k.a independent variables, explanatory variables, covariates
+	- e.g. customer gender, age range, etc.
+	- Note: Categorical variables need to be one-hot coded so propensity can be estimated using
+	logistic regression. [pandas.get_dummies](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.get_dummies.html) can be used.
+- Outcome: binary (0 or 1)
+	- a.k.a dependent variable, target variable, label
+	- e.g. whether the customer bought a product, clicked a link, etc.
+- Treatment: binary (0 or 1)
+	- a variable you can control and want to optimize for each individual (customer)
+	- a.k.a intervention
+	- e.g. whether an advertising campaign was executed, whether a discount was offered, etc.
+	- Note: if you cannot find a treatment column, you may need to ask stakeholders to get the data, which might take hours to years.
+- [Optional] Propensity: continuous between 0 and 1
+	- propensity (or probability) to be treated for observational datasets (not needed for A/B Testing results)
+	- If not provided, CausalLift can estimate from the features using logistic regression.
+
+### Step 1: Prepare for Uplift modeling and optionally estimate propensity scores using a supervised classification model
+
+If the `train_df` is from observational data (not A/B Test), you can set `enable_ipw`=True so IPW (Inverse Probability Weighting) can address the issue that treatment should have been chosen based on a different probability (propensity score) for each individual (e.g. customer, patient, etc.)
+
+If the `train_df` is from A/B Test or RCT (Randomized Controlled Trial), set `enble_ipw`=False to skip estimating propensity score.
+
+### Step 2: Estimate CATE by 2 supervised classification models
+
+Train 2 supervised classification models (e.g. XGBoost) for treated and untreated samples independently and compute estimated CATE (Conditional Average Treatment Effect), ITE (Individual Treatment Effect), or uplift score.
+
+This step is the Uplift Modeling consisting of 2 sub-steps:
+
+1. Training using train_df (Note: `Treatment` and `Outcome` are used)
+
+2. Prediction of CATE for train_df and test_df (Note: Neither `Treatment` nor `Outcome` is used.)
+
+### Step 3 [Optional] Estimate impact by following recommendation based on CATE
+
+Estimate how much conversion rate will increase by selecting treatment (campaign) targets as recommended by the uplift modeling.
+
+You can optionally evaluate the predicted CATE for train_df and test_df (Note: `CATE`, `Treatment` and `Outcome` are used.)
+
+This step is _optional_; you can skip if you want only CATE and you do not find this evaluation step useful.
+
+
 ## How to use CausalLift?
 
 There are 2 ways:
   - [Deprecated option] Use `causallift.CausalLift` class interface
   - [Recommended option] Use `causallift.nodes` subpackage with [`PipelineX`](https://github.com/Minyus/pipelinex) package
 
-## [Deprecated option] Use `causallift.CausalLift` class interface
-
+### [Deprecated option] Use `causallift.CausalLift` class interface
 
 Please see the demo code in Google Colab (free cloud CPU/GPU environment):
 
@@ -199,64 +225,18 @@ Here are the basic steps to use.
 ```python
 from causallift import CausalLift
 
-""" Step 1. Feed datasets and optionally compute estimated propensity scores
-using logistic regression if set enable_ipw = True.
-"""
-
+""" Step 1. """
 cl = CausalLift(train_df, test_df, enable_ipw=True)
 
-""" Step 2. Train 2 classification models (XGBoost) for treated and untreated
-samples independently and compute estimated CATE (Conditional Average Treatment
-Effect), ITE (Individual Treatment Effect), or uplift score.
-"""
-
+""" Step 2. """
 train_df, test_df = cl.estimate_cate_by_2_models()
 
-""" Step 3. Estimate how much conversion rate will increase by selecting treatment
-(campaign) targets as recommended by the uplift modeling.
-"""
-
+""" Step 3. """
 estimated_effect_df = cl.estimate_recommendation_impact()
 ```
 
-`causallift.CausalLift` class interface provides the following 3 steps:
 
-### Step 1: `cl = CausalLift(train_df, test_df)`
-
-If the `train_df` is from observational data (not A/B Test), you can set `enable_ipw`=True so IPW (Inverse Probability Weighting) can address the issue that treatment should have been chosen based on a different probability (propensity score) for each individual (e.g. customer, patient, etc.)
-
-If the `train_df` is from A/B Test or RCT (Randomized Controlled Trial), set `enble_ipw`=False to skip estimating propensity score.
-
-### Step 2: `CausalLift.estimate_cate_by_2_models`
-This step is the Uplift Modeling consisting of 2 sub-steps:
-
-1. Training using train_df (Note: `Treatment` and `Outcome` are used)
-
-2. Prediction of CATE for train_df and test_df (Note: Neither `Treatment` nor `Outcome` is used.)
-
-### Step 3 [Optional]: `CausalLift.estimate_recommendation_impact`
-
-You can optionally evaluate the predicted CATE for train_df and test_df (Note: `CATE`, `Treatment` and `Outcome` are used.)
-
-This step is optional; you can skip if you want only CATE and you do not find this evaluation step useful.
-
-
-### New features introduced in version 1.0.0
-
-CausalLift version 1.0.0 adopted [Kedro](https://kedro.readthedocs.io/) to add the following new
-features.
-
-- [Parallel execution] Train the 2 models in parallel
-- [File management] Save and load intermediate files such as the trained models
-- [Documentation] Generate the API document by Sphinx and visualize the process flow
-
-Other enhancements include:
-
-- [Logging] Show and/or log processing status such as timestamp and the running task
-- [Model options] Specify models other than XGBoost and Logistic Regression for uplift
-modeling and propensity modeling, respectively.
-
-## [Recommended option] Use `causallift.nodes` subpackage with [`PipelineX`](https://github.com/Minyus/pipelinex) package
+### [Recommended option] Use `causallift.nodes` subpackage with [`PipelineX`](https://github.com/Minyus/pipelinex) package
 
 Please see [PipelineX](https://github.com/Minyus/pipelinex) package and
  use [PipelineX Causallift example project](https://github.com/Minyus/pipelinex_causallift).
