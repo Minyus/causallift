@@ -65,7 +65,7 @@ def fit_propensity(args, df):
             columns=args.cols_features,
             index=["coefficient"],
         )
-        args.df_print(coef_df)
+        apply_method(coef_df, args.df_print)
 
     return model
 
@@ -96,14 +96,16 @@ def estimate_propensity(args, df, model):
         log.info(
             "\n### Score Table for logistic regression to calculate propensity score:"
         )
-        args.df_print(score_df(y_train, y_test, y_pred_train, y_pred_test))
+        apply_method(
+            score_df(y_train, y_test, y_pred_train, y_pred_test), args.df_print
+        )
 
         # if args.verbose >= 3:
         log.info("\n### Confusion Matrix for Train:")
-        args.df_print(conf_mat_df(y_train, y_pred_train))
+        apply_method(conf_mat_df(y_train, y_pred_train), args.df_print)
         # if args.verbose >= 3:
         log.info("\n### Confusion Matrix for Test:")
-        args.df_print(conf_mat_df(y_test, y_pred_test))
+        apply_method(conf_mat_df(y_test, y_pred_test), args.df_print)
 
     train_df = df.xs("train")
     test_df = df.xs("test")

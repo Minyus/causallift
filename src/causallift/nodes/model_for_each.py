@@ -87,7 +87,7 @@ class ModelForTreatedOrUntreated:
                     "\n### Feature importances of the model trained using samples "
                     "with observational Treatment: {}".format(treatment_val)
                 )
-                args.df_print(fi_df)
+                apply_method(fi_df, args.df_print)
             else:
                 log.info("## Feature importances not available.")
 
@@ -126,7 +126,7 @@ class ModelForTreatedOrUntreated:
                 "\n### Outcome estimated by the model trained using samples "
                 "with observational Treatment: {}".format(treatment_val)
             )
-            args.df_print(score_original_treatment_df)
+            apply_method(score_original_treatment_df, args.df_print)
 
         model_dict = dict(model=model, eval_df=score_original_treatment_df)
         return model_dict
@@ -197,7 +197,7 @@ class ModelForTreatedOrUntreated:
                     treatment_val
                 )
             )
-            args.df_print(score_recommended_treatment_df)
+            apply_method(score_recommended_treatment_df, args.df_print)
 
         out_df = pd.DataFrame(index=["train", "test"])
         out_df.index.name = "partition"

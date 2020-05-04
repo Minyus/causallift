@@ -354,4 +354,14 @@ def initialize_model(
     return model
 
 
-# class CausalLiftParamError(Exception):
+def apply_method(obj, method, **kwargs):
+    if method is callable:
+        return method(obj, **kwargs)
+    elif isinstance(method, str):
+        func = getattr(obj, method)
+        out = func(**kwargs)
+        if isinstance(out, str):
+            print(out)
+        return out
+    else:
+        raise ValueError("Neither callable nor string: {}".format(method))
