@@ -1,9 +1,6 @@
 import logging
 
-from IPython.display import display
 import pandas as pd
-from sklearn import linear_model
-from sklearn.model_selection import GridSearchCV
 
 from .utils import *  # NOQA
 
@@ -68,7 +65,7 @@ def fit_propensity(args, df):
             columns=args.cols_features,
             index=["coefficient"],
         )
-        display(coef_df)
+        args.df_print(coef_df)
 
     return model
 
@@ -99,14 +96,14 @@ def estimate_propensity(args, df, model):
         log.info(
             "\n### Score Table for logistic regression to calculate propensity score:"
         )
-        display(score_df(y_train, y_test, y_pred_train, y_pred_test))
+        args.df_print(score_df(y_train, y_test, y_pred_train, y_pred_test))
 
         # if args.verbose >= 3:
         log.info("\n### Confusion Matrix for Train:")
-        display(conf_mat_df(y_train, y_pred_train))
+        args.df_print(conf_mat_df(y_train, y_pred_train))
         # if args.verbose >= 3:
         log.info("\n### Confusion Matrix for Test:")
-        display(conf_mat_df(y_test, y_pred_test))
+        args.df_print(conf_mat_df(y_test, y_pred_test))
 
     train_df = df.xs("train")
     test_df = df.xs("test")

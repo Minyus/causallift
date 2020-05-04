@@ -3,19 +3,14 @@ from typing import List, Optional, Tuple, Type  # NOQA
 from kedro.io import AbstractDataSet, CSVLocalDataSet, MemoryDataSet, PickleLocalDataSet
 import numpy as np
 import sklearn  # NOQA
+import logging
+from IPython.display import display
 
 from causallift.context.flexible_context import *  # NOQA
 
 from .nodes.estimate_propensity import *  # NOQA
 from .nodes.model_for_each import *  # NOQA
 
-# import logging  # NOQA
-# from typing import Any, Dict, List, Optional, Tuple, Union  # NOQA
-#
-# import pandas as pd  # NOQA
-# import sklearn  # NOQA
-# from easydict import EasyDict  # NOQA
-# from IPython.core.display import display  # NOQA
 
 log = logging.getLogger(__name__)
 
@@ -169,6 +164,9 @@ class CausalLift:
             *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']* \n
             Skip running the pipeline if the output files already exist.
             False in default.
+        df_print:
+            callable to use to show output data frames.
+            IPython.display.display in default.
         dataset_catalog:
             *[Effective only if runner is set to either 'SequentialRunner' or 'ParallelRunner']* \n
             Specify dataset files to save in Dict[str, kedro.io.AbstractDataSet] format. \n
@@ -361,6 +359,7 @@ class CausalLift:
         partition_name="partition",  # type: str
         runner="SequentialRunner",  # type: str
         conditionally_skip=False,  # type: bool
+        df_print=display,
         dataset_catalog=dict(
             # args_raw = CSVLocalDataSet(filepath='../data/01_raw/args_raw.csv', version=None),
             # train_df = CSVLocalDataSet(filepath='../data/01_raw/train_df.csv', version=None),
@@ -518,6 +517,7 @@ class CausalLift:
             partition_name=partition_name,
             runner=runner,
             conditionally_skip=conditionally_skip,
+            df_print=df_print,
         )
 
         args_raw = EasyDict(args_raw)

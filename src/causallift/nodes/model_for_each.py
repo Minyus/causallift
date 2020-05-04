@@ -1,7 +1,5 @@
 import logging
 
-from IPython.display import display
-import numpy as np
 import pandas as pd
 
 from .utils import *  # NOQA
@@ -89,7 +87,7 @@ class ModelForTreatedOrUntreated:
                     "\n### Feature importances of the model trained using samples "
                     "with observational Treatment: {}".format(treatment_val)
                 )
-                display(fi_df)
+                args.df_print(fi_df)
             else:
                 log.info("## Feature importances not available.")
 
@@ -128,7 +126,7 @@ class ModelForTreatedOrUntreated:
                 "\n### Outcome estimated by the model trained using samples "
                 "with observational Treatment: {}".format(treatment_val)
             )
-            display(score_original_treatment_df)
+            args.df_print(score_original_treatment_df)
 
         model_dict = dict(model=model, eval_df=score_original_treatment_df)
         return model_dict
@@ -199,7 +197,7 @@ class ModelForTreatedOrUntreated:
                     treatment_val
                 )
             )
-            display(score_recommended_treatment_df)
+            args.df_print(score_recommended_treatment_df)
 
         out_df = pd.DataFrame(index=["train", "test"])
         out_df.index.name = "partition"
