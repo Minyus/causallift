@@ -287,37 +287,28 @@ def estimate_effect(args, sim_treated_df, sim_untreated_df):
     estimated_effect_df = pd.DataFrame()
 
     estimated_effect_df["# samples"] = (
-        sim_treated_df["# samples chosen without uplift model"]
-        + sim_untreated_df["# samples chosen without uplift model"]
+        sim_treated_df["# samples chosen"] + sim_untreated_df["# samples chosen"]
     )
 
     ## Original (without uplift model)
 
-    estimated_effect_df["observed conversion rate without uplift model"] = (
-        sim_treated_df["# samples chosen without uplift model"]
-        * sim_treated_df["observed conversion rate without uplift model"]
-        + sim_untreated_df["# samples chosen without uplift model"]
-        * sim_untreated_df["observed conversion rate without uplift model"]
-    ) / (
-        sim_treated_df["# samples chosen without uplift model"]
-        + sim_untreated_df["# samples chosen without uplift model"]
-    )
+    estimated_effect_df["observed CVR"] = (
+        sim_treated_df["# samples chosen"] * sim_treated_df["observed CVR"]
+        + sim_untreated_df["# samples chosen"] * sim_untreated_df["observed CVR"]
+    ) / (sim_treated_df["# samples chosen"] + sim_untreated_df["# samples chosen"])
 
     ## Recommended (with uplift model)
 
-    estimated_effect_df["predicted conversion rate using uplift model"] = (
-        sim_treated_df["# samples recommended by uplift model"]
-        * sim_treated_df["predicted conversion rate using uplift model"]
-        + sim_untreated_df["# samples recommended by uplift model"]
-        * sim_untreated_df["predicted conversion rate using uplift model"]
+    estimated_effect_df["predicted CVR"] = (
+        sim_treated_df["# samples recommended"] * sim_treated_df["predicted CVR"]
+        + sim_untreated_df["# samples recommended"] * sim_untreated_df["predicted CVR"]
     ) / (
-        sim_treated_df["# samples recommended by uplift model"]
-        + sim_untreated_df["# samples recommended by uplift model"]
+        sim_treated_df["# samples recommended"]
+        + sim_untreated_df["# samples recommended"]
     )
 
-    estimated_effect_df["predicted improvement rate"] = (
-        estimated_effect_df["predicted conversion rate using uplift model"]
-        / estimated_effect_df["observed conversion rate without uplift model"]
+    estimated_effect_df["pred/obs CVR"] = (
+        estimated_effect_df["predicted CVR"] / estimated_effect_df["observed CVR"]
     )
 
     verbose = args.verbose
