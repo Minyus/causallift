@@ -202,18 +202,10 @@ class ModelForTreatedOrUntreated:
         out_df = pd.DataFrame(index=["train", "test"])
         out_df.index.name = "partition"
         out_df["# samples chosen"] = score_original_treatment_df[["# samples"]]
-        out_df["observed CVR"] = score_original_treatment_df[
-            ["observed conversion rate"]
-        ]
+        out_df["observed CVR"] = score_original_treatment_df[["observed CVR"]]
         out_df["# samples recommended"] = score_recommended_treatment_df[["# samples"]]
-        out_df["predicted CVR"] = score_recommended_treatment_df[
-            ["predicted conversion rate"]
-        ]
-
-        # out_df["predicted improvement"] = (
-        # out_df["predicted conversion rate using uplift model"]
-        # / out_df["observed conversion rate without uplift model"]
-        # )
+        out_df["predicted CVR"] = score_recommended_treatment_df[["predicted CVR"]]
+        out_df["pred/obs CVR"] = out_df["predicted CVR"] / out_df["observed CVR"]
 
         if verbose >= 3:
             log.info(

@@ -192,9 +192,7 @@ def score_df(y_train, y_test, y_pred_train, y_pred_test, average="binary"):
                 "recall",
                 "f1",
             ] + (
-                ["roc_auc", "observed conversion rate", "predicted conversion rate"]
-                if num_classes == 2
-                else []
+                ["roc_auc", "observed CVR", "predicted CVR"] if num_classes == 2 else []
             )
 
             score_df_ = pd.DataFrame(
