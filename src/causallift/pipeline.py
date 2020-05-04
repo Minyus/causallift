@@ -202,7 +202,7 @@ def create_pipeline(**kwargs):
                 [
                     node(
                         estimate_effect,
-                        ["treated__sim_eval_df", "untreated__sim_eval_df"],
+                        ["args", "treated__sim_eval_df", "untreated__sim_eval_df"],
                         "estimated_effect_df",
                     )
                 ],

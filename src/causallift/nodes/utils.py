@@ -1,4 +1,5 @@
 from typing import Any, Dict, Type  # NOQA
+import logging
 
 from easydict import EasyDict
 from kedro.utils import load_obj
@@ -13,6 +14,9 @@ from sklearn.metrics import (
     recall_score,
     roc_auc_score,
 )
+
+
+log = logging.getLogger(__name__)
 
 
 def get_cols_features(
@@ -279,7 +283,7 @@ def recommend_by_cate(args, df, treatment_fractions):
     return df
 
 
-def estimate_effect(sim_treated_df, sim_untreated_df):
+def estimate_effect(args, sim_treated_df, sim_untreated_df):
     estimated_effect_df = pd.DataFrame()
 
     estimated_effect_df["# samples"] = (
@@ -315,6 +319,13 @@ def estimate_effect(sim_treated_df, sim_untreated_df):
         estimated_effect_df["predicted conversion rate using uplift model"]
         / estimated_effect_df["observed conversion rate without uplift model"]
     )
+
+    verbose = args.verbose
+    if verbose >= 2:
+        log.info(
+            "\n## Overall simulated effect of recommendation based on the uplift modeling:"
+        )
+        apply_method(estimated_effect_df, args.df_print)
 
     return estimated_effect_df
 

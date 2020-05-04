@@ -193,7 +193,7 @@ class ModelForTreatedOrUntreated:
         )
         if verbose >= 3:
             log.info(
-                "\n### Simulated outcome of samples recommended to be treatment: {} by the uplift model:".format(
+                "\n### Simulated outcome for samples with recommended treatment = {}:".format(
                     treatment_val
                 )
             )
@@ -218,6 +218,14 @@ class ModelForTreatedOrUntreated:
             out_df["predicted conversion rate using uplift model"]
             / out_df["observed conversion rate without uplift model"]
         )
+
+        if verbose >= 3:
+            log.info(
+                "\n### Simulated effect for samples with recommended treatment = {}:".format(
+                    treatment_val
+                )
+            )
+            apply_method(out_df, args.df_print)
 
         return out_df
 

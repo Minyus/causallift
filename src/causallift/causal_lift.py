@@ -699,7 +699,7 @@ class CausalLift:
                 self.args, self.df, self.uplift_models_dict
             )
             self.estimated_effect_df = estimate_effect(
-                self.treated__sim_eval_df, self.untreated__sim_eval_df
+                self.args, self.treated__sim_eval_df, self.untreated__sim_eval_df
             )
 
         if self.runner:
@@ -719,15 +719,5 @@ class CausalLift:
             self.estimated_effect_df = self.kedro_context.catalog.load(
                 "estimated_effect_df"
             )
-
-        if verbose >= 3:
-            log.info("\n### Treated samples without and with uplift model:")
-            display(self.treated__sim_eval_df)
-            log.info("\n### Untreated samples without and with uplift model:")
-            display(self.untreated__sim_eval_df)
-
-        # if verbose >= 2:
-        #    log.info('\n## Overall (both treated and untreated) samples without and with uplift model:')
-        #    display(estimated_effect_df)
 
         return self.estimated_effect_df
