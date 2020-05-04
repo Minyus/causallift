@@ -354,7 +354,6 @@ class CausalLift:
                 warm_start=[False],
             ),
         ),  # type: Dict[str, List[Any]]
-        cv=3,  # type: int
         index_name="index",  # type: str
         partition_name="partition",  # type: str
         runner="SequentialRunner",  # type: str
