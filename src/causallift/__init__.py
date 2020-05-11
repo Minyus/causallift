@@ -28,7 +28,7 @@
 """CausalLift
 """
 
-__version__ = "1.0.6"
+__version__ = "1.0.7"
 
 from .causal_lift import *  # NOQA
 from .generate_data import *  # NOQA
