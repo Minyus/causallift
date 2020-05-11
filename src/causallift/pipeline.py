@@ -70,7 +70,7 @@ def create_pipeline(**kwargs):
                         "df_00",
                     )
                 ],
-                name="011_bundle_train_and_test_data",
+                tags="011_bundle_train_and_test_data",
             ),
             Pipeline(
                 [
@@ -83,7 +83,7 @@ def create_pipeline(**kwargs):
                         "args",
                     ),
                 ],
-                name="121_prepare_args",
+                tags="121_prepare_args",
             ),
             Pipeline(
                 [
@@ -93,11 +93,11 @@ def create_pipeline(**kwargs):
                         "treatment_fractions",
                     )
                 ],
-                name="131_treatment_fractions_",
+                tags="131_treatment_fractions_",
             ),
             Pipeline(
                 [node(fit_propensity, ["args", "df_00"], "propensity_model")],
-                name="211_fit_propensity",
+                tags="211_fit_propensity",
             ),
             Pipeline(
                 [
@@ -107,7 +107,7 @@ def create_pipeline(**kwargs):
                         "df_01",
                     )
                 ],
-                name="221_estimate_propensity",
+                tags="221_estimate_propensity",
             ),
             Pipeline(
                 [
@@ -120,7 +120,7 @@ def create_pipeline(**kwargs):
                         "untreated__model_dict",
                     ),
                 ],
-                name="311_fit",
+                tags="311_fit",
             ),
             Pipeline(
                 [
@@ -130,7 +130,7 @@ def create_pipeline(**kwargs):
                         "uplift_models_dict",
                     )
                 ],
-                name="312_bundle_2_models",
+                tags="312_bundle_2_models",
             ),
             Pipeline(
                 [
@@ -145,7 +145,7 @@ def create_pipeline(**kwargs):
                         "untreated__proba",
                     ),
                 ],
-                name="321_predict_proba",
+                tags="321_predict_proba",
             ),
             Pipeline(
                 [
@@ -155,7 +155,7 @@ def create_pipeline(**kwargs):
                         "cate_estimated",
                     )
                 ],
-                name="411_compute_cate",
+                tags="411_compute_cate",
             ),
             Pipeline(
                 [
@@ -171,7 +171,7 @@ def create_pipeline(**kwargs):
                         "df_02",
                     )
                 ],
-                name="421_add_cate_to_df",
+                tags="421_add_cate_to_df",
             ),
             Pipeline(
                 [
@@ -181,7 +181,7 @@ def create_pipeline(**kwargs):
                         "df_03",
                     )
                 ],
-                name="511_recommend_by_cate",
+                tags="511_recommend_by_cate",
             ),
             Pipeline(
                 [
@@ -196,7 +196,7 @@ def create_pipeline(**kwargs):
                         "untreated__sim_eval_df",
                     ),
                 ],
-                name="521_simulate_recommendation",
+                tags="521_simulate_recommendation",
             ),
             Pipeline(
                 [
@@ -206,14 +206,14 @@ def create_pipeline(**kwargs):
                         "estimated_effect_df",
                     )
                 ],
-                name="531_estimate_effect",
+                tags="531_estimate_effect",
             ),
             # Pipeline([
             #    node(FUNC,
             #         ['IN'],
             #         ['OUT'],
             #         ),
-            # ], name='PIPELINE'),
+            # ], tags='PIPELINE'),
         ]
     )
 

@@ -1,6 +1,20 @@
 from typing import List, Optional, Tuple, Type  # NOQA
 
-from kedro.io import AbstractDataSet, CSVLocalDataSet, MemoryDataSet, PickleLocalDataSet
+from kedro.io import AbstractDataSet, MemoryDataSet
+
+try:
+    from kedro.io import CSVLocalDataSet
+except:
+    from kedro.extras.datasets.pandas.csv_dataset import CSVDataSet as CSVLocalDataSet
+
+try:
+    from kedro.io import PickleLocalDataSet
+except:
+    from kedro.extras.datasets.pickle.pickle_dataset import (
+        PickleDataSet as PickleLocalDataSet,
+    )
+
+
 import numpy as np
 import sklearn  # NOQA
 import logging
