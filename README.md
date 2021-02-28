@@ -50,8 +50,8 @@ The most famous use case of Uplift Modeling would be the 44th US president Barac
 presidential campaign in 2012. Obama's team used Uplift Modeling to find which voters could be
 persuaded to vote for him. Here are some articles.
 
-- [What is ‘Persuasion Modeling’, and how did it help Obama to win the elections?](http://numrush.com/2013/06/28/what-is-persuasion-modeling-and-how-did-it-help-obama-to-win-the-elections/)
-- [How Obama’s Team Used Big Data to Rally Voters](https://www.technologyreview.com/s/509026/how-obamas-team-used-big-data-to-rally-voters/)
+- [What is 'Persuasion Modeling', and how did it help Obama to win the elections?](http://numrush.com/2013/06/28/what-is-persuasion-modeling-and-how-did-it-help-obama-to-win-the-elections/)
+- [How Obama's Team Used Big Data to Rally Voters](https://www.technologyreview.com/s/509026/how-obamas-team-used-big-data-to-rally-voters/)
 - [How uplift modeling helped Obama's campaign -- and can aid marketers](https://searchbusinessanalytics.techtarget.com/video/How-uplift-modeling-helped-Obamas-campaign-and-can-aid-marketers)
 
 
@@ -64,9 +64,9 @@ by the campaign.
 
 Suppose you are in charge of a marketing campaign to sell a product, and the estimated conversion
 rate (probability to buy a product) of a customer is 50 % if targeted and the estimated conversion
-rate is 40 % if not targeted, then the uplift score of the customer is (50–40) = +10 % points.
+rate is 40 % if not targeted, then the uplift score of the customer is (50-40) = +10 % points.
 Likewise, suppose the estimated conversion rate if targeted is 20 % and the estimated conversion
-rate if not targeted is 80%, the uplift score is (20–80) = -60 % points (negative value).
+rate if not targeted is 80%, the uplift score is (20-80) = -60 % points (negative value).
 
 The range of uplift scores is between -100 and +100 % points (-1 and +1).
 It is recommended to target customers with high uplift scores and avoid customers with negative
@@ -247,7 +247,7 @@ Please see [PipelineX](https://github.com/Minyus/pipelinex) package and
  use [PipelineX Causallift example project](https://github.com/Minyus/pipelinex_causallift).
 
 
-## How to run inferrence (prediction of CATE for new data with `Treatment` and `Outcome` unknown)?
+## How to run inference (prediction of CATE for new data with `Treatment` and `Outcome` unknown)?
 
 Use the whole historical data (A/B Test data or observational data) as train_df instead of splitting into `tran_df` and `test_df`, and use the new data with `Treatment` and `Outcome` unknown as `test_df`.
 
@@ -258,7 +258,7 @@ Please note that valid evaluation for `test_df` will not be available as valid `
 
 ## Details about the parameters
 
-Please see [[CausalLift API reference]](https://minyus.github.io/causallift/causallift.html).
+Please see [[CausalLift API document]](https://causallift.readthedocs.io/en/latest/).
 
 
 ## Supported Python versions
@@ -320,7 +320,7 @@ Please see [[CausalLift API reference]](https://minyus.github.io/causallift/caus
 ## References
 
 - Gutierrez, Pierre. and G´erardy, Jean-Yves. Causal inference and uplift modelling: A review of
-the literature. In International Conference on Predictive Applications and APIs, pages 1–13, 2017.
+the literature. In International Conference on Predictive Applications and APIs, pages 1-13, 2017.
 
 - Athey, Susan and Imbens, Guido W. Machine learning methods for estimating heterogeneous causal
 effects. Stat, 2015.
