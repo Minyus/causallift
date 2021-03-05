@@ -7,12 +7,13 @@ https://badge.fury.io/py/causallift
 [![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD-yellow.svg)](
 https://opensource.org/licenses/BSD-2-Clause
 )
+[![Documentation](https://readthedocs.org/projects/causallift/badge/?version=latest)](https://causallift.readthedocs.io/)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
 https://colab.research.google.com/github/Minyus/causallift/blob/master/notebooks/demo/CausalLift_demo.ipynb
 )
 
 <p align="center">
-<img src="readme_images/CausalLift_Viz.PNG" width="734" height="465">
+<img src="https://raw.githubusercontent.com/Minyus/causallift/master/readme_images/CausalLift_Viz.PNG" width="734" height="465">
 </p>
 
 ## Introduction
@@ -106,7 +107,7 @@ Effects) or uplift scores) to address these challenges.
 	buying a product) will increase using the uplift model.
 
 <p align="center">
-<img src="readme_images/CausalLift_flow_diagram.png" width="415" height="274">
+<img src="https://raw.githubusercontent.com/Minyus/causallift/master/readme_images/CausalLift_flow_diagram.png" width="415" height="274">
 </p>
 
 <p align="center">
@@ -177,7 +178,7 @@ Prepare the following columns in 2 pandas DataFrames, train and test (validation
 	- propensity (or probability) to be treated for observational datasets (not needed for A/B Testing results)
 	- If not provided, CausalLift can estimate from the features using logistic regression.
 
-<img src="readme_images/Example_table_data.png">
+<img src="https://raw.githubusercontent.com/Minyus/causallift/master/readme_images/Example_table_data.png">
 <p align="center">
 	Example table data
 </p>
