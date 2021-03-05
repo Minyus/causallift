@@ -51,9 +51,9 @@ The most famous use case of Uplift Modeling would be the 44th US president Barac
 presidential campaign in 2012. Obama's team used Uplift Modeling to find which voters could be
 persuaded to vote for him. Here are some articles.
 
-- [What is 'Persuasion Modeling', and how did it help Obama to win the elections?](http://numrush.com/2013/06/28/what-is-persuasion-modeling-and-how-did-it-help-obama-to-win-the-elections/)
-- [How Obama's Team Used Big Data to Rally Voters](https://www.technologyreview.com/s/509026/how-obamas-team-used-big-data-to-rally-voters/)
-- [How uplift modeling helped Obama's campaign -- and can aid marketers](https://searchbusinessanalytics.techtarget.com/video/How-uplift-modeling-helped-Obamas-campaign-and-can-aid-marketers)
+- <[What is 'Persuasion Modeling', and how did it help Obama to win the elections?](http://numrush.com/2013/06/28/what-is-persuasion-modeling-and-how-did-it-help-obama-to-win-the-elections/)>
+- <[How Obama's Team Used Big Data to Rally Voters](https://www.technologyreview.com/s/509026/how-obamas-team-used-big-data-to-rally-voters/)>
+- <[How uplift modeling helped Obama's campaign -- and can aid marketers](https://searchbusinessanalytics.techtarget.com/video/How-uplift-modeling-helped-Obamas-campaign-and-can-aid-marketers)>
 
 
 
@@ -330,17 +330,17 @@ effects. Stat, 2015.
 April 3, 2019, from https://tech.wayfair.com/2018/10/pylift-a-fast-python-package-for-uplift-modeling/
 
 
-## Introductive resources about Uplift Modeling
+## Introductory resources about Uplift Modeling
 
-- [[Medium article] Uplift Models for better marketing campaigns (Part 1)](
+- <[Medium article: Uplift Models for better marketing campaigns (Part 1)](
 https://medium.com/@abhayspawar/uplift-models-for-better-marketing-campaigns-part-1-b491292e4c80
-)
-- [[Medium article] Simple Machine Learning Techniques To Improve Your Marketing Strategy: Demystifying Uplift Models](
+)>
+- <[Medium article: Simple Machine Learning Techniques To Improve Your Marketing Strategy: Demystifying Uplift Models](
 https://medium.com/datadriveninvestor/simple-machine-learning-techniques-to-improve-your-marketing-strategy-demystifying-uplift-models-dc4fb3f927a2
-)
-- [[Wikipedia] Uplift_modelling](
+)>
+- <[Wikipedia: Uplift_modelling](
 https://en.wikipedia.org/wiki/Uplift_modelling
-)
+)>
 
 ## License
 
