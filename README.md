@@ -141,9 +141,9 @@ $ python setup.py develop
 
 - numpy
 - pandas
-- scikit-learn<0.22 (sklearn==0.22 may not work.)
+- scikit-learn<=0.21.3 (scikit-learn 0.22 or later not supported yet.)
 - easydict
-- kedro>=0.15.0
+- kedro<=0.17.7 (kedro 0.18 or later not supported yet.)
 
 ### Optional:
 
