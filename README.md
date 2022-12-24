@@ -125,7 +125,7 @@ Effects) or uplift scores) to address these challenges.
 ### Install dependencies
 
 ```bash
-$ pip install python-json-logger==2.0.4 kedro<=0.17.7 scikit-learn<=0.21.3 numpy pandas easydict
+$ pip install python-json-logger<=2.0.4 kedro<=0.17.7 scikit-learn<=0.21.3 numpy pandas easydict
 ```
 
 Note:
