@@ -114,8 +114,26 @@ Effects) or uplift scores) to address these challenges.
 	CausalLift flow diagram
 </p>
 
+## Supported Python versions
+
+- Python 3.5
+- Python 3.6 (Tested and recommended)
+- Python 3.7
 
 ## Installation
+
+### Install dependencies
+
+```bash
+$ pip install python-json-logger==2.0.4 kedro<=0.17.7 scikit-learn<=0.21.3 numpy pandas easydict
+```
+
+Note:
+- Python 3.8 or later is not supported yet.
+- scikit-learn 0.22 or later is not supported yet.
+- kedro 0.18 or later is not supported yet.
+ 
+### Install CausalLift 
 
 - [Option 1] To install the latest release from the PyPI:
 
@@ -137,13 +155,6 @@ $ cd pipelinex
 $ python setup.py develop
 ```
 
-### Dependencies:
-
-- numpy
-- pandas
-- scikit-learn<=0.21.3 (scikit-learn 0.22 or later not supported yet.)
-- easydict
-- kedro<=0.17.7 (kedro 0.18 or later not supported yet.)
 
 ### Optional:
 
@@ -262,13 +273,6 @@ Please note that valid evaluation for `test_df` will not be available as valid `
 Please see [[CausalLift API document]](https://causallift.readthedocs.io/en/latest/).
 
 
-## Supported Python versions
-
-- Python 3.5
-- Python 3.6 (Tested and recommended)
-- Python 3.7
-
-
 ## Related Python packages
 
 - ["pylift"](https://github.com/wayfair/pylift)
@@ -349,6 +353,7 @@ https://en.wikipedia.org/wiki/Uplift_modelling
 
 ## To-dos
 
+- Support Python>=3.8, kedro>=0.18, and scikit-learn>=0.23
 - Improve documentation
 - Clarify the model summary output including visualization
 - Add examples of applying uplift modeling to more publicly available datasets
