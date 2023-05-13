@@ -12,22 +12,51 @@ https://opensource.org/licenses/BSD-2-Clause
 https://colab.research.google.com/github/Minyus/causallift/blob/master/notebooks/demo/CausalLift_demo.ipynb
 )
 
-<p align="center">
-<img src="https://raw.githubusercontent.com/Minyus/causallift/master/readme_images/CausalLift_Viz.PNG" width="734" height="465">
-</p>
-
 ## Introduction
 
-If you are simply building a Machine Learning model and executing promotion campaigns to the
-customers who are predicted to buy a product, for example, it is not efficient.
+### Scenario 1: Marketing campaign/promotion targeting
 
-Some customers will buy a product anyway even without promotion campaigns (called
-"Sure things").
+Suppose you are responsible for a marketing campaign/promotion (show an advertisement, offer discount, make a phone call, etc.) to some customers to increase revenue or prevent churns. Which one will you choose?
 
-It is even possible that the campaign triggers some customers to churn (called "Do Not Disturbs" or
-"Sleeping Dogs").
+- Strategy A: choose customers who will buy the product (with or without being contacted)
+- Strategy B: choose customers who will buy the product if contacted, but will not if not contacted
 
-The solution is Uplift Modeling.
+Strategy B is known as Uplift Modelling.
+
+
+### Scenario 2: Recommendation systems in E-commerce sites
+
+Suppose you are responsible for recommendation system at a E-commerce company. Which one will you choose?
+
+- Strategy A: recommend a product the user will buy (with or without recommendation)
+- Strategy B: recommend a product the user will buy if recommended, but will not if not recommended 
+
+Strategy B is known as Uplift Modelling.
+
+
+### Scenario 3: US presidential campaign
+
+Suppose you are trying to make a candidate to be the next US president. Which one will you choose?
+
+- Strategy A: contact voters who will vote for the candidate (with or without being contacted)
+- Strategy B: contact voters who will vote for the candidate if contacted, but will not if not contacted
+
+Strategy B is known as Uplift Modelling, and used by Barack Obama in 2012. Here are some articles.
+
+- [What is 'Persuasion Modeling', and how did it help Obama to win the elections?](http://numrush.com/2013/06/28/what-is-persuasion-modeling-and-how-did-it-help-obama-to-win-the-elections/)
+- [How Obama's Team Used Big Data to Rally Voters](https://www.technologyreview.com/s/509026/how-obamas-team-used-big-data-to-rally-voters/)
+- [How uplift modeling helped Obama's campaign -- and can aid marketers](https://searchbusinessanalytics.techtarget.com/video/How-uplift-modeling-helped-Obamas-campaign-and-can-aid-marketers)
+
+
+### Scenario 4: Avoid death
+
+Suppose you can receive one of the following words of the God of Machine Learning. Which one will you choose?
+
+- Option A: prediction that you will die somewhere next year
+- Option B: prediction that you will die if you live in city XXX next year, but will not die if you move to city YYY.
+
+Option B is the analogy of Uplift Modeling.
+
 
 ## What is Uplift Modeling?
 
@@ -38,23 +67,16 @@ targeted ("treated") and which customers should not be targeted.
 Uplift Modeling is also known as persuasion modeling, incremental modeling, treatment effects
 modeling, true lift modeling, or net modeling.
 
-Applications of Uplift Modeling for business include:
-- Increase revenue by finding which customers should be targeted for advertising/marketing
-campaigns and which customers should not.
-- Retain revenue by finding which customers should be contacted to prevent churn and which
-customers should not.
+Uplift Modeling predicts the following 4 labels:
 
-
-## A famous use case?
-
-The most famous use case of Uplift Modeling would be the 44th US president Barack Obama's 2nd
-presidential campaign in 2012. Obama's team used Uplift Modeling to find which voters could be
-persuaded to vote for him. Here are some articles.
-
-- <[What is 'Persuasion Modeling', and how did it help Obama to win the elections?](http://numrush.com/2013/06/28/what-is-persuasion-modeling-and-how-did-it-help-obama-to-win-the-elections/)>
-- <[How Obama's Team Used Big Data to Rally Voters](https://www.technologyreview.com/s/509026/how-obamas-team-used-big-data-to-rally-voters/)>
-- <[How uplift modeling helped Obama's campaign -- and can aid marketers](https://searchbusinessanalytics.techtarget.com/video/How-uplift-modeling-helped-Obamas-campaign-and-can-aid-marketers)>
-
+- True Uplift, aka "Persuadables"
+  - Customers will buy a product if treated, but will not buy if not treated
+- False Uplift, aka "Sure Things"
+  - Customers will buy a product regardless of the treatment
+- True Drop, aka "Sleeping Dogs"/"Do Not Disturbs"
+  - Customers who will *not* buy a product if treated, but will buy if *not* treated
+- False Drop, aka "Lost Causes"
+  - Customers will not buy a product regardless of the treatment
 
 
 ## How does Uplift Modeling work?
@@ -113,6 +135,15 @@ Effects) or uplift scores) to address these challenges.
 <p align="center">
 	CausalLift flow diagram
 </p>
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/Minyus/causallift/master/readme_images/CausalLift_Viz.PNG" width="734" height="465">
+</p>
+
+<p align="center">
+	CausalLift internal pipeline (visualized by Kedro Viz)
+</p>
+
 
 ## Supported Python versions
 
@@ -384,7 +415,7 @@ know. I will add the link here.
 
 [English] Causal Inference, Counterfactual, Propensity Score, Econometrics
 
-[中文] 因果推论, 反事实, 倾向评分, 计量经济学
+[中文] 因果推断, 反事实, 倾向评分, 计量经济学
 
 [日本語] 因果推論, 反事実, 傾向スコア, 計量経済学
 
