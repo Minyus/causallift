@@ -162,3 +162,5 @@ venv.bak/
 
 # data
 **/data/**
+.worktrees/
+docs/superpowers/
