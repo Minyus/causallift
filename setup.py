@@ -45,7 +45,7 @@ with open("requirements_dev.txt", "r") as f:
 
 setup(
     name="causallift",
-    version="1.0.7",  # Align with __version__ in __init__.py
+    version="1.1.0",  # Align with __version__ in __init__.py
     python_requires=">=3.10,<3.14",
     packages=find_packages(where="src", exclude=["tests"]),
     package_dir={"": "src"},
