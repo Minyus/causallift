@@ -1,5 +1,7 @@
-numpy
 pandas
 scikit-learn
+numpy
 easydict
-kedro>=0.15.0
+kedro
+kedro-datasets
+pipelinex>=0.8.0

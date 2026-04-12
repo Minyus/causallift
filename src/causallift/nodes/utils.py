@@ -57,6 +57,8 @@ def concat_train_test_df(args, train, test):
     Concatenate train and test data frames.
     Use df.xs('train') or df.xs('test') to split.
     """
+    if test is None:
+        test = train.iloc[0:0].copy()
     df = pd.concat(
         [train, test],
         keys=["train", "test"],
@@ -198,7 +200,7 @@ def score_df(y_train, y_test, y_pred_train, y_pred_test, average="binary"):
             score_df_ = pd.DataFrame(
                 [score_list], index=[partition_], columns=column_list,
             )
-            score_df = score_df.append(score_df_)
+            score_df = pd.concat([score_df, score_df_])
     return score_df
 
 
@@ -216,6 +218,9 @@ def bundle_train_and_test_data(args, train_df, test_df):
     # assert isinstance(test_df, pd.DataFrame)
     # assert set(train_df.columns) == set(test_df.columns)
     assert all([isinstance(col_name, str) for col_name in train_df.columns])
+
+    if test_df is None:
+        test_df = train_df.copy()
 
     index_name = args.index_name
 

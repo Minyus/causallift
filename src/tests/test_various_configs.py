@@ -36,7 +36,7 @@ def test_enable_ipw_without_known_propensity():
         df, test_size=0.2, random_state=seed, stratify=df["Treatment"]
     )
 
-    cl = CausalLift(train_df, test_df, enable_ipw=True, verbose=3)
+    cl = CausalLift(train_df, test_df, enable_ipw=True, verbose=0)
     train_df, test_df = cl.estimate_cate_by_2_models()
     estimated_effect_df = cl.estimate_recommendation_impact()
     assert isinstance(train_df, pd.DataFrame)
@@ -72,7 +72,7 @@ def test_enable_ipw_without_known_propensity_conditionally_skip():
     )
 
     cl = CausalLift(
-        train_df, test_df, enable_ipw=True, verbose=3, conditionally_skip=True
+        train_df, test_df, enable_ipw=True, verbose=0, conditionally_skip=True
     )
     train_df, test_df = cl.estimate_cate_by_2_models()
     estimated_effect_df = cl.estimate_recommendation_impact()
@@ -107,7 +107,7 @@ def test_disable_ipw():
         df, test_size=0.2, random_state=seed, stratify=df["Treatment"]
     )
 
-    cl = CausalLift(train_df, test_df, enable_ipw=False, verbose=3)
+    cl = CausalLift(train_df, test_df, enable_ipw=False, verbose=0)
     train_df, test_df = cl.estimate_cate_by_2_models()
     estimated_effect_df = cl.estimate_recommendation_impact()
     assert isinstance(train_df, pd.DataFrame)
@@ -156,7 +156,7 @@ def test_enable_ipw_with_known_propensity():
             random.random() for _ in range(test_df.shape[0])
         ]
 
-    cl = CausalLift(train_df, test_df, enable_ipw=True, verbose=3)
+    cl = CausalLift(train_df, test_df, enable_ipw=True, verbose=0)
     train_df, test_df = cl.estimate_cate_by_2_models()
     estimated_effect_df = cl.estimate_recommendation_impact()
     assert isinstance(train_df, pd.DataFrame)
@@ -190,7 +190,7 @@ def test_enable_ipw_without_known_propensity_no_runner():
         df, test_size=0.2, random_state=seed, stratify=df["Treatment"]
     )
 
-    cl = CausalLift(train_df, test_df, enable_ipw=True, verbose=3, runner=None)
+    cl = CausalLift(train_df, test_df, enable_ipw=True, verbose=0, runner=None)
     train_df, test_df = cl.estimate_cate_by_2_models()
     estimated_effect_df = cl.estimate_recommendation_impact()
     assert isinstance(train_df, pd.DataFrame)

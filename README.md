@@ -3,7 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/causallift.svg)](
 https://badge.fury.io/py/causallift
 )
-![Python Version](https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7-blue.svg)
+![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)
 [![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD-yellow.svg)](
 https://opensource.org/licenses/BSD-2-Clause
 )
@@ -147,22 +147,32 @@ Effects) or uplift scores) to address these challenges.
 
 ## Supported Python versions
 
-- Python 3.5
-- Python 3.6 (Tested and recommended)
-- Python 3.7
+- Python 3.10
+- Python 3.11 (Tested and recommended)
+- Python 3.12
+- Python 3.13
 
 ## Installation
 
 ### Install dependencies
 
+`requirements.txt` keeps runtime dependencies flexible, with only `pipelinex` constrained:
+
+- `pandas`
+- `scikit-learn`
+- `numpy`
+- `easydict`
+- `kedro`
+- `kedro-datasets`
+- `pipelinex>=0.8.0`
+
 ```bash
-$ pip install python-json-logger<=2.0.4 kedro<=0.17.7 scikit-learn<=0.21.3 numpy pandas easydict
+$ pip install -r requirements.txt
 ```
 
 Note:
-- Python 3.8 or later is not supported yet.
-- scikit-learn 0.22 or later is not supported yet.
-- kedro 0.18 or later is not supported yet.
+- Supported installs are tested on Python 3.10 through 3.13.
+- For local development and tests, also install `requirements_dev.txt`.
  
 ### Install CausalLift 
 
@@ -182,8 +192,19 @@ $ pip install git+https://github.com/Minyus/causallift.git
 
 ```bash
 $ git clone https://github.com/Minyus/causallift.git
-$ cd pipelinex
-$ python setup.py develop
+$ cd causallift
+$ pip install -r requirements.txt
+$ pip install -r requirements_dev.txt
+$ pip install -e .
+```
+
+### Run local tests
+
+```bash
+$ pip install -r requirements.txt
+$ pip install -r requirements_dev.txt
+$ pip install -e .
+$ pytest -ra
 ```
 
 
@@ -384,7 +405,7 @@ https://en.wikipedia.org/wiki/Uplift_modelling
 
 ## To-dos
 
-- Support Python>=3.8, kedro>=0.18, and scikit-learn>=0.23
+- Keep Python 3.10 through 3.13 support aligned with the modern tested stack and flexible `requirements.txt`
 - Improve documentation
 - Clarify the model summary output including visualization
 - Add examples of applying uplift modeling to more publicly available datasets

@@ -30,7 +30,7 @@
 import abc
 from typing import Any, Dict, Iterable, Optional, Union
 
-from kedro.io import DataCatalog
+from kedro.io import DataCatalog, SharedMemoryDataCatalog
 from kedro.pipeline import Pipeline
 from kedro.runner import AbstractRunner, SequentialRunner
 
@@ -56,6 +56,12 @@ class BaseKedroContext(abc.ABC):
     def __init__(self):
         # type: (...) -> None
         self._catalog = DataCatalog()
+
+    def _ensure_shared_memory_catalog(self):
+        # type: (...) -> SharedMemoryDataCatalog
+        if not isinstance(self._catalog, SharedMemoryDataCatalog):
+            self._catalog = SharedMemoryDataCatalog(datasets=self._catalog._datasets)
+        return self._catalog
 
     @property
     @abc.abstractmethod

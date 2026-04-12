@@ -31,9 +31,9 @@
 import logging
 import logging.config
 from pathlib import Path
-from typing import Any, Dict, Iterable, Optional, Union  # NOQA
+from typing import Any, Dict, Iterable, Optional, Union, cast  # NOQA
 
-from kedro.io import DataCatalog
+from kedro.io import MemoryDataset, SharedMemoryDataCatalog, SharedMemoryDataset
 from kedro.pipeline import Pipeline
 from kedro.runner import AbstractRunner, ParallelRunner, SequentialRunner
 
@@ -41,6 +41,54 @@ from causallift.context.base_context import BaseKedroContext, KedroContextError
 from causallift.pipeline import create_pipeline
 
 log = logging.getLogger(__name__)
+
+
+def _as_runtime_dataset(data, shared=False, manager=None):
+    if hasattr(data, "load"):
+        return data
+    if not shared:
+        return MemoryDataset(data)
+    dataset = SharedMemoryDataset(manager)
+    if manager is not None:
+        dataset.save(data)
+    else:
+        return MemoryDataset(data)
+    return dataset
+
+
+def _catalog_has_output(catalog, name):
+    if name in getattr(catalog, "_datasets", {}):
+        try:
+            catalog.load(name)
+            return True
+        except Exception:
+            return False
+    if hasattr(catalog, "exists"):
+        try:
+            return bool(catalog.exists(name))
+        except Exception:
+            return False
+    try:
+        catalog.load(name)
+        return True
+    except Exception:
+        return False
+
+
+def _resolve_runner(runner, current=None):
+    if isinstance(runner, str):
+        assert runner in {"ParallelRunner", "SequentialRunner"}
+        if current is not None and type(current).__name__ == runner:
+            return current
+        return ParallelRunner() if runner == "ParallelRunner" else SequentialRunner()
+    return runner
+
+
+def _needs_manager_datasets_wiring(runner, catalog):
+    return (
+        getattr(runner, "_manager_datasets_manager", None) is not getattr(runner, "_manager", None)
+        or getattr(runner, "_manager_datasets_catalog", None) is not catalog
+    )
 
 
 class ProjectContext(BaseKedroContext):
@@ -59,12 +107,13 @@ class ProjectContext(BaseKedroContext):
 
     def run(
         self,
-        tags=None,  # type: Iterable[str]
-        runner=None,  # type: AbstractRunner
-        node_names=None,  # type: Iterable[str]
-        only_missing=False,  # type: bool
-    ):
-        # type: (...) -> Dict[str, Any]
+        tags: Optional[Iterable[str]] = None,
+        runner: Optional[AbstractRunner] = None,
+        node_names: Optional[Iterable[str]] = None,
+        from_nodes: Optional[Iterable[str]] = None,
+        to_nodes: Optional[Iterable[str]] = None,
+        only_missing: bool = False,
+    ) -> Dict[str, Any]:
         """Runs the pipeline wi th a specified runner.
 
         Args:
@@ -88,10 +137,14 @@ class ProjectContext(BaseKedroContext):
 
         # Load the pipeline
         pipeline = self.pipeline
-        if node_names:
-            pipeline = pipeline.only_nodes(*node_names)
         if tags:
             pipeline = pipeline.only_nodes_with_tags(*tags)
+        if from_nodes:
+            pipeline = pipeline.from_nodes(*from_nodes)
+        if to_nodes:
+            pipeline = pipeline.to_nodes(*to_nodes)
+        if node_names:
+            pipeline = pipeline.only_nodes(*node_names)
 
         if not pipeline.nodes:
             msg = "Pipeline contains no nodes"
@@ -101,17 +154,17 @@ class ProjectContext(BaseKedroContext):
 
         # Run the runner
         runner = runner or SequentialRunner()
-        if only_missing and _skippable(self.catalog):
-            return runner.run_only_missing(pipeline, self.catalog)
-        return runner.run(pipeline, self.catalog)
-
-
-def _skippable(
-    catalog,  # type: DataCatalog
-):
-    # type: (...) -> bool
-    missing = {ds for ds in catalog.list() if not catalog.exists(ds)}
-    return not missing
+        catalog = self.catalog
+        if isinstance(runner, ParallelRunner):
+            catalog = self._ensure_shared_memory_catalog()
+            shared_catalog = cast(Any, catalog)
+            setattr(catalog, "_manager", runner._manager)
+            runner._validate_catalog(shared_catalog)
+            if _needs_manager_datasets_wiring(runner, shared_catalog):
+                runner._set_manager_datasets(shared_catalog)
+                setattr(runner, "_manager_datasets_manager", runner._manager)
+                setattr(runner, "_manager_datasets_catalog", shared_catalog)
+        return runner.run(pipeline, catalog, only_missing_outputs=only_missing)
 
 
 class ProjectContext1(ProjectContext):
@@ -119,27 +172,57 @@ class ProjectContext1(ProjectContext):
 
     def run(
         self,
-        runner=None,  # type: Union[AbstractRunner, str]
-        **kwargs  # type: Any
-    ):
-        # type: (...) -> Dict[str, Any]
+        tags: Optional[Iterable[str]] = None,
+        runner: Union[AbstractRunner, str, None] = None,
+        node_names: Optional[Iterable[str]] = None,
+        from_nodes: Optional[Iterable[str]] = None,
+        to_nodes: Optional[Iterable[str]] = None,
+        only_missing: bool = False,
+    ) -> Dict[str, Any]:
+        if isinstance(getattr(self, "_runner", None), str):
+            self._runner = _resolve_runner(self._runner)
         if isinstance(runner, str):
-            assert runner in {"ParallelRunner", "SequentialRunner"}
-            runner = (
-                ParallelRunner() if runner == "ParallelRunner" else SequentialRunner()
-            )
-        return super().run(runner=runner, **kwargs)
+            runner = _resolve_runner(runner, getattr(self, "_runner", None))
+        runner = cast(Optional[AbstractRunner], runner)
+        return super().run(
+            tags=tags,
+            runner=runner,
+            node_names=node_names,
+            from_nodes=from_nodes,
+            to_nodes=to_nodes,
+            only_missing=only_missing,
+        )
 
 
 class ProjectContext2(ProjectContext1):
     r"""Keep the output datasets in the catalog."""
 
     def run(
-        self, **kwargs  # type: Any
-    ):
-        # type: (...) -> Dict[str, Any]
-        d = super().run(**kwargs)
-        self.catalog.add_feed_dict(d, replace=True)
+        self,
+        tags: Optional[Iterable[str]] = None,
+        runner: Union[AbstractRunner, str, None] = None,
+        node_names: Optional[Iterable[str]] = None,
+        from_nodes: Optional[Iterable[str]] = None,
+        to_nodes: Optional[Iterable[str]] = None,
+        only_missing: bool = False,
+    ) -> Dict[str, Any]:
+        d = super().run(
+            tags=tags,
+            runner=runner,
+            node_names=node_names,
+            from_nodes=from_nodes,
+            to_nodes=to_nodes,
+            only_missing=only_missing,
+        )
+        shared = isinstance(self.catalog, SharedMemoryDataCatalog)
+        self.catalog._datasets.update(  # type: ignore[arg-type]
+            {
+                key: _as_runtime_dataset(
+                    value, shared=shared, manager=getattr(self.catalog, "_manager", None)
+                )
+                for key, value in d.items()
+            }.items()
+        )
         return d
 
 
@@ -154,17 +237,22 @@ class FlexibleKedroContext(ProjectContext2):
     ):
         # type: (...) -> None
         super().__init__(**kwargs)
-        self._runner = runner
+        self._runner = _resolve_runner(runner)
         self._only_missing = only_missing
 
     def run(
         self,
-        tags=None,  # type: Optional[Iterable[str] ]
-        runner=None,  # type: Optional[AbstractRunner]
-        node_names=None,  # type: Optional[Iterable[str]]
-        only_missing=False,  # type: bool
-    ):
-        # type: (...) -> Dict[str, Any]
+        tags: Optional[Iterable[str]] = None,
+        runner: Union[AbstractRunner, str, None] = None,
+        node_names: Optional[Iterable[str]] = None,
+        from_nodes: Optional[Iterable[str]] = None,
+        to_nodes: Optional[Iterable[str]] = None,
+        only_missing: bool = False,
+    ) -> Dict[str, Any]:
+        if isinstance(getattr(self, "_runner", None), str):
+            self._runner = _resolve_runner(self._runner)
+        if isinstance(runner, str):
+            runner = _resolve_runner(runner, getattr(self, "_runner", None))
         runner = runner or self._runner
         only_missing = only_missing or self._only_missing
         log.info(
@@ -175,6 +263,46 @@ class FlexibleKedroContext(ProjectContext2):
             + "only_missing: {}".format(only_missing)
             + ")"
         )
-        return super().run(
-            tags=tags, runner=runner, node_names=node_names, only_missing=only_missing
+        d = super().run(
+            tags=tags,
+            runner=runner,
+            node_names=node_names,
+            from_nodes=from_nodes,
+            to_nodes=to_nodes,
+            only_missing=only_missing,
         )
+
+        if only_missing:
+            pipeline = self.pipeline
+            if tags:
+                pipeline = pipeline.only_nodes_with_tags(*tags)
+            if from_nodes:
+                pipeline = pipeline.from_nodes(*from_nodes)
+            if to_nodes:
+                pipeline = pipeline.to_nodes(*to_nodes)
+            if node_names:
+                pipeline = pipeline.only_nodes(*node_names)
+            output_names = getattr(pipeline, "outputs", lambda: set())()
+            missing_outputs = [
+                name for name in output_names if name not in d and not _catalog_has_output(self.catalog, name)
+            ]
+            if missing_outputs:
+                d = super().run(
+                    tags=tags,
+                    runner=runner,
+                    node_names=node_names,
+                    from_nodes=from_nodes,
+                    to_nodes=to_nodes,
+                    only_missing=False,
+                )
+
+        shared = isinstance(self.catalog, SharedMemoryDataCatalog)
+        self.catalog._datasets.update(  # type: ignore[arg-type]
+            {
+                key: _as_runtime_dataset(
+                    value, shared=shared, manager=getattr(self.catalog, "_manager", None)
+                )
+                for key, value in d.items()
+            }.items()
+        )
+        return d
