@@ -1,24 +1,39 @@
 from typing import List, Optional, Tuple, Type  # NOQA
 
-from kedro.io import AbstractDataSet, MemoryDataSet
-
 try:
-    from kedro.io import CSVLocalDataSet
-except:
-    from kedro.extras.datasets.pandas.csv_dataset import CSVDataSet as CSVLocalDataSet
+    from kedro.io import AbstractDataset as AbstractDataSet
+    from kedro.io import MemoryDataset as MemoryDataSet
+    from kedro.io import SharedMemoryDataset
+    from kedro_datasets.pandas import CSVDataset as CSVLocalDataSet
+    from kedro_datasets.pickle import PickleDataset as PickleLocalDataSet
+except ImportError:
+    from kedro.io import AbstractDataSet, MemoryDataSet
+    from kedro.io import SharedMemoryDataset
 
-try:
-    from kedro.io import PickleLocalDataSet
-except:
-    from kedro.extras.datasets.pickle.pickle_dataset import (
-        PickleDataSet as PickleLocalDataSet,
-    )
+    try:
+        from kedro.io import CSVLocalDataSet
+    except ImportError:
+        from kedro.extras.datasets.pandas.csv_dataset import (
+            CSVDataSet as CSVLocalDataSet,
+        )
+
+    try:
+        from kedro.io import PickleLocalDataSet
+    except ImportError:
+        from kedro.extras.datasets.pickle.pickle_dataset import (
+            PickleDataSet as PickleLocalDataSet,
+        )
 
 
 import numpy as np
 import sklearn  # NOQA
 import logging
-from IPython.display import display
+from copy import deepcopy
+
+try:
+    from IPython.display import display
+except ImportError:
+    display = print
 
 from causallift.context.flexible_context import *  # NOQA
 
@@ -27,6 +42,97 @@ from .nodes.model_for_each import *  # NOQA
 
 
 log = logging.getLogger(__name__)
+
+
+def _fallback_logging_config(logging_config):
+    fallback = deepcopy(logging_config)
+    fallback["formatters"] = {
+        "simple": {"format": "[%(asctime)s|%(name)s|%(levelname)s] %(message)s"}
+    }
+    fallback["handlers"] = {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            "level": "INFO",
+            "stream": "ext://sys.stdout",
+        }
+    }
+    for section in ("root", "loggers"):
+        fallback.pop(section, None)
+    fallback["version"] = 1
+    fallback["disable_existing_loggers"] = False
+    return fallback
+
+
+def _add_feed_dict(catalog, feed_dict):
+    if hasattr(catalog, "add_feed_dict"):
+        catalog.add_feed_dict(feed_dict, replace=True)
+        return
+    for name, dataset in feed_dict.items():
+        catalog._datasets[name] = dataset
+
+
+def _runtime_dataset(data):
+    if hasattr(data, "load"):
+        return data
+    return MemoryDataSet(data)
+
+
+def _default_uplift_model_params():
+    try:
+        __import__("xgboost")
+    except ImportError:
+        return dict(
+            search_cv="sklearn.model_selection.GridSearchCV",
+            estimator="sklearn.linear_model.LogisticRegression",
+            scoring=None,
+            cv=3,
+            return_train_score=False,
+            n_jobs=-1,
+            param_grid=dict(
+                C=[0.1, 1, 10],
+                class_weight=[None],
+                dual=[False],
+                fit_intercept=[True],
+                intercept_scaling=[1],
+                max_iter=[100],
+                n_jobs=[1],
+                penalty=["l1", "l2"],
+                solver=["liblinear"],
+                tol=[0.0001],
+                warm_start=[False],
+            ),
+        )
+    return dict(
+        search_cv="sklearn.model_selection.GridSearchCV",
+        estimator="xgboost.XGBClassifier",
+        scoring=None,
+        cv=3,
+        return_train_score=False,
+        n_jobs=-1,
+        param_grid=dict(
+            random_state=[0],
+            max_depth=[3],
+            learning_rate=[0.1],
+            n_estimators=[100],
+            verbose=[0],
+            objective=["binary:logistic"],
+            booster=["gbtree"],
+            n_jobs=[-1],
+            nthread=[None],
+            gamma=[0],
+            min_child_weight=[1],
+            max_delta_step=[0],
+            subsample=[1],
+            colsample_bytree=[1],
+            colsample_bylevel=[1],
+            reg_alpha=[0],
+            reg_lambda=[1],
+            scale_pos_weight=[1],
+            base_score=[0.5],
+            missing=[None],
+        ),
+    )
 
 
 class CausalLift:
@@ -313,36 +419,7 @@ class CausalLift:
         min_propensity=0.01,  # type: float
         max_propensity=0.99,  # type: float
         verbose=2,  # type: int
-        uplift_model_params=dict(
-            search_cv="sklearn.model_selection.GridSearchCV",
-            estimator="xgboost.XGBClassifier",
-            scoring=None,
-            cv=3,
-            return_train_score=False,
-            n_jobs=-1,
-            param_grid=dict(
-                random_state=[0],
-                max_depth=[3],
-                learning_rate=[0.1],
-                n_estimators=[100],
-                verbose=[0],
-                objective=["binary:logistic"],
-                booster=["gbtree"],
-                n_jobs=[-1],
-                nthread=[None],
-                gamma=[0],
-                min_child_weight=[1],
-                max_delta_step=[0],
-                subsample=[1],
-                colsample_bytree=[1],
-                colsample_bylevel=[1],
-                reg_alpha=[0],
-                reg_lambda=[1],
-                scale_pos_weight=[1],
-                base_score=[0.5],
-                missing=[None],
-            ),
-        ),  # type: Union[Dict[str, List[Any]], Type[sklearn.base.BaseEstimator]]
+        uplift_model_params=_default_uplift_model_params(),  # type: Union[Dict[str, List[Any]], Type[sklearn.base.BaseEstimator]]
         enable_ipw=True,  # type: bool
         enable_weighting=False,  # type: bool
         propensity_model_params=dict(
@@ -360,7 +437,6 @@ class CausalLift:
                 fit_intercept=[True],
                 intercept_scaling=[1],
                 max_iter=[100],
-                multi_class=["ovr"],
                 n_jobs=[1],
                 penalty=["l1", "l2"],
                 solver=["liblinear"],
@@ -507,7 +583,10 @@ class CausalLift:
 
         # Instance attributes were defined above.
         if logging_config:
-            logging.config.dictConfig(logging_config)
+            try:
+                logging.config.dictConfig(logging_config)
+            except (ImportError, ValueError):
+                logging.config.dictConfig(_fallback_logging_config(logging_config))
 
         args_raw = dict(
             cols_features=cols_features,
@@ -558,15 +637,15 @@ class CausalLift:
                 self.df = estimate_propensity(self.args, self.df, self.propensity_model)
 
         if self.runner:
-            self.kedro_context.catalog.add_feed_dict(
+            _add_feed_dict(
+                self.kedro_context.catalog,
                 {
-                    "train_df": MemoryDataSet(train_df),
-                    "test_df": MemoryDataSet(test_df),
-                    "args_raw": MemoryDataSet(args_raw),
+                    "train_df": _runtime_dataset(train_df),
+                    "test_df": _runtime_dataset(test_df),
+                    "args_raw": _runtime_dataset(args_raw),
                 },
-                replace=True,
             )
-            self.kedro_context.catalog.add_feed_dict(dataset_catalog, replace=True)
+            _add_feed_dict(self.kedro_context.catalog, dataset_catalog)
 
             self.kedro_context.run(tags=["011_bundle_train_and_test_data"])
             self.df = self.kedro_context.catalog.load("df_00")
@@ -591,9 +670,7 @@ class CausalLift:
                 self.kedro_context.run(tags=["221_estimate_propensity"])
                 self.df = self.kedro_context.catalog.load("df_01")
             else:
-                self.kedro_context.catalog.add_feed_dict(
-                    {"df_01": MemoryDataSet(self.df)}, replace=True
-                )
+                _add_feed_dict(self.kedro_context.catalog, {"df_01": _runtime_dataset(self.df)})
 
         self.treatment_fraction_train = self.treatment_fractions.train
         self.treatment_fraction_test = self.treatment_fractions.test

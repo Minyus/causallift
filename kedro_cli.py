@@ -64,12 +64,12 @@ os.environ["IPYTHONDIR"] = str(PROJ_PATH / ".ipython")
 
 NO_PYTEST_MESSAGE = """
 pytest is not installed. Please make sure pytest is in
-src/requirements.txt and run `kedro install`.
+requirements.txt and run `kedro install`.
 """
 
 NO_NBSTRIPOUT_MESSAGE = """
 nbstripout is not installed. Please make sure nbstripout is in
-`src/requirements.txt` and run `kedro install`.
+`requirements.txt` and run `kedro install`.
 """
 
 TAG_ARG_HELP = """Construct the pipeline using only nodes which have this tag
@@ -163,10 +163,11 @@ def test(args):
 def install():
     """Install project dependencies from both requirements.txt and environment.yml (optional)."""
 
-    if (Path.cwd() / "src" / "environment.yml").is_file():
-        call(["conda", "install", "--file", "src/environment.yml", "--yes"])
+    env_path = PROJ_PATH / "environment.yml"
+    if env_path.is_file():
+        call(["conda", "install", "--file", str(env_path), "--yes"], cwd=PROJ_PATH)
 
-    python_call("pip", ["install", "-U", "-r", "src/requirements.txt"])
+    call([sys.executable, "-m", "pip", "install", "-U", "-r", str(PROJ_PATH / "requirements.txt")], cwd=PROJ_PATH)
 
 
 @forward_command(cli, forward_help=True)
@@ -180,8 +181,8 @@ def ipython(args):
 @cli.command()
 def package():
     """Package the project as a Python egg and wheel."""
-    call([sys.executable, "setup.py", "clean", "--all", "bdist_egg"], cwd="src")
-    call([sys.executable, "setup.py", "clean", "--all", "bdist_wheel"], cwd="src")
+    call([sys.executable, "setup.py", "clean", "--all", "bdist_egg"], cwd=PROJ_PATH)
+    call([sys.executable, "setup.py", "clean", "--all", "bdist_wheel"], cwd=PROJ_PATH)
 
 
 @cli.command("build-docs")
@@ -222,12 +223,12 @@ def build_docs():
 @cli.command("build-reqs")
 def build_reqs():
     """Build the project dependency requirements."""
-    requirements_path = Path.cwd() / "src" / "requirements.in"
+    requirements_path = PROJ_PATH / "requirements.in"
     if not requirements_path.is_file():
         secho("No requirements.in found. Copying contents from requirements.txt...")
-        contents = (Path.cwd() / "src" / "requirements.txt").read_text()
+        contents = (PROJ_PATH / "requirements.txt").read_text()
         requirements_path.write_text(contents)
-    python_call("piptools", ["compile", str(requirements_path)])
+    python_call("piptools", ["compile", str(requirements_path)], cwd=PROJ_PATH)
     secho(
         (
             "Requirements built! Please update requirements.in "

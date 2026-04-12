@@ -1,8 +1,14 @@
+import pytest
+
 from pathlib import Path
 import sys
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
+
+skopt = pytest.importorskip("skopt")
+pytest.importorskip("xgboost")
+
 from skopt import BayesSearchCV
 from skopt.space import Categorical, Integer, Real
 from xgboost import XGBClassifier
@@ -57,7 +63,7 @@ def test_skopt():
         cv=3,
         n_jobs=-1,
         n_iter=10,
-        verbose=1,
+        verbose=0,
         refit=True,
     )
 
@@ -65,7 +71,7 @@ def test_skopt():
         train_df,
         test_df,
         enable_ipw=True,
-        verbose=3,
+        verbose=0,
         uplift_model_params=uplift_model_params,
     )
     train_df, test_df = cl.estimate_cate_by_2_models()
@@ -116,12 +122,12 @@ def test_skopt():
         cv=3,
         n_jobs=-1,
         n_iter=10,
-        verbose=1,
+        verbose=0,
         refit=True,
     )
 
     cl_ext = CausalLift(
-        train_df, test_df, enable_ipw=True, verbose=3, uplift_model_params=model
+        train_df, test_df, enable_ipw=True, verbose=0, uplift_model_params=model
     )
     train_df_ext, test_df_ext = cl_ext.estimate_cate_by_2_models()
     estimated_effect_df_ext = cl_ext.estimate_recommendation_impact()

@@ -46,6 +46,7 @@ with open("requirements_dev.txt", "r") as f:
 setup(
     name="causallift",
     version="1.0.7",  # Align with __version__ in __init__.py
+    python_requires=">=3.10,<3.14",
     packages=find_packages(where="src", exclude=["tests"]),
     package_dir={"": "src"},
     entry_points={"console_scripts": [entry_point]},
@@ -65,9 +66,10 @@ setup(
         "Development Status :: 4 - Beta",
         "Natural Language :: English",
         "License :: OSI Approved :: BSD License",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Operating System :: OS Independent",
     ],
 )
