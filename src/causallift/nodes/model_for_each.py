@@ -109,8 +109,10 @@ class ModelForTreatedOrUntreated:
             else:
                 for col in args.cols_features:
                     if col not in test_df.columns:
-                        error_str = "{} not found in test dataframe columns: {}.".format(
-                            col, test_df.columns
+                        error_str = (
+                            "{} not found in test dataframe columns: {}.".format(
+                                col, test_df.columns
+                            )
                         )
                         log.error(error_str)
                         raise ValueError(error_str)
@@ -179,8 +181,10 @@ class ModelForTreatedOrUntreated:
             else:
                 for col in args.cols_features:
                     if col not in test_df.columns:
-                        error_str = "{} not found in test dataframe columns: {}.".format(
-                            col, test_df.columns
+                        error_str = (
+                            "{} not found in test dataframe columns: {}.".format(
+                                col, test_df.columns
+                            )
                         )
                         log.error(error_str)
                         raise ValueError(error_str)

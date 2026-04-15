@@ -15,7 +15,11 @@ def read_text(filename: str) -> str:
 
 
 def read_lines(filename: str) -> list[str]:
-    return [line.strip() for line in (ROOT / filename).read_text().splitlines() if line.strip()]
+    return [
+        line.strip()
+        for line in (ROOT / filename).read_text().splitlines()
+        if line.strip()
+    ]
 
 
 def read_setup_version() -> str:
@@ -61,7 +65,9 @@ def test_setup_py_declares_supported_python_requires():
 
 
 def test_github_actions_ci_targets_supported_python_matrix():
-    workflow = yaml.load((ROOT / ".github/workflows/ci.yml").read_text(), Loader=yaml.BaseLoader)
+    workflow = yaml.load(
+        (ROOT / ".github/workflows/ci.yml").read_text(), Loader=yaml.BaseLoader
+    )
 
     assert set(workflow["on"].keys()) == {"push", "pull_request"}
     assert workflow["jobs"]["test"]["strategy"]["fail-fast"] == "false"
@@ -70,7 +76,11 @@ def test_github_actions_ci_targets_supported_python_matrix():
     assert matrix == ["3.10", "3.11", "3.12", "3.13"]
 
     steps = workflow["jobs"]["test"]["steps"]
-    install_step = next(step for step in steps if step.get("name") == "Install package and test dependencies")
+    install_step = next(
+        step
+        for step in steps
+        if step.get("name") == "Install package and test dependencies"
+    )
     assert install_step["name"] == "Install package and test dependencies"
     assert install_step["run"].splitlines() == [
         "pip install -r requirements.txt",

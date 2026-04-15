@@ -156,7 +156,7 @@ def score_df(y_train, y_test, y_pred_train, y_pred_test, average="binary"):
 
     score_df = pd.DataFrame()
 
-    for (partition_, y_, y_pred_) in [
+    for partition_, y_, y_pred_ in [
         ("train", y_train, y_pred_train),
         ("test", y_test, y_pred_test),
     ]:
@@ -168,7 +168,6 @@ def score_df(y_train, y_test, y_pred_train, y_pred_test, average="binary"):
             and (0 <= y_pred_).all()
             and (y_pred_ <= 1).all()
         ):
-
             num_classes = pd.Series(y_).nunique()
             score_list = [
                 len(y_),
@@ -198,7 +197,9 @@ def score_df(y_train, y_test, y_pred_train, y_pred_test, average="binary"):
             )
 
             score_df_ = pd.DataFrame(
-                [score_list], index=[partition_], columns=column_list,
+                [score_list],
+                index=[partition_],
+                columns=column_list,
             )
             score_df = pd.concat([score_df, score_df_])
     return score_df

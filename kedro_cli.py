@@ -167,7 +167,18 @@ def install():
     if env_path.is_file():
         call(["conda", "install", "--file", str(env_path), "--yes"], cwd=PROJ_PATH)
 
-    call([sys.executable, "-m", "pip", "install", "-U", "-r", str(PROJ_PATH / "requirements.txt")], cwd=PROJ_PATH)
+    call(
+        [
+            sys.executable,
+            "-m",
+            "pip",
+            "install",
+            "-U",
+            "-r",
+            str(PROJ_PATH / "requirements.txt"),
+        ],
+        cwd=PROJ_PATH,
+    )
 
 
 @forward_command(cli, forward_help=True)
@@ -365,8 +376,9 @@ def convert_notebook(all_flag, overwrite_flag, filepath):
     non_unique_names = [name for name, counts in counter.items() if counts > 1]
     if non_unique_names:
         raise KedroCliError(
-            "Found non-unique notebook names! "
-            "Please rename the following: {}".format(", ".join(non_unique_names))
+            "Found non-unique notebook names! Please rename the following: {}".format(
+                ", ".join(non_unique_names)
+            )
         )
 
     for notebook in notebooks:

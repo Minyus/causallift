@@ -670,7 +670,9 @@ class CausalLift:
                 self.kedro_context.run(tags=["221_estimate_propensity"])
                 self.df = self.kedro_context.catalog.load("df_01")
             else:
-                _add_feed_dict(self.kedro_context.catalog, {"df_01": _runtime_dataset(self.df)})
+                _add_feed_dict(
+                    self.kedro_context.catalog, {"df_01": _runtime_dataset(self.df)}
+                )
 
         self.treatment_fraction_train = self.treatment_fractions.train
         self.treatment_fraction_test = self.treatment_fractions.test

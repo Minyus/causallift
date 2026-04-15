@@ -8,7 +8,7 @@ from kedro.context import load_context
 
 @register_line_magic
 def reload_kedro(project_path, line=None):
-    """"Line magic which reloads all Kedro default variables."""
+    """ "Line magic which reloads all Kedro default variables."""
     global startup_error
     global context
     try:

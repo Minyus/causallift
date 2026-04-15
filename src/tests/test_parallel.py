@@ -53,7 +53,9 @@ def test_parallel_runner_string_reuses_same_instance(monkeypatch):
     def fake_super_run(self, runner=None, **kwargs):
         return runner
 
-    monkeypatch.setattr("causallift.context.flexible_context.ParallelRunner", DummyParallelRunner)
+    monkeypatch.setattr(
+        "causallift.context.flexible_context.ParallelRunner", DummyParallelRunner
+    )
     monkeypatch.setattr(ProjectContext, "run", fake_super_run)
 
     ctx = ProjectContext1.__new__(ProjectContext1)
@@ -70,7 +72,9 @@ def test_parallel_runner_string_reuses_same_instance(monkeypatch):
 def test_parallel_runner_uses_shared_memory_catalog(monkeypatch):
     captured = {}
 
-    def fake_parallel_run(self, pipeline, catalog, only_missing_outputs=False, **kwargs):
+    def fake_parallel_run(
+        self, pipeline, catalog, only_missing_outputs=False, **kwargs
+    ):
         captured["catalog_type"] = type(catalog).__name__
         captured["has_set_manager_datasets"] = hasattr(catalog, "set_manager_datasets")
         captured["has_validate_catalog"] = hasattr(catalog, "validate_catalog")
@@ -96,7 +100,9 @@ def test_parallel_runner_uses_shared_memory_catalog(monkeypatch):
 def test_parallel_runner_only_wires_manager_datasets_once(monkeypatch):
     calls = []
 
-    def fake_parallel_run(self, pipeline, catalog, only_missing_outputs=False, **kwargs):
+    def fake_parallel_run(
+        self, pipeline, catalog, only_missing_outputs=False, **kwargs
+    ):
         return "ok"
 
     def fake_set_manager_datasets(self, catalog):
@@ -108,7 +114,9 @@ def test_parallel_runner_only_wires_manager_datasets_once(monkeypatch):
             return SimpleNamespace(nodes=[object()])
 
     monkeypatch.setattr(ParallelRunner, "run", fake_parallel_run)
-    monkeypatch.setattr(ParallelRunner, "_set_manager_datasets", fake_set_manager_datasets)
+    monkeypatch.setattr(
+        ParallelRunner, "_set_manager_datasets", fake_set_manager_datasets
+    )
 
     ctx = DummyContext.__new__(DummyContext)
     ctx._catalog = SharedMemoryDataCatalog(datasets={"input": MemoryDataset(1)})  # type: ignore[attr-defined]
@@ -133,7 +141,14 @@ def test_only_missing_is_not_blocked_by_populated_catalog(monkeypatch):
             self.calls.append(("filter", pipeline, catalog))
             return pipeline
 
-        def run(self, pipeline, catalog, hook_manager=None, run_id=None, only_missing_outputs=False):
+        def run(
+            self,
+            pipeline,
+            catalog,
+            hook_manager=None,
+            run_id=None,
+            only_missing_outputs=False,
+        ):
             self.calls.append((pipeline, catalog, only_missing_outputs))
             return {"skipped": True}
 
@@ -184,11 +199,15 @@ def test_project_context_preserves_from_and_to_nodes(monkeypatch):
 
     ctx = DummyContext.__new__(DummyContext)
     ctx._catalog = SimpleNamespace()  # type: ignore[attr-defined]
-    assert DummyContext.run(ctx, runner=DummyRunner(), from_nodes=["a"], to_nodes=["b"], node_names=["c"]) == {"ok": True}  # type: ignore[arg-type]
+    assert DummyContext.run(
+        ctx, runner=DummyRunner(), from_nodes=["a"], to_nodes=["b"], node_names=["c"]
+    ) == {"ok": True}  # type: ignore[arg-type]
     assert calls == [("from", ("a",)), ("to", ("b",)), ("nodes", ("c",))]
 
 
-def test_parallel_context_converts_runtime_outputs_to_shared_memory_dataset(monkeypatch):
+def test_parallel_context_converts_runtime_outputs_to_shared_memory_dataset(
+    monkeypatch,
+):
     class DummyPipeline:
         nodes = [object()]
 
@@ -196,7 +215,14 @@ def test_parallel_context_converts_runtime_outputs_to_shared_memory_dataset(monk
         def __init__(self):
             self.calls = []
 
-        def run(self, pipeline, catalog, hook_manager=None, run_id=None, only_missing_outputs=False):
+        def run(
+            self,
+            pipeline,
+            catalog,
+            hook_manager=None,
+            run_id=None,
+            only_missing_outputs=False,
+        ):
             self.calls.append((type(catalog).__name__, only_missing_outputs))
             return {"df_00": [1, 2, 3]}
 
@@ -215,7 +241,10 @@ def test_parallel_context_converts_runtime_outputs_to_shared_memory_dataset(monk
         def load(self):
             return self._value
 
-    monkeypatch.setattr("causallift.context.flexible_context.SharedMemoryDataset", FakeSharedMemoryDataset)
+    monkeypatch.setattr(
+        "causallift.context.flexible_context.SharedMemoryDataset",
+        FakeSharedMemoryDataset,
+    )
 
     ctx = DummyContext.__new__(DummyContext)
     ctx._catalog = SharedMemoryDataCatalog(datasets={"seed": MemoryDataset(0)})  # type: ignore[attr-defined]
@@ -229,7 +258,10 @@ def test_parallel_context_converts_runtime_outputs_to_shared_memory_dataset(monk
     assert type(ctx.catalog._datasets["df_00"]).__name__ == "FakeSharedMemoryDataset"
 
 
-@pytest.mark.xfail(sys.platform == "darwin", reason="Kedro multiprocessing authstring issue in this environment")
+@pytest.mark.xfail(
+    sys.platform == "darwin",
+    reason="Kedro multiprocessing authstring issue in this environment",
+)
 def test_parallel_runner_executes_real_pipeline_end_to_end():
     script = """
 from kedro.io import MemoryDataset, SharedMemoryDataCatalog
@@ -277,7 +309,14 @@ def test_conditionally_skip_reruns_when_missing_outputs_are_not_cataloged(monkey
         def _filter_pipeline_for_missing_outputs(self, pipeline, catalog):
             return pipeline
 
-        def run(self, pipeline, catalog, hook_manager=None, run_id=None, only_missing_outputs=False):
+        def run(
+            self,
+            pipeline,
+            catalog,
+            hook_manager=None,
+            run_id=None,
+            only_missing_outputs=False,
+        ):
             self.calls.append(only_missing_outputs)
             if only_missing_outputs:
                 return {}
@@ -294,6 +333,8 @@ def test_conditionally_skip_reruns_when_missing_outputs_are_not_cataloged(monkey
     ctx._only_missing = False
 
     runner = DummyRunner()
-    assert DummyContext.run(ctx, runner=runner, only_missing=True) == {"df_00": [1, 2, 3]}  # type: ignore[arg-type]
+    assert DummyContext.run(ctx, runner=runner, only_missing=True) == {
+        "df_00": [1, 2, 3]
+    }  # type: ignore[arg-type]
     assert runner.calls == [True, False]
     assert ctx.catalog._datasets["df_00"].load() == [1, 2, 3]

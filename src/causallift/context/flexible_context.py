@@ -86,7 +86,8 @@ def _resolve_runner(runner, current=None):
 
 def _needs_manager_datasets_wiring(runner, catalog):
     return (
-        getattr(runner, "_manager_datasets_manager", None) is not getattr(runner, "_manager", None)
+        getattr(runner, "_manager_datasets_manager", None)
+        is not getattr(runner, "_manager", None)
         or getattr(runner, "_manager_datasets_catalog", None) is not catalog
     )
 
@@ -218,7 +219,9 @@ class ProjectContext2(ProjectContext1):
         self.catalog._datasets.update(  # type: ignore[arg-type]
             {
                 key: _as_runtime_dataset(
-                    value, shared=shared, manager=getattr(self.catalog, "_manager", None)
+                    value,
+                    shared=shared,
+                    manager=getattr(self.catalog, "_manager", None),
                 )
                 for key, value in d.items()
             }.items()
@@ -233,7 +236,7 @@ class FlexibleKedroContext(ProjectContext2):
         self,
         runner=None,  # type: Optional[str]
         only_missing=False,  # type: bool
-        **kwargs  # type: Any
+        **kwargs,  # type: Any
     ):
         # type: (...) -> None
         super().__init__(**kwargs)
@@ -284,7 +287,9 @@ class FlexibleKedroContext(ProjectContext2):
                 pipeline = pipeline.only_nodes(*node_names)
             output_names = getattr(pipeline, "outputs", lambda: set())()
             missing_outputs = [
-                name for name in output_names if name not in d and not _catalog_has_output(self.catalog, name)
+                name
+                for name in output_names
+                if name not in d and not _catalog_has_output(self.catalog, name)
             ]
             if missing_outputs:
                 d = super().run(
@@ -300,7 +305,9 @@ class FlexibleKedroContext(ProjectContext2):
         self.catalog._datasets.update(  # type: ignore[arg-type]
             {
                 key: _as_runtime_dataset(
-                    value, shared=shared, manager=getattr(self.catalog, "_manager", None)
+                    value,
+                    shared=shared,
+                    manager=getattr(self.catalog, "_manager", None),
                 )
                 for key, value in d.items()
             }.items()
